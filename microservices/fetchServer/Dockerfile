@@ -18,9 +18,7 @@ RUN npm i -g turbo
 COPY . .
 
 RUN npm install -w=@dodgeball/fetchserver --force
-
 RUN npm run build -w=packages
-
 RUN npm run build -w=@dodgeball/fetchserver
 
 ##########################
