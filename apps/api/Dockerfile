@@ -18,7 +18,6 @@ RUN npm i -g turbo
 COPY . .
 
 RUN npm i
-
 RUN npm install -w=@dodgeball/api --force
 RUN npm run build -w=packages
 RUN npm run build -w=@dodgeball/api
