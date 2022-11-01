@@ -32,9 +32,9 @@ FROM node:16-alpine as APP
 ENV NODE_ENV=production
 COPY --from=BUILDER /app/ .
 
-WORKDIR /app/apps/customer
+WORKDIR /app/apps/web
 
-COPY --from=BUILDER /app/apps/customer/ .
+COPY --from=BUILDER /app/apps/web/ .
 
 RUN apk update && \
   apk upgrade && \
