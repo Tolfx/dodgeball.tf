@@ -13,6 +13,8 @@ RUN apk update && \
 RUN npm install -g @types/node \
   && npm install -g typescript@4.3.5 
 
+RUN npm i -g turbo
+
 COPY . .
 
 RUN npm i
