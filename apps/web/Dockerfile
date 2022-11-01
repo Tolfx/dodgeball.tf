@@ -46,12 +46,6 @@ LABEL author="Tolfix" maintainer="support@tolfix.com"
 
 RUN apk add --no-cache --upgrade bash
 
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
-RUN chown -R nextjs:nodejs /app/apps/web/.next
-
-USER nextjs
-
 EXPOSE 3000
 ENV PORT 3000
 
