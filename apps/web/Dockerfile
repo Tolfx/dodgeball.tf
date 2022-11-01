@@ -1,8 +1,8 @@
-# Installer
-FROM node:16-alpine as INSTALLER
+# BUILDER
+FROM node:16-alpine as BUILDER
 
 # Caching
-# RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
@@ -10,28 +10,20 @@ RUN apk update && \
   apk upgrade && \
   apk add git
 
-RUN npm i -g turbo
-
 RUN npm install -g @types/node \
   && npm install -g typescript@4.3.5 
+
+RUN npm i -g turbo
 
 COPY . .
 
 RUN npm i
-RUN npm install -w=@dodgeball/web --force
+RUN npm install -w=@dodgeball/api --force
 RUN npm run build -w=packages
-RUN npm run build -w=@dodgeball/web
+RUN npm run build -w=@dodgeball/api
+
 ##########################
 
-# BUILDER
-FROM node:16-alpine as BUILDER
-
-RUN npm i -g turbo
-COPY --from=INSTALLER . .
-
-WORKDIR /app
-
-RUN turbo run build --scope=@dodgeball/web
 ##########################
 
 # APP
@@ -48,8 +40,7 @@ RUN apk update && \
   apk upgrade && \
   apk add git
 
-# COPY ./apps/customer/entrypoint.sh .
-# COPY ./apps/customer/.env.production .
+ENV DEBIAN_FRONTEND=noninteractive
 
 LABEL author="Tolfix" maintainer="support@tolfix.com"
 
