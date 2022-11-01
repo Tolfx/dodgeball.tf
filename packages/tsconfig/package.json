@@ -2,6 +2,9 @@
   "name": "@dodgeball/tsconfig",
   "version": "0.0.0",
   "private": true,
+  "scripts": {
+    "build": ""
+  },
   "files": [
     "base.json",
     "nextjs.json",
