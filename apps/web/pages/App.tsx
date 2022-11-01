@@ -1,6 +1,7 @@
-import { Badge, Box, Container, Typography } from "@mui/material";
+import { Badge, Box, Container, Link, Typography } from "@mui/material";
 import Head from "next/head";
 import ServerContainer from "../components/ServerContainer";
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 export default function App()
 {
@@ -26,11 +27,27 @@ export default function App()
           <Badge anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
-          }} badgeContent={'Beta v0.0.3'} color='primary'>
+          }} badgeContent={'Beta v0.0.4'} color='primary'>
             Dodgeball.tf
           </Badge>
         </Typography>
-
+        <Container sx={{
+          color: "white",
+          textAlign: "center",
+        }}>
+          {/* Let's have github icon of source code */}
+          <Typography sx={{
+            color: "white",
+            textAlign: "right",
+          }}>
+            <Link href="https://github.com/Tolfx/dodgeball.tf" color="inherit" underline="none">
+              <GitHubIcon sx={{
+                color: "white",
+                fontSize: "50px",
+              }} />
+            </Link>
+          </Typography>
+        </Container>
         <Box>
           <ServerContainer />
         </Box>
