@@ -4,7 +4,7 @@ FROM node:16-alpine as BUILDER
 # Caching
 RUN apk add --no-cache libc6-compat
 
-WORKDIR /microservices
+WORKDIR /app
 
 RUN apk update && \
   apk upgrade && \
@@ -30,11 +30,11 @@ FROM node:16-alpine as APP
 
 ENV NODE_ENV=production
 
-COPY --from=BUILDER /microservices/ .
+COPY --from=BUILDER /app/ .
 
-WORKDIR /microservices/fetchServer
+WORKDIR /app/microservices/fetchServer
 
-COPY --from=BUILDER /microservices/fetchServer/ .
+COPY --from=BUILDER /app/microservices/fetchServer/ .
 
 RUN apk update && \
   apk upgrade && \
