@@ -18,11 +18,9 @@ RUN npm i -g turbo
 COPY . .
 
 RUN npm i
-RUN npm install -w=@dodgeball/api --force
+RUN npm install -w=@dodgeball/web --force
 RUN npm run build -w=packages
-RUN npm run build -w=@dodgeball/api
-
-##########################
+RUN npm run build -w=@dodgeball/web
 
 ##########################
 
@@ -30,11 +28,10 @@ RUN npm run build -w=@dodgeball/api
 FROM node:16-alpine as APP
 
 ENV NODE_ENV=production
+
 COPY --from=BUILDER /app/ .
 
-WORKDIR /app/apps/web
-
-COPY --from=BUILDER /app/apps/web/ .
+WORKDIR /apps/web
 
 RUN apk update && \
   apk upgrade && \
@@ -49,6 +46,7 @@ RUN apk add --no-cache --upgrade bash
 EXPOSE 3000
 ENV PORT 3000
 
-RUN npx next telemetry disable
+# RUN npx next telemetry disable
 
+# Run bash
 CMD npm run start

@@ -16,6 +16,37 @@ services:
     networks:
       - dodgeball-network
 
+  dodgeball_web:
+    image: tolfx/dodgeball-web:latest
+    container_name: dodgeball_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - dodgeball-network
+
+  dodgeball_api:
+    image: tolfx/dodgeball-api:latest
+    container_name: dodgeball_api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_HOST=mongodb_dodgeball
+      - DEBUG=dodgeball*
+    networks:
+      - dodgeball-network
+
+  dodgeball_micro_fetchserver:
+    image: tolfx/dodgeball-fetchserver:latest
+    container_name: dodgeball_micro_fetchserver
+    restart: unless-stopped
+    environment:
+      - MONGO_HOST=mongodb_dodgeball
+      - DEBUG=dodgeball*
+    networks:
+      - dodgeball-network
+
 volumes:
   mongodb-dodegaball-storage:
 
