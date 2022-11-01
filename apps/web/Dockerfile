@@ -48,7 +48,7 @@ RUN apk add --no-cache --upgrade bash
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
-RUN chown -R nextjs:nodejs /app/.next
+RUN chown -R nextjs:nodejs /app/apps/web/.next
 
 USER nextjs
 
