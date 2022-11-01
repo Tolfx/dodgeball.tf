@@ -3,15 +3,6 @@ name: Docker Image - Micro - Fetch Server
 on:
   push:
     paths:
-      - 'apps/api/src/**'
-      - 'apps/api/package.json'
-      - 'apps/api/Dockerfile'
-    branches:
-      - master
-
-on:
-  push:
-    paths:
       - 'microservices/fetchServer/src/**'
       - 'microservices/fetchServer/package.json'
       - 'microservices/fetchServer/Dockerfile'
