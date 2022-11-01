@@ -3,9 +3,9 @@ name: Docker Image - API
 on:
   push:
     paths:
-      - 'microservices/fetchServer/src/**'
-      - 'microservices/fetchServer/package.json'
-      - 'microservices/fetchServer/Dockerfile'
+      - 'apps/api/src/**'
+      - 'apps/api/package.json'
+      - 'apps/api/Dockerfile'
     branches:
       - master
 
