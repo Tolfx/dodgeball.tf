@@ -3,8 +3,8 @@
   "display": "Default",
   "compilerOptions": {
     "composite": false,
-    "declaration": false,
-    "declarationMap": false,
+    "declaration": true,
+    "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "inlineSources": false,

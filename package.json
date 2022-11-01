@@ -1,10 +1,11 @@
 {
-  "name": "dodgeball.tf",
+  "name": "dodgeball",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "microservices/*"
   ],
   "scripts": {
     "build": "turbo run build",
