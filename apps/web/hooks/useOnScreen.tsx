@@ -11,6 +11,7 @@ export default function useOnScreen<T>(ref: Ref<T>)
 
   useEffect(() =>
   {
+    // @ts-ignore
     observer.observe(ref?.current)
     // Remove the observer as soon as the component is unmounted
     return () => { observer.disconnect() }
