@@ -3,16 +3,11 @@ import debug from "debug";
 import Services from './Services';
 import { CronJob } from "cron";
 import fetchServer from './crons/fetchServers.cron';
+import { MONGO_DATABASE, MONGO_HOST, MONGO_PASSWORD, MONGO_PORT, MONG_USEERNAME, RUN_ALL_ON_STARTUP } from './utils/constants';
 
 const LOG = debug("dodgeball:bootstrap");
 
-const MONGO_HOST = process.env.MONGO_HOST || 'localhost';
-const MONGO_PORT = parseInt(process.env.MONGO_PORT || '27017');
-const MONGO_DATABASE = process.env.MONGO_DATABASE || 'dodgeball';
-const MONG_USEERNAME = process.env.MONGO_USERNAME || 'root';
-const MONGO_PASSWORD = process.env.MONGO_PASSWORD || 'root';
 
-const RUN_ALL_ON_STARTUP = process.env.RUN_ALL_ON_STARTUP || false;
 
 const bootstrap = async () =>
 {
