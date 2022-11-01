@@ -1,14 +1,20 @@
-import { Button, Card, CardActions, CardContent, CircularProgress, Paper, Skeleton, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Collapse, Skeleton, Typography } from "@mui/material";
+import CachedIcon from '@mui/icons-material/Cached';
+import React from "react";
 import { useEffect, useState } from "react";
+import useOnScreen from "../hooks/useOnScreen";
 import Loading from "./Loading";
 import { IServerInfoData } from "./ServerContainer";
+import { ExpandMore } from "@mui/icons-material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PlayersTable from "./PlayersTable";
 
 interface Props
 {
   server: IServerInfoData;
 }
 
-interface player
+export interface player
 {
   name: string;
   raw: {
@@ -27,6 +33,10 @@ interface fullServerInfo extends IServerInfoData
 export default function ServerCard({ server }: Props)
 {
   const [additionInfo, setAdditionInfo] = useState<fullServerInfo>();
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+  const [expanded, setExpanded] = React.useState(false);
+  const isVisable = useOnScreen(ref);
   const isPROD = process.env.NODE_ENV === "production";
 
   const fetchAdditionInfo = async () =>
@@ -39,12 +49,16 @@ export default function ServerCard({ server }: Props)
 
   useEffect(() =>
   {
-    fetchAdditionInfo();
-  }, []);
+    if (isVisable && !hasBeenVisible)
+    {
+      fetchAdditionInfo();
+      setHasBeenVisible(true);
+    }
+  }, [isVisable]);
 
   return (
     <>
-      <Card sx={{
+      <Card ref={ref} sx={{
         margin: "2rem"
       }}>
         <CardContent>
@@ -67,6 +81,17 @@ export default function ServerCard({ server }: Props)
             {!additionInfo ? <Skeleton /> : <>
               <Typography variant="h5">
                 Players: {additionInfo?.players?.length}/{additionInfo?.maxplayers}
+                {/* @ts-ignore */}
+                <ExpandMore
+                  expand={expanded}
+                  onClick={() => setExpanded(!expanded)}
+                  aria-label="show more"
+                >
+                  <ExpandMoreIcon />
+                </ExpandMore>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <PlayersTable players={additionInfo.players} />
+                </Collapse>
               </Typography>
             </>}
           </Typography>
@@ -74,6 +99,16 @@ export default function ServerCard({ server }: Props)
         <CardActions>
           <Button href={`steam://connect/${server.connect}`} color='success'>
             Connect
+          </Button>
+          {/* Have timeout on right */}
+          <Button
+            sx={{
+              marginLeft: "auto"
+            }}
+            onClick={() => fetchAdditionInfo()}
+            title="Refresh"
+          >
+            <CachedIcon />
           </Button>
         </CardActions>
       </Card>

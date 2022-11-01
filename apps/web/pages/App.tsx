@@ -21,7 +21,7 @@ export default function App()
           <Badge anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
-          }} badgeContent={'Beta'} color='primary'>
+          }} badgeContent={'Beta v0.0.3'} color='primary'>
             Dodgeball.tf
           </Badge>
         </Typography>
