@@ -1,0 +1,67 @@
+# Installer
+FROM node:16-alpine as INSTALLER
+
+# Caching
+# RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+RUN apk update && \
+  apk upgrade && \
+  apk add git
+
+RUN npm install -g @types/node \
+  && npm install -g typescript@4.3.5 
+
+COPY . .
+
+RUN npm i
+RUN npm install -w=@dodgeball/web --force
+RUN npm run build -w=packages
+RUN npm run build -w=@dodgeball/web
+##########################
+
+# BUILDER
+FROM node:16-alpine as BUILDER
+
+RUN npm i -g turbo
+COPY --from=INSTALLER . .
+
+WORKDIR /app
+
+RUN turbo run build --scope=@dodgeball/web
+##########################
+
+# APP
+FROM node:16-alpine as APP
+
+ENV NODE_ENV=production
+COPY --from=BUILDER /app/ .
+
+WORKDIR /app/apps/customer
+
+COPY --from=BUILDER /app/apps/customer/ .
+
+RUN apk update && \
+  apk upgrade && \
+  apk add git
+
+# COPY ./apps/customer/entrypoint.sh .
+# COPY ./apps/customer/.env.production .
+
+LABEL author="Tolfix" maintainer="support@tolfix.com"
+
+RUN apk add --no-cache --upgrade bash
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+RUN chown -R nextjs:nodejs /app/.next
+
+USER nextjs
+
+EXPOSE 3000
+ENV PORT 3000
+
+RUN npx next telemetry disable
+
+CMD npm run start
