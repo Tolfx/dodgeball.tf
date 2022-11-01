@@ -9,6 +9,11 @@ export default function App()
       <Head>
         <title>Dodgeball.tf</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="description" content="dodgeball.tf, a website containing every dodgeball server in Team Fortress 2" />
+        <meta name="keywords" content="dodgeball.tf,dodgeball,tf2,team fortress 2, tfdb" />
+        <meta name="author" content="Tolfx" />
+        {/* Meta data about color */}
+        <meta name="theme-color" content="#8650AE" />
       </Head>
       <Container>
         {/* My vision, we have a text in the middle saying "dodgeball.tf" with some color on it */}
