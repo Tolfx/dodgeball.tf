@@ -1,6 +1,5 @@
-import { Box, CircularProgress, Skeleton } from "@mui/material";
+import { Autocomplete, Box, CircularProgress, Skeleton, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import Loading from "./Loading";
 import ServerCard from "./ServerCard";
 
 export interface IServerInfoData
@@ -20,8 +19,42 @@ export default function ServerContainer()
 {
 
   const [servers, setServers] = useState<IServerInfoData[] | []>([]);
+  const [server, setServer] = useState<IServerInfoData>();
+  const [highlightedServers, setHighlightedServers] = useState<IServerInfoData[] | undefined>();
   const [isLoading, setIsLoading] = useState(true);
+  const [highlightCache, setHighlightCache] = useState<string[]>([]);
   const isPROD = process.env.NODE_ENV === "production";
+
+  useEffect(() =>
+  {
+    const queryParams = new URLSearchParams(window.location.search);
+    const getHighlight = queryParams.get("highlight");
+    if (getHighlight)
+    {
+      // Get the server from the connect
+      const [ip, port] = getHighlight.split(":");
+      const server = servers.find(s => s.connect === `${ip}:${port}`);
+      setServer(server);
+    }
+  }, [servers])
+
+  useEffect(() =>
+  {
+    const queryParams = new URLSearchParams(window.location.search);
+    const getHighlights = queryParams.get("highlights");
+    if (getHighlights)
+    {
+      const highServers = getHighlights.split(",");
+      const s = highServers.map(s =>
+      {
+        const [ip, port] = s.split(":");
+        return servers.find(s => s.connect === `${ip}:${port}`);
+      });
+      // Filter out undefined
+      // @ts-ignore
+      setHighlightedServers(s.filter(s => s));
+    }
+  }, [servers])
 
   const fetchServers = async () =>
   {
@@ -31,6 +64,7 @@ export default function ServerContainer()
     setIsLoading(false);
     setServers(data);
   }
+
 
   useEffect(() =>
   {
@@ -59,10 +93,46 @@ export default function ServerContainer()
 
   return (
     <>
-      {servers.map((server, i) =>
+      <Box sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: "2rem"
+      }}>
+        <Autocomplete
+          freeSolo
+          fullWidth
+          options={servers.map((server) => server.name)}
+          renderInput={(params) => (
+            <TextField {...params} label="Search" margin="normal" variant="outlined" />
+          )}
+          value={server?.name || ''}
+          onChange={(e, value) =>
+          {
+            const server = servers.find((server) => server.name === value);
+            // Only render the server if it exists
+            if (server)
+            {
+              setServer(server);
+            }
+            else
+            {
+              setServer(undefined);
+            }
+          }}
+        />
+      </Box>
+      {(!server) && (!highlightedServers) && servers.map((server, i) =>
       {
         return (
-          <ServerCard server={server} key={i} />
+          <ServerCard server={server} key={i} highlightCache={highlightCache} setHighlightCache={setHighlightCache} />
+        )
+      })}
+      {(server) && (!highlightedServers) && <ServerCard server={server} highlight={true} highlightCache={highlightCache} setHighlightCache={setHighlightCache} />}
+      {(!server) && (highlightedServers) && highlightedServers.map((server, i) =>
+      {
+        return (
+          <ServerCard server={server} key={i} highlight={true} highlightCache={highlightCache} setHighlightCache={setHighlightCache} />
         )
       })}
     </>
