@@ -26,16 +26,18 @@ export default function App()
         <meta name="twitter:site" content="https://tolfix.com/" />
         <meta name="twitter:title" content="dodgeball.tf" />
         <meta name="twitter:image" content="/logo.png" />
+        <meta name="twitter:description" content="dodgeball.tf, a website containing every dodgeball server in Team Fortress 2" />
 
         <meta property="og:title" content="dodgeball.tf" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://dodgeball.tf/" />
         <meta property="og:image" content="/logo.png" />
+        <meta property="og:description" content="dodgeball.tf, a website containing every dodgeball server in Team Fortress 2" />
       </Head>
       <Container>
         {/* My vision, we have a text in the middle saying "dodgeball.tf" with some color on it */}
         {/* We then have a servercontainer */}
-        <Typography sx={{
+        <Typography component={'span'} sx={{
           color: "white",
           fontSize: "100px",
           textAlign: "center",
@@ -43,8 +45,17 @@ export default function App()
           <Badge anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
-          }} badgeContent={'Beta v0.0.4'} color='primary'>
-            Dodgeball.tf
+          }} badgeContent={'Beta v0.1.1'} color='primary'>
+            <Link href="/" underline="none" color="inherit" sx={{
+              "&:hover": {
+                color: "#8650AE",
+                fontSize: "120px",
+                transition: "0.4s",
+              },
+              transition: "0.4s",
+            }}>
+              Dodgeball.tf
+            </Link>
           </Badge>
         </Typography>
         <Container sx={{
@@ -52,7 +63,7 @@ export default function App()
           textAlign: "center",
         }}>
           {/* Let's have github icon of source code */}
-          <Typography sx={{
+          <Typography component={'span'} sx={{
             color: "white",
             textAlign: "right",
           }}>
