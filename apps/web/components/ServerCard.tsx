@@ -1,17 +1,19 @@
-import { Button, Card, CardActions, CardContent, Collapse, Skeleton, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Collapse, IconButton, IconButtonProps, Skeleton, styled, Typography } from "@mui/material";
 import CachedIcon from '@mui/icons-material/Cached';
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import useOnScreen from "../hooks/useOnScreen";
-import Loading from "./Loading";
 import { IServerInfoData } from "./ServerContainer";
-import { ExpandMore } from "@mui/icons-material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import HighlightIcon from '@mui/icons-material/Highlight';
 import PlayersTable from "./PlayersTable";
 
 interface Props
 {
   server: IServerInfoData;
+  highlight?: boolean;
+  setHighlightCache: Dispatch<SetStateAction<string[]>>;
+  highlightCache: string[];
 }
 
 export interface player
@@ -30,12 +32,30 @@ interface fullServerInfo extends IServerInfoData
   bots: player[];
 }
 
-export default function ServerCard({ server }: Props)
+interface ExpandMoreProps extends IconButtonProps
+{
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) =>
+{
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+export default function ServerCard({ server, highlight, highlightCache, setHighlightCache }: Props)
 {
   const [additionInfo, setAdditionInfo] = useState<fullServerInfo>();
   const ref = React.useRef<HTMLDivElement>(null);
   const [hasBeenVisible, setHasBeenVisible] = useState(false);
   const [expanded, setExpanded] = React.useState(false);
+  const [isHighlighted, setIsHighlighted] = useState(highlight || false);
   const isVisable = useOnScreen(ref);
   const isPROD = process.env.NODE_ENV === "production";
 
@@ -59,33 +79,35 @@ export default function ServerCard({ server }: Props)
   return (
     <>
       <Card ref={ref} sx={{
-        margin: "2rem"
+        margin: "2rem",
+        border: isHighlighted ? "2px solid #FED801" : "none",
       }}>
         <CardContent>
-          <Typography variant="h5">
+          <Typography component={'span'} variant="h5">
             {server.name}
           </Typography>
           <Typography >
-            <Typography color="gray">
+            <Typography component={'span'} color="gray">
               {server.raw.tags?.join(", ")}
             </Typography>
           </Typography>
-          <Typography >
+          <Typography component={'span'}>
             {!additionInfo ? <Skeleton /> : <>
               <Typography variant="h5">
                 Map: {additionInfo.map}
               </Typography>
             </>}
           </Typography>
-          <Typography >
+          <Typography component={'span'}>
             {!additionInfo ? <Skeleton /> : <>
-              <Typography variant="h5">
+              <Typography component={'span'} variant="h5">
                 Players: {additionInfo?.players?.length}/{additionInfo?.maxplayers}
                 {/* @ts-ignore */}
                 <ExpandMore
                   expand={expanded}
                   onClick={() => setExpanded(!expanded)}
                   aria-label="show more"
+
                 >
                   <ExpandMoreIcon />
                 </ExpandMore>
@@ -100,7 +122,45 @@ export default function ServerCard({ server }: Props)
           <Button href={`steam://connect/${server.connect}`} color='success'>
             Connect
           </Button>
-          {/* Have timeout on right */}
+          <Button
+            sx={{
+              marginLeft: "auto"
+            }}
+            onClick={() =>
+            {
+              setIsHighlighted(!isHighlighted)
+              if (!isHighlighted)
+              {
+                // Set to local storage
+                setHighlightCache([...highlightCache, server.connect]);
+                const cache = [...highlightCache, server.connect]
+                // Check if we got more than 1
+                if (cache.length === 1)
+                {
+                  const host = window.location.host;
+                  navigator.clipboard.writeText(`${host}/?highlight=${server.connect}`);
+                }
+                else
+                {
+                  const host = window.location.host;
+                  // Use highlightedServers to make a link
+                  const text = `${host}/?highlights=${cache.join(",")}`;
+                  navigator.clipboard.writeText(text);
+                }
+              }
+              else
+              {
+                // remove from local storage and remove from url
+                setHighlightCache(highlightCache.filter((s) => s !== server.connect));
+                const host = window.location.host;
+                const text = `${host}/?highlights=${highlightCache.join(",")}`;
+                navigator.clipboard.writeText(text);
+              }
+            }}
+            title="Highlight"
+          >
+            <HighlightIcon />
+          </Button>
           <Button
             sx={{
               marginLeft: "auto"
