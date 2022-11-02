@@ -37,7 +37,7 @@ export default function App()
       <Container>
         {/* My vision, we have a text in the middle saying "dodgeball.tf" with some color on it */}
         {/* We then have a servercontainer */}
-        <Typography component={'span'} sx={{
+        <Typography sx={{
           color: "white",
           fontSize: "100px",
           textAlign: "center",
@@ -63,7 +63,7 @@ export default function App()
           textAlign: "center",
         }}>
           {/* Let's have github icon of source code */}
-          <Typography component={'span'} sx={{
+          <Typography sx={{
             color: "white",
             textAlign: "right",
           }}>
