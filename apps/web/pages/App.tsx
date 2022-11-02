@@ -21,6 +21,16 @@ export default function App()
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#8650AE" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="https://tolfix.com/" />
+        <meta name="twitter:title" content="dodgeball.tf" />
+        <meta name="twitter:image" content="/logo.png" />
+
+        <meta property="og:title" content="dodgeball.tf" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://dodgeball.tf/" />
+        <meta property="og:image" content="/logo.png" />
       </Head>
       <Container>
         {/* My vision, we have a text in the middle saying "dodgeball.tf" with some color on it */}
