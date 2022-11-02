@@ -22,7 +22,7 @@ const bootstrap = async () =>
   {
     LOG(`Running cron jobs`);
     fetchServer(services);
-  });
+  }, null, true, "Europe/Stockholm");
 
   // Run all crons on startup
   if (RUN_ALL_ON_STARTUP)
