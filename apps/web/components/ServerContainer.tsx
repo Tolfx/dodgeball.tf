@@ -1,4 +1,4 @@
-import { Autocomplete, Box, CircularProgress, Skeleton, TextField } from "@mui/material";
+import { Autocomplete, Box, CircularProgress, Skeleton, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ServerCard from "./ServerCard";
 
@@ -20,9 +20,12 @@ export default function ServerContainer()
 
   const [servers, setServers] = useState<IServerInfoData[] | []>([]);
   const [server, setServer] = useState<IServerInfoData>();
-  const [highlightedServers, setHighlightedServers] = useState<IServerInfoData[] | undefined>();
+
   const [isLoading, setIsLoading] = useState(true);
+
+  const [highlightedServers, setHighlightedServers] = useState<IServerInfoData[] | undefined>();
   const [highlightCache, setHighlightCache] = useState<string[]>([]);
+
   const isPROD = process.env.NODE_ENV === "production";
 
   useEffect(() =>
@@ -65,6 +68,14 @@ export default function ServerContainer()
     setServers(data);
   }
 
+  const getServerCount = () =>
+  {
+    if (server) return 1;
+    if (highlightedServers) return highlightedServers.length;
+    return servers.length;
+  }
+
+
 
   useEffect(() =>
   {
@@ -97,6 +108,7 @@ export default function ServerContainer()
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        flexDirection: "column",
         margin: "2rem"
       }}>
         <Autocomplete
@@ -120,7 +132,16 @@ export default function ServerContainer()
               setServer(undefined);
             }
           }}
+
         />
+        <Typography variant="h6" sx={{
+          marginLeft: "1rem",
+          alignItems: 'left',
+          justifyContent: 'left',
+        }}>
+          {/* Server count here */}
+          Server count: {getServerCount()}
+        </Typography>
       </Box>
       {(!server) && (!highlightedServers) && servers.map((server, i) =>
       {

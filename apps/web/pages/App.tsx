@@ -45,7 +45,7 @@ export default function App()
           <Badge anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
-          }} badgeContent={'Beta v0.1.1'} color='primary'>
+          }} badgeContent={'Beta v0.1.2'} color='primary'>
             <Link href="/" underline="none" color="inherit" sx={{
               "&:hover": {
                 color: "#8650AE",
