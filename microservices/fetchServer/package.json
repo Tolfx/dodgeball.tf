@@ -26,8 +26,8 @@
         "lint": "TIMING=1 eslint src/**/*.ts* --fix"
     },
     "devDependencies": {
-        "@dodgeball/eslint-config-custom": "*",
-        "@dodgeball/tsconfig": "*",
+        "eslint-config-custom": "*",
+        "tsconfig": "*",
         "@types/cron": "^2.0.0",
         "@typescript-eslint/eslint-plugin": "^5.33.0",
         "@typescript-eslint/parser": "^5.33.0",

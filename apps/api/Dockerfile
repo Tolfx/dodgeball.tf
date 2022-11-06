@@ -4,8 +4,6 @@ FROM node:16-alpine as BUILDER
 # Caching
 RUN apk add --no-cache libc6-compat
 
-WORKDIR /app
-
 RUN apk update && \
   apk upgrade && \
   apk add git
@@ -13,27 +11,51 @@ RUN apk update && \
 RUN npm install -g @types/node \
   && npm install -g typescript@4.3.5 
 
+WORKDIR /app
+
 RUN npm i -g turbo
 
 COPY . .
 
-RUN npm i
-RUN npm install -w=@dodgeball/api --force
-RUN npm run build -w=packages
-RUN npm run build -w=@dodgeball/api
+RUN turbo prune --scope=@dodgeball/api --docker
+
+##########################
+
+FROM node:16-alpine as INSTALLER
+RUN apk add --no-cache libc6-compat
+RUN apk update
+RUN apk add git
+WORKDIR /app
+
+COPY .gitignore .gitignore
+COPY --from=BUILDER /app/out/json/ .
+# COPY --from=BUILDER /app/out/package-lock.json ./package-lock.json
+
+RUN npm i --force
+
+COPY --from=builder /app/out/full/ .
+
+COPY turbo.json turbo.json
+
+RUN npm run build --filter=@dodgeball/api...
 
 ##########################
 
 # APP
 FROM node:16-alpine as APP
 
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
 ENV NODE_ENV=production
 
-COPY --from=BUILDER /app/ .
+
+WORKDIR /app
+
+# Currently idk how to get this to work, so copying root ig? with some files ignored from pruning at least.
+COPY --from=INSTALLER /app .
 
 WORKDIR /app/apps/api
-
-COPY --from=BUILDER /app/apps/api/ .
 
 RUN apk update && \
   apk upgrade && \

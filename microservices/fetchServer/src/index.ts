@@ -7,8 +7,6 @@ import { MONGO_DATABASE, MONGO_HOST, MONGO_PASSWORD, MONGO_PORT, MONG_USEERNAME,
 
 const LOG = debug("dodgeball:bootstrap");
 
-
-
 const bootstrap = async () =>
 {
   LOG("Starting bootstrap");
