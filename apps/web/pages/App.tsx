@@ -1,7 +1,6 @@
-import { Badge, Box, Container, Link, Typography } from "@mui/material";
+import { Badge, Box, Button, Container, Link, Tooltip, Typography } from "@mui/material";
 import Head from "next/head";
 import ServerContainer from "../components/ServerContainer";
-import GitHubIcon from '@mui/icons-material/GitHub';
 
 export default function App()
 {
@@ -45,7 +44,7 @@ export default function App()
           <Badge anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',
-          }} badgeContent={'Beta v0.1.2'} color='primary'>
+          }} badgeContent={'Beta v0.1.6'} color='primary'>
             <Link href="/" underline="none" color="inherit" sx={{
               "&:hover": {
                 color: "#8650AE",
@@ -62,18 +61,52 @@ export default function App()
           color: "white",
           textAlign: "center",
         }}>
-          {/* Let's have github icon of source code */}
-          <Typography sx={{
-            color: "white",
-            textAlign: "right",
+          <Container sx={{
+            "& > *": {
+              margin: "20px",
+            },
+            textAlign: "left",
+            border: "1px solid white",
+            borderRadius: "10px",
           }}>
-            <Link href="https://github.com/Tolfx/dodgeball.tf" color="inherit" underline="none">
-              <GitHubIcon sx={{
-                color: "white",
-                fontSize: "50px",
-              }} />
-            </Link>
-          </Typography>
+            <Button color='primary' sx={{
+              fontSize: "24px",
+            }}>
+              <Link target={'_blank'} href="https://stats.dodgeball.tf/" underline="none" color="inherit">
+                Stats
+              </Link>
+            </Button >
+            <Button color='primary' sx={{
+              fontSize: "24px",
+            }}>
+              <Link target={'_blank'} href="https://bans.dodgeball.tf/" underline="none" color="inherit">
+                Bans
+              </Link>
+            </Button>
+            <Tooltip title='Coming soon..'>
+              <Button disabled sx={{
+                fontSize: "24px",
+              }}>
+                <Link target={'_blank'} href="#" color="inherit" underline="none">
+                  Forums
+                </Link>
+              </Button>
+            </Tooltip>
+            <Button sx={{
+              fontSize: "24px",
+            }}>
+              <Link target={'_blank'} href="https://discord.dodgeball.tf" color="inherit" underline="none">
+                Discord
+              </Link>
+            </Button>
+            <Button sx={{
+              fontSize: "24px",
+            }}>
+              <Link target={'_blank'} href="https://github.com/Tolfx/dodgeball.tf" color="inherit" underline="none">
+                Github
+              </Link>
+            </Button>
+          </Container>
         </Container>
         <Box>
           <ServerContainer />
