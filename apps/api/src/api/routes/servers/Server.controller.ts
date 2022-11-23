@@ -30,6 +30,9 @@ export default class ServerController
       try
       {
         const formattedServer = await getServerInfo(server.ip, server.port);
+        // Filter if map isn't tfdb_ in the beginning
+        if (!formattedServer.map.startsWith('tfdb_'))
+          continue;
         this.service.formattedServers.set(`${server.ip}:${server.port}`, formattedServer);
       }
       catch (err)
