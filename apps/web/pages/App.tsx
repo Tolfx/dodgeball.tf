@@ -95,6 +95,13 @@ export default function App()
             <Button sx={{
               fontSize: "24px",
             }}>
+              <Link target={'_blank'} href="https://steamcommunity.com/groups/OfficialTFDB" color="inherit" underline="none">
+                Steam Group
+              </Link>
+            </Button>
+            <Button sx={{
+              fontSize: "24px",
+            }}>
               <Link target={'_blank'} href="https://discord.dodgeball.tf" color="inherit" underline="none">
                 Discord
               </Link>
