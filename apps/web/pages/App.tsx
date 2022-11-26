@@ -83,15 +83,13 @@ export default function App()
                 Bans
               </Link>
             </Button>
-            <Tooltip title='Coming soon..'>
-              <Button disabled sx={{
+              <Button sx={{
                 fontSize: "24px",
               }}>
-                <Link target={'_blank'} href="#" color="inherit" underline="none">
+                <Link target={'_blank'} href="https://forum.dodgeball.tf/" color="inherit" underline="none">
                   Forums
                 </Link>
               </Button>
-            </Tooltip>
             <Button sx={{
               fontSize: "24px",
             }}>
