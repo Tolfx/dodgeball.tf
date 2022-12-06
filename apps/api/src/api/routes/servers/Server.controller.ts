@@ -18,7 +18,18 @@ export default class ServerController
   async getServers(req: Request, res: Response)
   {
     LOG(`Getting servers`);
-    const servers = await Server.find();
+    // We will be a bit biased and add put our servers on the top
+    const ODB_SERVER = ['185.107.96.145'];
+    const notOurServer = await Server.find({
+      // Get all servers but order our servers first
+      ip: { $nin: ODB_SERVER },
+    }).sort({ ip: 1 });
+    const ourServers = await Server.find({
+      ip: { $in: ODB_SERVER },
+    }).sort({ ip: 1 });
+
+    const servers = [...ourServers, ...notOurServer];
+
     LOG(`Got servers ${servers.length}`);
     // Go through each server and format it
     for await (const server of servers)
