@@ -39,7 +39,7 @@ export default class LinkInteraction implements InteractionsHandler
       .addFields([
         {
           name: 'Linking your account with steam',
-          value: `To link your account, please click [here](https://api.discord.dogeball.tf/oauth2/link) to link your account with steam and discord.`,
+          value: `To link your account, please click [here](https://api.discord.dodgeball.tf/oauth2/link) to link your account with steam and discord.`,
           inline: false
         }
       ])
