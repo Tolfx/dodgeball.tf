@@ -17,7 +17,7 @@ export const MYSQL_PORT = getEnv("MYSQL_PORT", "3306");
 export const API_PORT = process.env.API_PORT;
 export const API_HOST = getEnv("API_HOST", "localhost");
 export const API_PROTOCOL = getEnv("API_PROTOCOL", "http");
-export const API_DOMAIN = `${API_PROTOCOL}://${API_HOST}${API_PORT ? `:${API_PORT}` : ""}`;
+export const API_DOMAIN = `${API_PROTOCOL}://${API_HOST}${API_PROTOCOL === 'http' ? `:${API_PORT}` : ""}`;
 
 /**
  * @deprecated This was a stupid idea, when I can fetch from the database on bootstrap, but since when
