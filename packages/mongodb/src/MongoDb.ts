@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { MONGO_DATABASE, MONGO_HOST, MONGO_PASSWORD, MONGO_PORT, MONGO_USERNAME } from "./utils/constants";
 
 export default class MongoDb
 {
@@ -11,7 +12,13 @@ export default class MongoDb
 
   public mongoose?: mongoose.Mongoose;
 
-  constructor(host: string, port: number, database: string, username: string, password: string)
+  constructor(
+    host: string = MONGO_HOST,
+    port: number = MONGO_PORT,
+    database: string = MONGO_DATABASE,
+    username: string = MONGO_USERNAME,
+    password: string = MONGO_PASSWORD
+  )
   {
     this.host = host;
     this.port = port;
