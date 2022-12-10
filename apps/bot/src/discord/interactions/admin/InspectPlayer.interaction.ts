@@ -68,6 +68,11 @@ export default class InspectPlayerInteractions implements InteractionsHandler
           name: 'Comms',
           value: `[Comms](https://bans.dodgeball.tf/index.php?p=commslist&advSearch=${steamid}&advType=steamid)`,
           inline: true
+        },
+        {
+          name: 'Stats',
+          value: `[Stats](https://stats.dodgeball.tf/hlstats.php?mode=search&q=${encodeURIComponent(steamid)}&st=uniqueid&game=)`,
+          inline: true
         }
       ])
       .setColor(Colors.GREEN)
