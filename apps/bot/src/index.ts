@@ -1,5 +1,6 @@
 require('dotenv').config();
 import debug from "debug";
+import { MongoDb } from "@dodgeball/mongodb";
 import CommandRegister from "./discord/commands/register.command";
 import EventRegister from "./discord/events/register.events";
 import InteractionsRegister from "./discord/interactions/register.interactions";
@@ -8,6 +9,8 @@ import SlashRegister from "./discord/slash/register.slash";
 import setupMysql from "./mysql/setupMysql";
 import CacheService from "./services/CacheService";
 import Services from "./services/Services";
+import setupApi from "./api/setupApi";
+import RegisterRouters from "./api/routes/register.router";
 
 const LOG = debug('dodgeball:bot:bootstrap')
 
@@ -16,9 +19,13 @@ const bootstrap = async () =>
   LOG('Starting bot');
 
   const mysql = await setupMysql();
+  const mongodb = new MongoDb();
+  await mongodb.connect();
+
+  const server = setupApi();
 
   const discordClient = setupDiscord();
-  const services = new Services(discordClient, mysql);
+  const services = new Services(discordClient, mysql, mongodb, server);
 
   const cacheService = new CacheService(services);
   await cacheService.startCache();
@@ -35,6 +42,9 @@ const bootstrap = async () =>
 
   const slashRegister = new SlashRegister(services);
   await slashRegister.registerSlash();
+
+  const routerRegister = new RegisterRouters(services);
+  routerRegister.registerRouters();
 
   LOG('Bot started');
 };
