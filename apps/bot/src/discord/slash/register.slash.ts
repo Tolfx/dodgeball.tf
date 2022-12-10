@@ -3,6 +3,7 @@ import { Client, REST, Routes } from "discord.js";
 import Services from "../../services/Services";
 import { DISCORD_BOT_ID, DISCORD_GUILD_ID, DISCORD_TOKEN } from "../../util/constants";
 import InspectPlayerSlash from "./admin/InspectPlayer.slash";
+import RemoveTopSpeedSlash from "./admin/RemoveTopSpeed.slash";
 import HelpSlash from "./information/Help.slash";
 import Top10Slash from "./rank/Top10.slash";
 import TopspeedSlash from "./rank/Topspeed.slash";
@@ -17,7 +18,8 @@ export default class SlashRegister
     TopspeedSlash,
     HelpSlash,
     Top10Slash,
-    InspectPlayerSlash
+    InspectPlayerSlash,
+    RemoveTopSpeedSlash
   ];
 
   constructor(private services: Services)
