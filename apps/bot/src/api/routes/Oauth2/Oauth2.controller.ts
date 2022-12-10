@@ -2,7 +2,10 @@ import { Application, Response, Request } from "express";
 import Services from "../../../services/Services";
 import { API_DOMAIN, DISCORD_BOT_ID, DISCORD_CLIENT_SECRET, DISCORD_GUILD_ID, STEAM_API_KEY } from "../../../util/constants";
 import type { ControllerRouter } from "../register.router";
-import fetch from "node-fetch";
+/**
+ * @type {import("node-fetch")}
+ */
+const fetch = require("node-fetch-commonjs");
 import AsyncAwait from "../../../util/AsyncAwait";
 import { isError } from "../../../util/errors";
 import { LinkedAccountModel } from "@dodgeball/mongodb";
@@ -154,7 +157,7 @@ export default class Oauth2Controller implements ControllerRouter
 
   public async discordCallback(req: Request, res: Response)
   {
-    const [auth, eAuth] = await AsyncAwait(fetch("https://discord.com/api/oauth2/token", {
+    const [auth, eAuth] = await AsyncAwait<any>(fetch("https://discord.com/api/oauth2/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
