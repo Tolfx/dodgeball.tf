@@ -4,6 +4,7 @@ import Services from "../../services/Services";
 import InspectPlayerInteractions from "./admin/InspectPlayer.interaction";
 import RemoveTopSpeedInteractions from "./admin/RemoveTopSpeed.interaction";
 import HelpInteraction from "./information/Help.interaction";
+import LinkInteraction from "./information/Link.interaction";
 import Top10Interactions from "./ranks/Top10.interactions";
 import TopSpeedInteractions from "./ranks/Topspeed.interactions";
 
@@ -35,7 +36,8 @@ export default class InteractionsRegister
     new HelpInteraction(),
     new Top10Interactions(),
     new InspectPlayerInteractions(),
-    new RemoveTopSpeedInteractions()
+    new RemoveTopSpeedInteractions(),
+    new LinkInteraction()
   ];
 
   constructor(private services: Services)

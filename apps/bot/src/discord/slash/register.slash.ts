@@ -5,6 +5,7 @@ import { DISCORD_BOT_ID, DISCORD_GUILD_ID, DISCORD_TOKEN } from "../../util/cons
 import InspectPlayerSlash from "./admin/InspectPlayer.slash";
 import RemoveTopSpeedSlash from "./admin/RemoveTopSpeed.slash";
 import HelpSlash from "./information/Help.slash";
+import LinkSlash from "./information/Link.slash";
 import Top10Slash from "./rank/Top10.slash";
 import TopspeedSlash from "./rank/Topspeed.slash";
 
@@ -19,7 +20,8 @@ export default class SlashRegister
     HelpSlash,
     Top10Slash,
     InspectPlayerSlash,
-    RemoveTopSpeedSlash
+    RemoveTopSpeedSlash,
+    LinkSlash
   ];
 
   constructor(private services: Services)
