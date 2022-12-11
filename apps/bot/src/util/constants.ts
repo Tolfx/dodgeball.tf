@@ -19,6 +19,9 @@ export const API_HOST = getEnv("API_HOST", "localhost");
 export const API_PROTOCOL = getEnv("API_PROTOCOL", "http");
 export const API_DOMAIN = `${API_PROTOCOL}://${API_HOST}${API_PROTOCOL === 'http' ? `:${API_PORT}` : ""}`;
 
+export const STRIPE_SECRET_KEY = getEnv("STRIPE_SECRET_KEY", "secret");
+export const STRIPE_WEBHOOK_SECRET = getEnv("STRIPE_WEBHOOK_SECRET", "secret");
+
 /**
  * @deprecated This was a stupid idea, when I can fetch from the database on bootstrap, but since when
  * I created the whole system I didn't really plan ahead, one next purge I'll remove it and fix the problem
