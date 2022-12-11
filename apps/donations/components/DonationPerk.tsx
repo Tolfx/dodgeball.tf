@@ -62,7 +62,7 @@ const DonationPerk: FC<DonationPerkProps> = (props) =>
             backgroundColor: Colors.DARK_ORANGE,
           },
         }}>
-          <Link href={process.env.NODE_ENV === 'production' ? `https://donate.dodgeball/donator?amount=${props.price}` : `http://localhost:3004/donator?amount=${props.price}`}>
+          <Link href={process.env.NODE_ENV === 'production' ? `https://donate.dodgeball.tf/donator?amount=${props.price}` : `http://localhost:3004/donator?amount=${props.price}`}>
             Click to get started
           </Link>
         </Button>
