@@ -13,6 +13,8 @@
     "@types/debug": "^4.1.7",
     "@types/express-session": "^1.17.5",
     "@types/mysql": "^2.15.21",
+    "@types/passport": "^1.0.11",
+    "@types/passport-steam": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "^8.22.0",
@@ -37,6 +39,9 @@
     "node-fetch": "^3.3.0",
     "node-fetch-commonjs": "^3.2.4",
     "node-steam-openid": "^1.0.1",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-steam": "^1.0.17",
+    "stripe": "^11.3.0"
   }
 }
