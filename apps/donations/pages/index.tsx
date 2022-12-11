@@ -1,4 +1,4 @@
-import { Container, createTheme, CssBaseline, ThemeProvider } from '@mui/material'
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
 import App from './App';
 
 const theme = createTheme({

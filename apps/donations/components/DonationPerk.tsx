@@ -9,9 +9,10 @@ interface DonationPerkProps {
   isMonthly?: boolean;
   isPermanent?: boolean;
   id: string;
-};
+}
 
-const DonationPerk: FC<DonationPerkProps> = (props) => {
+const DonationPerk: FC<DonationPerkProps> = (props) =>
+{
   return (
     <Card sx={{
       width: "100%",
