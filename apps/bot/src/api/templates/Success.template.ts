@@ -26,6 +26,11 @@ export default function SuccessTemplate(message?: string)
                     font-weight: bold;
                     color: #000;
                 }
+
+                a {
+                    text-decoration: none;
+                    color: #FE902E;
+                }
             </style>
         </head>
         <body>

@@ -1,7 +1,10 @@
+import { DonatorUserModel } from "@dodgeball/mongodb";
 import debug from "debug";
 import express from "express";
 import session from "express-session";
+import passport from "passport";
 import { API_PORT } from "../util/constants";
+import SteamPassport from "./passport/Steam.passport";
 
 const LOG = debug('dodgeball:bot:api:setupApi')
 
@@ -20,7 +23,17 @@ export default function setupApi()
   });
 
   // Setup body parser
-  server.use(express.json());
+  server.use((req, res, next) => 
+  {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    express.json({
+      verify: (req, res, buf) =>
+      {
+        // @ts-ignore
+        req.rawBody = buf;
+      }
+    })(req, res, next);
+  })
   server.use(express.urlencoded({ extended: true }));
 
   const sessionMiddleWare = session({
@@ -34,6 +47,24 @@ export default function setupApi()
   });
 
   server.use(sessionMiddleWare);
+
+  passport.use(SteamPassport);
+
+  passport.serializeUser(function (user, done)
+  {
+    // @ts-ignore
+    done(null, user);
+  });
+
+  passport.deserializeUser(function (id, done)
+  {
+    // @ts-ignore
+    done(null, id)
+  });
+
+  server.use(passport.initialize());
+  server.use(passport.session());
+
 
   server.listen(API_PORT, () => LOG(`API listening on port ${API_PORT}`));
 

@@ -1,6 +1,7 @@
 import debug from "debug";
 import { Application, Router } from "express";
 import Services from "../../services/Services";
+import DonatorConfig from "./Donator/Donator.config";
 import Oauth2Config from "./Oauth2/Oauth2.config";
 
 const LOG = debug('dodgeball:bot:api:routes:register.router')
@@ -24,7 +25,8 @@ export default class RegisterRouters
   private services: Services;
 
   private Routes = [
-    Oauth2Config
+    Oauth2Config,
+    DonatorConfig
   ]
 
   constructor(services: Services)
