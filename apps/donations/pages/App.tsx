@@ -68,7 +68,6 @@ export default function App()
             }}>TF</span>
           </Typography>
         </Box>
-
         <Box sx={{
           display: "flex",
           justifyContent: "center",
