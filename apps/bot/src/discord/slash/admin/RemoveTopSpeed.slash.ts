@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import Services from "../../../services/Services"
 import { TOPSPEED_SERVERS_IDS } from "../../../util/constants";
 
@@ -12,6 +12,7 @@ export default async (service: Services) =>
   return new SlashCommandBuilder()
     .setName('remove-top-speed')
     .setDescription('Remove top speed from a server, not including the server id will remove it from all servers')
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addStringOption(option =>
     {
       option.setName('steamid')
