@@ -977,6 +977,9 @@
     "nodemon" "^2.0.20"
     "passport" "^0.6.0"
     "passport-steam" "^1.0.17"
+    "rcon-srcds" "^2.0.1"
+    "steamid" "^2.0.0"
+    "stripe" "^11.3.0"
 
 "@dodgeball/donations@file:E:\\Programming\\Typescript\\dodgeball.tf\\apps\\donations":
   "resolved" "file:apps/donations"
@@ -1715,6 +1718,11 @@
   dependencies:
     "@types/mime" "*"
     "@types/node" "*"
+
+"@types/steamid@^2.0.1":
+  "integrity" "sha512-B8sy9wfOOeh+yNrFFzyghCQ1n3rssYbTvZD2kXzuy3HSJEK7TVeYnrpXG/0dOKrq1VU8D7cWORgszsdqKBZnVg=="
+  "resolved" "https://registry.npmjs.org/@types/steamid/-/steamid-2.0.1.tgz"
+  "version" "2.0.1"
 
 "@types/webidl-conversions@*":
   "integrity" "sha512-xTE1E+YF4aWPJJeUzaZI5DRntlkY3+BCVJi0axFptnjGmAoWxkyREIh/XMrfxVLejwQxMCfDXdICo0VLxThrog=="
@@ -4551,6 +4559,11 @@
     "iconv-lite" "0.4.24"
     "unpipe" "1.0.0"
 
+"rcon-srcds@^2.0.1":
+  "integrity" "sha512-MhfL5DwFM3NHKb5Zf0xjR5mLZfvtvMFGm7lpQwJTn0dmAFMpd6exzn4Xl9Abc2sxwe3QCQYyZ1fanabCmj06vA=="
+  "resolved" "https://registry.npmjs.org/rcon-srcds/-/rcon-srcds-2.0.1.tgz"
+  "version" "2.0.1"
+
 "react-dom@^17.0.0 || ^18.0.0", "react-dom@^17.0.2 || ^18.0.0-0", "react-dom@^18.2.0", "react-dom@>=16.6.0", "react-dom@18.2.0":
   "integrity" "sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
@@ -4965,6 +4978,11 @@
   "version" "0.4.0"
   dependencies:
     "qs" "^6.1.0"
+
+"steamid@^2.0.0":
+  "integrity" "sha512-+BFJMbo+IxzyfovLR37E7APkaNfmrL3S+88T7wTMRHnQ6LBhzEawPnjfWNKM9eUL/dH45j+7vhSX4WaGXoa4/Q=="
+  "resolved" "https://registry.npmjs.org/steamid/-/steamid-2.0.0.tgz"
+  "version" "2.0.0"
 
 "streamsearch@^1.1.0":
   "integrity" "sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg=="
