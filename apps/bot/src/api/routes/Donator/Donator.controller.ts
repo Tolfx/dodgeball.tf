@@ -40,6 +40,9 @@ export default class DonatorController implements ControllerRouter
 
     const amountNum = parseFloat(String(amount));
 
+    if (amountNum < 2.5)
+      return res.status(400).send(ErrorTemplate("Minimum amount is $2.50!"));
+
     const session = await this.stripe.checkout.sessions.create({
       line_items: [
         {

@@ -92,6 +92,9 @@ export default (amount = 2.5) =>
           document.getElementById('title').innerHTML = 'Title: Patron';
         else
           document.getElementById('title').innerHTML = 'Title: Supporter';
+
+        if (parseInt(amount) < 2.5)
+          document.getElementById('amount').value = 2.5;
       };
   
       clickStripe.addEventListener('click', () => {
