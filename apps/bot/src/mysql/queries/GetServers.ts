@@ -6,11 +6,12 @@ export type Server = {
   port: number;
   name: string;
   game: string;
+  rcon_password: string;
 }
 
 export default function GetServers()
 {
-  const query = `SELECT serverId,address,port,name,game FROM hlstatsx.hlstats_Servers`;
+  const query = `SELECT serverId,address,port,name,game,rcon_password FROM hlstatsx.hlstats_Servers`;
 
   return (connection: mysql.Connection): Promise<Array<Server>> => new Promise((resolve, reject) =>
   {

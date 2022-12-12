@@ -7,7 +7,7 @@ import ErrorTemplate from "../../templates/Error.template";
 import { Stripe } from "stripe";
 import { API_DOMAIN, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from "../../../util/constants";
 import SuccessTemplate from "../../templates/Success.template";
-import { DonatorUser, DonatorUserModel, DonatorUserSchema } from "@dodgeball/mongodb";
+import { DonatorUserModel } from "@dodgeball/mongodb";
 
 const LOG = debug('dodgeball:bot:api:routes:donator:donator.controller');
 
@@ -57,13 +57,18 @@ export default class DonatorController implements ControllerRouter
       metadata: {
         // @ts-ignore
         steamId: user.steamId,
+        // @ts-ignore
+        steamName: user.steamName,
       },
       mode: 'payment',
       success_url: `${API_DOMAIN}/donator/stripe/success`,
       cancel_url: `${API_DOMAIN}/donator/stripe/cancel`,
     });
 
-    return res.redirect(303, session.url!);
+    if (!session.url)
+      return res.status(500).send(ErrorTemplate("Something went wrong!"));
+
+    return res.redirect(303, session.url);
   }
 
   public async stripeSuccess(req: Request, res: Response)
@@ -112,6 +117,7 @@ export default class DonatorController implements ControllerRouter
       {
         const newDonator = new DonatorUserModel({
           steamId: metadata.steamId,
+          steamName: metadata.steamName,
           isActive: true,
           title: amount >= 25 ? 'patron' : 'supporter',
           isPermanent: amount >= 25 ? true : false,
@@ -120,17 +126,22 @@ export default class DonatorController implements ControllerRouter
         });
 
         await newDonator.save();
+
+        this.services.getServerRegisterService()?.addDonator(newDonator)
       }
       // If they are already a donator, lets update their info
       else
       {
         const currentTitle = donator.title;
+        const wasActive = donator.isActive;
         donator.isActive = true;
         donator.title = currentTitle === 'patron' ? 'patron' : amount >= 25 ? 'patron' : 'supporter';
         donator.isPermanent = currentTitle === 'patron' ? true : amount >= 25 ? true : false;
         donator.expiresAt = currentTitle === 'patron' ? undefined : amount >= 25 ? undefined : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
         donator.lastPaidAt = new Date();
         await donator.save();
+        if (!wasActive) this.services.getServerRegisterService()?.addDonator(donator)
+        if (currentTitle !== 'patron' && amount >= 25) this.services.getServerRegisterService()?.updateDonator(donator)
       }
     }
 

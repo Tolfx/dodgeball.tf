@@ -3,6 +3,7 @@ import { model, Schema, Document } from "mongoose";
 export interface DonatorUser
 {
   steamId: string;
+  steamName: string;
   /**
    * Title of the donator, none is the default value
    */
@@ -15,6 +16,7 @@ export interface DonatorUser
 
 export const DonatorUserSchema: Schema = new Schema({
   steamId: { type: String, required: true },
+  steamName: { type: String, required: true },
   title: { type: String, enum: ['supporter', 'patron', ' booster', 'none'], default: 'none' },
   isActive: { type: Boolean, default: false },
   isPermanent: { type: Boolean, required: false },

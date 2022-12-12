@@ -11,6 +11,7 @@ import CacheService from "./services/CacheService";
 import Services from "./services/Services";
 import setupApi from "./api/setupApi";
 import RegisterRouters from "./api/routes/register.router";
+import ServerRegisterService from "./services/ServerRegisterService";
 
 const LOG = debug('dodgeball:bot:bootstrap')
 
@@ -45,6 +46,10 @@ const bootstrap = async () =>
 
   const routerRegister = new RegisterRouters(services);
   routerRegister.registerRouters();
+
+  const serverRegisterService = new ServerRegisterService(services);
+  await serverRegisterService.start();
+  services.setServerRegisterService(serverRegisterService);
 
   LOG('Bot started');
 };

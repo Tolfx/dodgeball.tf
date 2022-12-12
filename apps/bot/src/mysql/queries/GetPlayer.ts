@@ -16,7 +16,7 @@ export type HlstatsPlayers = {
 
 export default function GetPlayer(playerId: string)
 {
-  const query = `SELECT * FROM hlstatsx.hlstats_Players WHERE playerId = '${playerId}}'`;
+  const query = `SELECT * FROM hlstatsx.hlstats_Players WHERE playerId = '${playerId}'`;
 
   return (connection: mysql.Connection): Promise<Array<HlstatsPlayers>> => new Promise((resolve, reject) =>
   {

@@ -12,15 +12,16 @@ export default new SteamStrategy({
   async function (identifier, profile, done)
   {
     // Will use this for donators for now?
-    let user = await DonatorUserModel.findOne({
+    const user = await DonatorUserModel.findOne({
       steamId: profile.id
     });
 
     if (!user)
     {
       // Create new user
-      let newUser = await (new DonatorUserModel({
+      const newUser = await (new DonatorUserModel({
         steamId: profile.id,
+        steamName: profile.displayName
       }).save());
 
       const newUserData = Object.assign(newUser.toJSON(), { identifier });

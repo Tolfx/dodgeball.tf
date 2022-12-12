@@ -3,6 +3,7 @@ import { Client } from "discord.js";
 import { Application } from "express";
 import mysql from 'mysql';
 import CacheService from "./CacheService";
+import ServerRegisterService from "./ServerRegisterService";
 
 export default class Services
 {
@@ -11,6 +12,7 @@ export default class Services
   private mongodb: MongoDb;
   private server: Application;
   private cacheService?: CacheService;
+  private serverRegisterService?: ServerRegisterService;
 
   constructor(discordClient: Client, mysqlConnection: mysql.Connection, mongodb: MongoDb, server: Application)
   {
@@ -48,5 +50,15 @@ export default class Services
   getCacheService()
   {
     return this.cacheService;
+  }
+
+  setServerRegisterService(serverRegisterService: ServerRegisterService)
+  {
+    this.serverRegisterService = serverRegisterService;
+  }
+
+  getServerRegisterService()
+  {
+    return this.serverRegisterService;
   }
 }
