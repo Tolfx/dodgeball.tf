@@ -30,7 +30,7 @@ export default function Fame()
       {
         console.error(error);
       });
-  });
+  }, []);
 
   return (
     <>
