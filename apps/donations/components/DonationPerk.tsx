@@ -37,8 +37,9 @@ const DonationPerk: FC<DonationPerkProps> = (props) =>
         </Typography>
       </CardContent>
       <CardContent>
-        {/* Table of the perks */}
-        <Typography variant="h5" component="h2">
+        <Typography variant="h5" component="h2" sx={{
+          marginLeft: "1.5rem",
+        }}>
           Perks
         </Typography>
         <ul>
@@ -57,13 +58,14 @@ const DonationPerk: FC<DonationPerkProps> = (props) =>
       }}>
         <Button sx={{
           color: 'white',
+          fontSize: '1rem',
           backgroundColor: Colors.ORANGE,
           '&:hover': {
             backgroundColor: Colors.DARK_ORANGE,
           },
         }}>
           <Link href={process.env.NODE_ENV === 'production' ? `https://donate.dodgeball.tf/donator?amount=${props.price}` : `http://localhost:3004/donator?amount=${props.price}`}>
-            Click to get started
+            Proceed
           </Link>
         </Button>
       </CardActions>
