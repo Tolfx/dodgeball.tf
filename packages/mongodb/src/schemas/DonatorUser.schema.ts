@@ -9,6 +9,11 @@ export interface DonatorUser
    */
   title: 'supporter' | 'patron' | 'booster' | 'none';
   isActive: boolean;
+  donations: Array<{
+    amount: string;
+    currency: string;
+    createdAt: Date;
+  }>;
   isPermanent?: boolean;
   expiresAt?: Date;
   lastPaidAt?: Date;
@@ -18,6 +23,16 @@ export const DonatorUserSchema: Schema = new Schema({
   steamId: { type: String, required: true },
   steamName: { type: String, required: true },
   title: { type: String, enum: ['supporter', 'patron', ' booster', 'none'], default: 'none' },
+  donations: {
+    type: [
+      {
+        amount: { type: String, required: true },
+        currency: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now },
+      }
+    ],
+    default: []
+  },
   isActive: { type: Boolean, default: false },
   isPermanent: { type: Boolean, required: false },
   expiresAt: { type: Date, required: false },

@@ -40,18 +40,22 @@ export default class ServerService
     // First add to database
     // RCON rehash
     await this.rcon('sm_rehash');
-    const steamid = new SteamID(donator.steamId)
+    const steamid = new SteamID(donator.steamId);
     await this.rcon(`sm_joinmsgonid "${steamid.steam2()}" "${donator.steamName}"`);
   }
 
   async updateDonator(donator: DonatorUser)
   {
     await this.rcon('sm_rehash');
+    const steamid = new SteamID(donator.steamId);
+    await this.rcon(`sm_joinmsgonid "${steamid.steam2()}" "${donator.steamName}"`);
   }
 
-  async removeDonator(donor: DonatorUser)
+  async removeDonator(donator: DonatorUser)
   {
-    // 
+    await this.rcon('sm_rehash');
+    const steamid = new SteamID(donator.steamId)
+    await this.rcon(`sm_joinmsgoffid "${steamid.steam2()}"`);
   }
 
 }

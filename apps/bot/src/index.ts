@@ -12,6 +12,7 @@ import Services from "./services/Services";
 import setupApi from "./api/setupApi";
 import RegisterRouters from "./api/routes/register.router";
 import ServerRegisterService from "./services/ServerRegisterService";
+import RegisterEvents from "./events/register.events";
 
 const LOG = debug('dodgeball:bot:bootstrap')
 
@@ -50,6 +51,10 @@ const bootstrap = async () =>
   const serverRegisterService = new ServerRegisterService(services);
   await serverRegisterService.start();
   services.setServerRegisterService(serverRegisterService);
+
+  const registerEvents = new RegisterEvents(services);
+  registerEvents.register();
+  services.setEventRegister(registerEvents);
 
   LOG('Bot started');
 };

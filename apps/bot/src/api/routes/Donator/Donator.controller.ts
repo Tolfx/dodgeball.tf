@@ -8,6 +8,9 @@ import { Stripe } from "stripe";
 import { API_DOMAIN, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from "../../../util/constants";
 import SuccessTemplate from "../../templates/Success.template";
 import { DonatorUserModel } from "@dodgeball/mongodb";
+import { Event } from "../../../events/register.events";
+import { OnDonatePayload } from "../../../events/Donations/OnDonateAdd.event";
+import { OnDonateUpdatePayload } from "../../../events/Donations/OnDonateUpdate.event";
 
 const LOG = debug('dodgeball:bot:api:routes:donator:donator.controller');
 
@@ -125,12 +128,19 @@ export default class DonatorController implements ControllerRouter
           title: amount >= 25 ? 'patron' : 'supporter',
           isPermanent: amount >= 25 ? true : false,
           expiresAt: amount >= 25 ? null : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          donations: [
+            {
+              amount: String(amount),
+              currency: 'USD',
+              createdAt: new Date(),
+            }
+          ],
           lastPaidAt: new Date(),
         });
 
         await newDonator.save();
 
-        this.services.getServerRegisterService()?.addDonator(newDonator)
+        this.services.getEventRegister()?.emit(new Event<OnDonatePayload>("1", 'donator.added', { donator: newDonator }));
       }
       // If they are already a donator, lets update their info
       else
@@ -142,14 +152,55 @@ export default class DonatorController implements ControllerRouter
         donator.isPermanent = currentTitle === 'patron' ? true : amount >= 25 ? true : false;
         donator.expiresAt = currentTitle === 'patron' ? undefined : amount >= 25 ? undefined : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
         donator.lastPaidAt = new Date();
+        donator.donations.push({
+          amount: String(amount),
+          currency: 'USD',
+          createdAt: new Date(),
+        });
         await donator.save();
-        if (!wasActive) this.services.getServerRegisterService()?.addDonator(donator)
-        if (currentTitle !== 'patron' && amount >= 25) this.services.getServerRegisterService()?.updateDonator(donator)
+        if (!wasActive)
+        {
+          this.services.getEventRegister()?.emit(new Event<OnDonatePayload>("1", 'donator.added', { donator }));
+        }
+        else
+        {
+          this.services.getEventRegister()?.emit(new Event<OnDonateUpdatePayload>("1", 'donator.updated',
+            { donator, beforeAmount: amount, beforeTitle: currentTitle }
+          ));
+        }
       }
     }
 
     // Return a response to acknowledge receipt of the event
     res.json({ received: true });
+  }
+
+  public async getDonators(req: Request, res: Response)
+  {
+    // Lets get donators who has donations, so we can show them in the hall of fame
+    const donators = await DonatorUserModel.find({ donations: { $exists: true, $not: { $size: 0 } } });
+    // Sort them by the amount of donations they have
+    // We want to sort by checking the amount in donators.donations.amount
+    // and then sum them up
+    const sortedDonators = donators.sort((a, b) =>
+    {
+      const aAmount = a.donations.reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
+      const bAmount = b.donations.reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
+      return bAmount - aAmount;
+    });
+
+    // Lets also not include everything, we only want name and the amount
+    const donatorsToSend = sortedDonators.map(donator =>
+    {
+      const amount = donator.donations.reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
+      return {
+        name: donator.steamName,
+        amount,
+        steamid: donator.steamId,
+      }
+    });
+
+    return res.send(donatorsToSend);
   }
 
 }

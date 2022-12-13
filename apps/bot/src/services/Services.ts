@@ -2,6 +2,7 @@ import { MongoDb } from "@dodgeball/mongodb";
 import { Client } from "discord.js";
 import { Application } from "express";
 import mysql from 'mysql';
+import RegisterEvents from "../events/register.events";
 import CacheService from "./CacheService";
 import ServerRegisterService from "./ServerRegisterService";
 
@@ -13,6 +14,7 @@ export default class Services
   private server: Application;
   private cacheService?: CacheService;
   private serverRegisterService?: ServerRegisterService;
+  private eventRegister?: RegisterEvents;
 
   constructor(discordClient: Client, mysqlConnection: mysql.Connection, mongodb: MongoDb, server: Application)
   {
@@ -60,5 +62,15 @@ export default class Services
   getServerRegisterService()
   {
     return this.serverRegisterService;
+  }
+
+  setEventRegister(eventRegister: RegisterEvents)
+  {
+    this.eventRegister = eventRegister;
+  }
+
+  getEventRegister()
+  {
+    return this.eventRegister;
   }
 }
