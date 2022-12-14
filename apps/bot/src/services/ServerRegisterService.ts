@@ -44,7 +44,7 @@ export default class ServerRegisterService
 
   public async updateDonator(donator: DonatorUser)
   {
-    await UpdateDonator(donator, this.services.getCacheService()?.getAllCachedServers()?.length)(this.services.getMysqlConnection());
+    await UpdateDonator(donator)(this.services.getMysqlConnection());
     const servers = this.getAllServers();
     for (const server of servers)
     {
