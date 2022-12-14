@@ -1,11 +1,12 @@
 import debug from "debug";
 import Services from "../services/Services";
 import OnDonateAdd from "./Donations/OnDonateAdd.event";
+import OnDonateRemove from "./Donations/OnDonateRemove.event";
 import OnDonateUpdate from "./Donations/OnDonateUpdate.event";
 
 const LOG = debug('dodgeball:bot:events:register.events');
 
-export type Events = "donator.added" | "donator.updated";
+export type Events = "donator.added" | "donator.updated" | "donator.removed";
 
 export interface EventHandler<Payload>
 {
@@ -36,7 +37,8 @@ export default class RegisterEvents
 
   private OnEvents = [
     OnDonateAdd,
-    OnDonateUpdate
+    OnDonateUpdate,
+    OnDonateRemove
   ];
 
   constructor(services: Services)

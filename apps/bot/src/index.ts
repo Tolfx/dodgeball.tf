@@ -13,6 +13,8 @@ import setupApi from "./api/setupApi";
 import RegisterRouters from "./api/routes/register.router";
 import ServerRegisterService from "./services/ServerRegisterService";
 import RegisterEvents from "./events/register.events";
+import CronJobs from "./cron/cron";
+import RemoveExpiredDonatorsCron from "./cron/jobs/RemoveExpiredDonators.cron";
 
 const LOG = debug('dodgeball:bot:bootstrap')
 
@@ -55,6 +57,9 @@ const bootstrap = async () =>
   const registerEvents = new RegisterEvents(services);
   registerEvents.register();
   services.setEventRegister(registerEvents);
+
+  CronJobs.init(services);
+
 
   LOG('Bot started');
 };
