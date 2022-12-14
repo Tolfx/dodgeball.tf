@@ -1,0 +1,1 @@
+export const RUN_ALL_ON_STARTUP = process.env.RUN_ALL_ON_STARTUP || true;
