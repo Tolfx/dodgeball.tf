@@ -3,9 +3,9 @@ name: Docker Image - Micro - Purge Top Speed
 on:
   push:
     paths:
-      - 'microservices/fetchServer/src/**'
-      - 'microservices/fetchServer/package.json'
-      - 'microservices/fetchServer/Dockerfile'
+      - 'microservices/purgeTopSpeed/src/**'
+      - 'microservices/purgeTopSpeed/package.json'
+      - 'microservices/purgeTopSpeed/Dockerfile'
     branches:
       - master
 
