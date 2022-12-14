@@ -2,6 +2,7 @@ import debug from "debug";
 import { CacheType, ChatInputCommandInteraction, Client, StringSelectMenuInteraction } from "discord.js";
 import Services from "../../services/Services";
 import InspectPlayerInteractions from "./admin/InspectPlayer.interaction";
+import ManuallyLinkInteraction from "./admin/ManuallyLink.interaction";
 import RemoveTopSpeedInteractions from "./admin/RemoveTopSpeed.interaction";
 import HelpInteraction from "./information/Help.interaction";
 import LinkInteraction from "./information/Link.interaction";
@@ -37,7 +38,8 @@ export default class InteractionsRegister
     new Top10Interactions(),
     new InspectPlayerInteractions(),
     new RemoveTopSpeedInteractions(),
-    new LinkInteraction()
+    new LinkInteraction(),
+    new ManuallyLinkInteraction()
   ];
 
   constructor(private services: Services)
