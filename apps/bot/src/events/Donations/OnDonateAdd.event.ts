@@ -1,6 +1,8 @@
 import { DonatorUser } from "@dodgeball/mongodb";
 import debug from "debug";
+import SteamID from "steamid";
 import OnDonateEmbed from "../../discord/embeds/information/OnDonate.embed";
+import GetAdmins from "../../mysql/queries/GetAdmins";
 import Services from "../../services/Services";
 import { DISCORD_OWNER_ID, DISCORD_WEBHOOKS } from "../../util/constants";
 import { webhookUrlToIdAndToken } from "../../util/discord";
@@ -28,7 +30,14 @@ export default class OnDonateAdd implements EventHandler<OnDonatePayload>
   {
     LOG(`Donator added: ${event.payload.donator.steamName}, steamid: ${event.payload.donator.steamId}`)
     const { donator } = event.payload;
-    this.services.getServerRegisterService()?.addDonator(donator);
+
+    const admins = await GetAdmins()(this.services.getMysqlConnection());
+
+    // Let's make sure we don't the admin as a donator in the database
+    const admin = admins.find((admin) => admin.authid === (new SteamID(donator.steamId)).steam2());
+    if (!admin)
+      this.services.getServerRegisterService()?.addDonator(donator);
+
 
     // Send webhook to discord
     const client = this.services.getDiscordClient();

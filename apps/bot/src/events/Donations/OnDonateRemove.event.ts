@@ -3,6 +3,7 @@ import { DonatorUser, DonatorUserModel } from "@dodgeball/mongodb";
 import debug from "debug";
 import SteamID from "steamid";
 import DeleteDonator from "../../mysql/queries/DeleteDonator";
+import GetAdmins from "../../mysql/queries/GetAdmins";
 import Services from "../../services/Services";
 import { Colors, DISCORD_OWNER_ID, DISCORD_WEBHOOKS } from "../../util/constants";
 import { webhookUrlToIdAndToken } from "../../util/discord";
@@ -28,11 +29,15 @@ export default class OnDonateRemove implements EventHandler<OnDonateRemovePayloa
 
   async handle(event: Event<OnDonateRemovePayload>)
   {
-    LOG(`Deleting donator: ${event.payload.donator.steamName}, steamid: ${event.payload.donator.steamId}`)
     const { donator } = event.payload;
-
+    
+    const admins = await GetAdmins()(this.services.getMysqlConnection());
+    const admin = admins.find((admin) => admin.authid === (new SteamID(donator.steamId)).steam2());
+    
     // Lets make a safety check that this donator is not a patron or permanent
-    if (donator.title === 'patron' || donator.isPermanent) return;
+    if (donator.title === 'patron' || donator.isPermanent || admin) return;
+    
+    LOG(`Deleting donator: ${event.payload.donator.steamName}, steamid: ${event.payload.donator.steamId}`)
 
     const mysql = this.services.getMysqlConnection();
     await DeleteDonator(donator)(mysql);

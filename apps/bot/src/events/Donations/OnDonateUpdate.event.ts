@@ -1,6 +1,8 @@
 import { DonatorUser } from "@dodgeball/mongodb";
 import debug from "debug";
+import SteamID from "steamid";
 import OnDonateEmbed from "../../discord/embeds/information/OnDonate.embed";
+import GetAdmins from "../../mysql/queries/GetAdmins";
 import Services from "../../services/Services";
 import { DISCORD_OWNER_ID, DISCORD_WEBHOOKS } from "../../util/constants";
 import { webhookUrlToIdAndToken } from "../../util/discord";
@@ -31,7 +33,10 @@ export default class OnDonateUpdate implements EventHandler<OnDonateUpdatePayloa
     LOG(`Donator updated: ${event.payload.donator.steamName}, steamid: ${event.payload.donator.steamId}`)
     const { donator, beforeAmount, beforeTitle } = event.payload;
 
-    if (beforeTitle !== 'patron' && beforeAmount >= 25)
+    const admins = await GetAdmins()(this.services.getMysqlConnection());
+    const admin = admins.find((admin) => admin.authid === (new SteamID(donator.steamId)).steam2());
+
+    if (beforeTitle !== 'patron' && beforeAmount >= 25 && !admin)
     {
       this.services.getServerRegisterService()?.updateDonator(donator);
     }
