@@ -51,6 +51,7 @@ export default class AddBoostersCron
     }
 
     // loop through all boosters
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const [_,booster] of boosters)
     {
       // find the linked account

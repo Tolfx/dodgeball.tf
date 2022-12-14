@@ -22,7 +22,7 @@ export default function DeleteDonator(donator: DonatorUser)
 
           connection
             .query(queryDeleteDonator,
-              (err, results) =>
+              (err) =>
               {
                 if (err)
                   return reject(err);

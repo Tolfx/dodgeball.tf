@@ -2,7 +2,7 @@ import { DonatorUser } from '@dodgeball/mongodb';
 import mysql from 'mysql';
 import SteamID from 'steamid';
 
-export default function UpdateDonator(donator: DonatorUser, serverAmounts = 3)
+export default function UpdateDonator(donator: DonatorUser)
 {
   // We gonna do some multiple inserts here...
   const srvGroupSupporter = 5;
@@ -65,7 +65,7 @@ export default function UpdateDonator(donator: DonatorUser, serverAmounts = 3)
 
           connection
             .query(queryUpateDonator,
-              (err, results) =>
+              (err) =>
               {
                 if (err)
                   return reject(err);

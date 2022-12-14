@@ -14,7 +14,6 @@ import RegisterRouters from "./api/routes/register.router";
 import ServerRegisterService from "./services/ServerRegisterService";
 import RegisterEvents from "./events/register.events";
 import CronJobs from "./cron/cron";
-import RemoveExpiredDonatorsCron from "./cron/jobs/RemoveExpiredDonators.cron";
 
 const LOG = debug('dodgeball:bot:bootstrap')
 
