@@ -1,0 +1,40 @@
+{
+    "name": "@dodgeball/mysql",
+    "version": "0.0.0",
+    "license": "MIT",
+    "private": true,
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "source": "./src/index.ts",
+    "files": [
+        "dist/**"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsc",
+        "clean": "rm -rf dist",
+        "lint": "TIMING=1 eslint src/**/*.ts* --fix"
+    },
+    "devDependencies": {
+        "@types/debug": "^4.1.7",
+        "@types/mysql": "^2.15.21",
+        "@typescript-eslint/eslint-plugin": "^5.33.0",
+        "@typescript-eslint/parser": "^5.33.0",
+        "eslint": "^8.22.0",
+        "eslint-config-custom": "*",
+        "ts-node": "^10.9.1",
+        "tsconfig": "*",
+        "typescript": "^4.9.3"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "debug": "^4.3.4",
+        "dotenv": "^16.0.3",
+        "mysql": "^2.18.1",
+        "nodemon": "^2.0.20"
+    }
+}

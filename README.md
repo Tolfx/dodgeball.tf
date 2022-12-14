@@ -19,3 +19,6 @@ We can also re cache server data with the endpoint `/servers/serverinfo/:ip/:por
 ### Web
 
 The frontend of [dodgeball.tf](https://dodgeball.tf), it fetches `/servers` and get all of the servers and we fetch server info later once we got them all.
+
+### Bot
+Bot is our discord bot, and an api for donations/linking. Does some administration work as well some cron jobs keeping our server clean etc.

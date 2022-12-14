@@ -1014,6 +1014,25 @@
   dependencies:
     "mongoose" "^6.7.0"
 
+"@dodgeball/mysql@*", "@dodgeball/mysql@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\mysql":
+  "resolved" "file:packages/mysql"
+  "version" "0.0.0"
+  dependencies:
+    "debug" "^4.3.4"
+    "dotenv" "^16.0.3"
+    "mysql" "^2.18.1"
+    "nodemon" "^2.0.20"
+
+"@dodgeball/purgetopspeed@file:E:\\Programming\\Typescript\\dodgeball.tf\\microservices\\purgeTopSpeed":
+  "resolved" "file:microservices/purgeTopSpeed"
+  "version" "0.0.0"
+  dependencies:
+    "@dodgeball/mongodb" "*"
+    "@dodgeball/mysql" "*"
+    "@types/debug" "^4.1.7"
+    "cron" "^2.1.0"
+    "debug" "^4.3.4"
+
 "@dodgeball/ui@*", "@dodgeball/ui@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\ui":
   "resolved" "file:packages/ui"
   "version" "0.0.0"

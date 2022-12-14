@@ -10,6 +10,7 @@
     "lint": "TIMING=1 eslint src/**/*.ts* --fix"
   },
   "devDependencies": {
+    "@types/cron": "^2.0.0",
     "@types/debug": "^4.1.7",
     "@types/express-session": "^1.17.5",
     "@types/mysql": "^2.15.21",
@@ -29,6 +30,7 @@
   "license": "ISC",
   "dependencies": {
     "@dodgeball/mongodb": "*",
+    "cron": "^2.1.0",
     "debug": "^4.3.4",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
