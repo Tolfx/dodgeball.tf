@@ -83,13 +83,20 @@ export default function App()
                 Bans
               </Link>
             </Button>
-              <Button sx={{
-                fontSize: "24px",
-              }}>
-                <Link target={'_blank'} href="https://forum.dodgeball.tf/" color="inherit" underline="none">
-                  Forums
-                </Link>
-              </Button>
+            <Button sx={{
+              fontSize: "24px",
+            }}>
+              <Link target={'_blank'} href="https://forum.dodgeball.tf/" color="inherit" underline="none">
+                Forums
+              </Link>
+            </Button>
+            <Button sx={{
+              fontSize: "24px",
+            }}>
+              <Link target={'_blank'} href="https://donations.dodgeball.tf/" color="inherit" underline="none">
+                Donate
+              </Link>
+            </Button>
             <Button sx={{
               fontSize: "24px",
             }}>
