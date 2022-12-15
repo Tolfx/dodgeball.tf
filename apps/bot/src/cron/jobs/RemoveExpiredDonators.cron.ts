@@ -15,7 +15,7 @@ export default class RemoveExpiredDonatorsCron
   {
     // Every day at 01:00 in midnight
     // in Europe/Stockholm
-    new CronJob("0 0 1 * * *", () =>
+    new CronJob("0 1 * * *", () =>
     {
       LOG(`Running cron job`);
       this.run();

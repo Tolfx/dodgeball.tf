@@ -14,10 +14,10 @@ export default class AddBoostersCron
   {
     // Every day at 03:00 in midnight
     // in Europe/Stockholm
-    new CronJob("0 0 3 * * *", () =>
+    new CronJob("0 3 * * *", async () =>
     {
-      LOG(`Running cron job`);
-      this.run();
+      LOG("Running cron job");
+      await this.run();
     }, null, true, "Europe/Stockholm");
   }
 
