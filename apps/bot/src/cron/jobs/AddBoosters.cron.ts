@@ -42,7 +42,7 @@ export default class AddBoostersCron
     }
 
     // get all boosters
-    const boosters = guild.members.cache.filter(member => member.premiumSince !== null);
+    const boosters = (await guild.members.fetch()).filter(member => member.premiumSince !== null);
 
     if (!boosters)
     {

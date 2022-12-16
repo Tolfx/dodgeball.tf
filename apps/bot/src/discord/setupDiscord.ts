@@ -14,7 +14,8 @@ export default () =>
       'Guilds',
       'GuildMessageReactions',
       'GuildMessages',
-      'MessageContent'
+      'MessageContent',
+      'GuildMembers'
     ]
   });
 

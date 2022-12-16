@@ -66,6 +66,11 @@ export default class RemoveExpiredDonatorsCron
 
     LOG(`Found ${donatorsToRemove.length} donators to remove`);
 
+    if (donatorsToRemove.length === 0)
+    {
+      return;
+    }
+
     // Loop through all donators
     for await (const donator of donatorsToRemove)
     {
