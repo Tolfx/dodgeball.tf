@@ -2,6 +2,7 @@ import debug from "debug";
 import Services from "../services/Services";
 import AddBoostersCron from "./jobs/AddBoosters.cron";
 import RemoveExpiredDonatorsCron from "./jobs/RemoveExpiredDonators.cron";
+import RemoveNoneBoosterCron from "./jobs/RemoveNoneBoosters.cron";
 
 const LOG = debug("dodgeball:bot:cron");
 
@@ -9,7 +10,8 @@ export default class CronJobs
 {
   private static crons = [
     AddBoostersCron,
-    RemoveExpiredDonatorsCron
+    RemoveExpiredDonatorsCron,
+    RemoveNoneBoosterCron
   ];
   
   public static async init(services: Services)
