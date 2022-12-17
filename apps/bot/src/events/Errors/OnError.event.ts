@@ -13,7 +13,7 @@ export interface OnErrorPayload
   stack?: string;
 }
 
-export default class OnDonateUpdate implements EventHandler<OnErrorPayload>
+export default class OnError implements EventHandler<OnErrorPayload>
 {
   public event = "error" as const;
 
