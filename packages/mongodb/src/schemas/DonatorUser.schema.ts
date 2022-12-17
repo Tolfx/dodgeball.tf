@@ -22,7 +22,7 @@ export interface DonatorUser
 export const DonatorUserSchema: Schema = new Schema({
   steamId: { type: String, required: true },
   steamName: { type: String, required: true },
-  title: { type: String, enum: ['supporter', 'patron', ' booster', 'none'], default: 'none' },
+  title: { type: String, enum: ['supporter', 'patron', 'booster', 'none'], default: 'none' },
   donations: {
     type: [
       {
