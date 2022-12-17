@@ -6,7 +6,7 @@ import { DISCORD_GUILD_ID } from "../../util/constants";
 import { Event } from "../../events/register.events";
 import { OnDonatePayload } from "../../events/Donations/OnDonateAdd.event";
 
-const LOG = debug("dodgeball:bot:cron:AddBoosters");
+const LOG = debug("dodgeball:bot:cron:jobs:AddBoosters");
 
 export default class AddBoostersCron
 {

@@ -7,7 +7,7 @@ import { OnDonateRemovePayload } from "../../events/Donations/OnDonateRemove.eve
 import GetAdmins from "../../mysql/queries/GetAdmins";
 import SteamID from "steamid";
 
-const LOG = debug("dodgeball:bot:cron:RemoveExpiredDonatorsCron");
+const LOG = debug("dodgeball:bot:cron:jobs:RemoveExpiredDonatorsCron");
 
 export default class RemoveExpiredDonatorsCron
 {
@@ -68,6 +68,7 @@ export default class RemoveExpiredDonatorsCron
 
     if (donatorsToRemove.length === 0)
     {
+      LOG(`No donators to remove`);
       return;
     }
 
