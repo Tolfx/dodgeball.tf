@@ -73,6 +73,7 @@ export default class AddBoostersCron
 
       const donator = await (new DonatorUserModel({
         steamId: linkedAccount.steamId,
+        steamName: booster.displayName,
         title: "booster",
         isActive: true,
         donations: [],
