@@ -1,15 +1,15 @@
 require('dotenv').config();
 import debug from "debug";
+import Services from "./services/Services";
+import setupApi from "./api/setupApi";
+import setupMysql from "./mysql/setupMysql";
 import { MongoDb } from "@dodgeball/mongodb";
 import CommandRegister from "./discord/commands/register.command";
 import EventRegister from "./discord/events/register.events";
 import InteractionsRegister from "./discord/interactions/register.interactions";
 import setupDiscord from "./discord/setupDiscord";
 import SlashRegister from "./discord/slash/register.slash";
-import setupMysql from "./mysql/setupMysql";
 import CacheService from "./services/CacheService";
-import Services from "./services/Services";
-import setupApi from "./api/setupApi";
 import RegisterRouters from "./api/routes/register.router";
 import ServerRegisterService from "./services/ServerRegisterService";
 import RegisterEvents from "./events/register.events";
