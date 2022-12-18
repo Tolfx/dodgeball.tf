@@ -1,4 +1,4 @@
-import { EmbedBuilder } from "@discordjs/builders";
+import { EmbedBuilder } from "discord.js";
 import { DonatorUser, DonatorUserModel } from "@dodgeball/mongodb";
 import debug from "debug";
 import SteamID from "steamid";
@@ -68,7 +68,6 @@ export default class OnDonateRemove implements EventHandler<OnDonateRemovePayloa
     const embed = new EmbedBuilder()
       .setTitle('Donator Removed')
       .setDescription(`Donator ${donator.steamName} has been removed from the database.`)
-      // @ts-ignore
       .setColor(Colors.DARK_RED)
       .addFields(
         {

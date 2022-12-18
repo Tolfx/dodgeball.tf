@@ -3,14 +3,15 @@ import Services from "../../services/Services";
 import { DISCORD_OWNER_ID, DISCORD_WEBHOOKS, Colors } from "../../util/constants";
 import { webhookUrlToIdAndToken } from "../../util/discord";
 import { EventHandler, Event } from "../register.events";
-import { EmbedBuilder } from "@discordjs/builders";
+import { EmbedBuilder } from "discord.js";
 
-const LOG = debug('dodgeball:bot:events:donations:OnDonateUpdate');
+const LOG = debug('dodgeball:bot:events:errors:OnError');
 
 export interface OnErrorPayload
 {
-  error: Error | any;
-  stack?: string;
+  error: any;
+  origin?: any;
+  reason?: any;
 }
 
 export default class OnError implements EventHandler<OnErrorPayload>
@@ -24,10 +25,14 @@ export default class OnError implements EventHandler<OnErrorPayload>
     this.services = services;
   }
 
+  private isPromise<T>(obj: any): obj is Promise<T>
+  {
+    return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+  }
+
   async handle(event: Event<OnErrorPayload>)
   {
-    LOG(`Error: ${event.payload.error}`);
-
+    LOG(`Error: `, event.payload.error);
     // Send webhook to discord
     const client = this.services.getDiscordClient();
     const webhookInfoUrl = DISCORD_WEBHOOKS['error'];
@@ -36,26 +41,41 @@ export default class OnError implements EventHandler<OnErrorPayload>
     const webhook = await client.fetchWebhook(webhookData.id, webhookData.token);
 
     const embed = new EmbedBuilder()
-      .setAuthor({
-        name: 'Error',
-      })
-      .setDescription(event.payload.error)
-      // @ts-ignore
+      .setTitle('Error')
+      .setDescription('An error has occurred')
       .setColor(Colors.RED)
       .setTimestamp()
-      .setFields(
-        {
-          name: 'Error',
-          value: event.payload.error,
-          inline: true
-        },
-        {
-          name: 'Stack',
-          value: event.payload.stack || '',
-          inline: true
-        },
-      )
 
+    const fields = [
+      {
+        name: 'Error',
+        value: `\`\`\`
+${this.isPromise(event.payload.error) ? `Unhandled promise, unable to log as string` : event.payload.error}
+\`\`\``,
+        inline: true
+      }
+    ];
+
+    if (event.payload.origin)
+    {
+      fields.push({
+        name: 'Origin',
+        value: `${event.payload.origin}`,
+        inline: true
+      });
+    }
+
+    if (event.payload.reason)
+    {
+      fields.push({
+        name: 'Reason',
+        value: `${event.payload.reason}`,
+        inline: true
+      });
+    }
+
+    embed.addFields(fields);
+    
     await webhook.send({
       content: DISCORD_OWNER_ID.map((id) => `<@${id}>`).join(' '),
       embeds: [
