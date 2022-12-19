@@ -59,7 +59,6 @@ const bootstrap = async () =>
 
   CronJobs.init(services);
 
-
   LOG('Bot started');
 };
 

@@ -31,6 +31,25 @@ export default class DonatorController implements ControllerRouter
     });
   }
 
+  private processDate(amount: number)
+  {
+    // Since minimum donation is $2.50 which is 1 month
+    // so if its 5 dollars, then its 2 months
+    // etc
+    const months = Math.floor(amount / 2.5);
+    const days = Math.floor((amount % 2.5) * 30);
+
+    const date = new Date();
+    date.setMonth(date.getMonth() + months);
+    date.setDate(date.getDate() + days);
+
+    return {
+      months,
+      days,
+      date,
+    };
+  }
+
   public async startStripePayment(req: Request, res: Response)
   {
     const { amount } = req.query;
@@ -46,13 +65,15 @@ export default class DonatorController implements ControllerRouter
     if (amountNum < 2.5)
       return res.status(400).send(ErrorTemplate("Minimum amount is $2.50!"));
 
+    const date = this.processDate(amountNum);
+
     const session = await this.stripe.checkout.sessions.create({
       line_items: [
         {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: amountNum >= 25 ? 'Patron' : 'Supporter',
+              name: amountNum >= 25 ? 'Patron' : `Supporter (${date.months} months, ${date.days} days)`,
             },
             unit_amount: amountNum * 100,
           },
@@ -127,7 +148,7 @@ export default class DonatorController implements ControllerRouter
           isActive: true,
           title: amount >= 25 ? 'patron' : 'supporter',
           isPermanent: amount >= 25 ? true : false,
-          expiresAt: amount >= 25 ? null : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          expiresAt: amount >= 25 ? null : this.processDate(amount).date,
           donations: [
             {
               amount: String(amount),
@@ -145,12 +166,21 @@ export default class DonatorController implements ControllerRouter
       // If they are already a donator, lets update their info
       else
       {
+        let date = this.processDate(amount).date;
+        if (donator.expiresAt)
+        {
+          // check if date has expired
+          if (donator.expiresAt.getTime() < Date.now())
+            date = this.processDate(amount).date;
+          else
+            date = new Date(donator.expiresAt.getTime() + this.processDate(amount).date.getTime());
+        }
         const currentTitle = donator.title;
         const wasActive = donator.isActive;
         donator.isActive = true;
         donator.title = currentTitle === 'patron' ? 'patron' : amount >= 25 ? 'patron' : 'supporter';
         donator.isPermanent = currentTitle === 'patron' ? true : amount >= 25 ? true : false;
-        donator.expiresAt = currentTitle === 'patron' ? undefined : amount >= 25 ? undefined : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+        donator.expiresAt = currentTitle === 'patron' ? undefined : amount >= 25 ? undefined : date;
         donator.lastPaidAt = new Date();
         donator.donations.push({
           amount: String(amount),
