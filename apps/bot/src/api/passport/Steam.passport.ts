@@ -1,13 +1,26 @@
-import { DonatorUserModel } from '@dodgeball/mongodb';
+import { DonatorUserModel, DonatorUser } from '@dodgeball/mongodb';
 import SteamStrategy from 'passport-steam';
 import { API_DOMAIN, STEAM_API_KEY } from '../../util/constants';
+declare global
+{
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express
+  {
+    export interface User extends DonatorUser
+    {
+      identifier: string;
+    }
+  }
+}
+
 
 // @ts-ignore
-export default new SteamStrategy({
-  returnURL: `${API_DOMAIN}/donator/auth/steam/callback`,
-  realm: API_DOMAIN,
-  apiKey: STEAM_API_KEY
-},
+export default new SteamStrategy(
+  {
+    returnURL: `${API_DOMAIN}/donator/auth/steam/callback`,
+    realm: API_DOMAIN,
+    apiKey: STEAM_API_KEY
+  },
   // @ts-ignore
   async function (identifier, profile, done)
   {
@@ -19,10 +32,10 @@ export default new SteamStrategy({
     if (!user)
     {
       // Create new user
-      const newUser = await (new DonatorUserModel({
+      const newUser = await new DonatorUserModel({
         steamId: profile.id,
         steamName: profile.displayName
-      }).save());
+      }).save();
 
       const newUserData = Object.assign(newUser.toJSON(), { identifier });
       return done(null, newUserData);
@@ -31,4 +44,4 @@ export default new SteamStrategy({
     const newUserData = Object.assign(user.toJSON(), { identifier });
     return done(null, newUserData);
   }
-)
+);

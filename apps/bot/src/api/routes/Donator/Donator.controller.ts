@@ -1,16 +1,17 @@
-import { Application, Response, Request } from "express";
-import Services from "../../../services/Services";
-import type { ControllerRouter } from "../register.router";
-import debug from "debug";
-import { Client } from "discord.js";
-import ErrorTemplate from "../../templates/Error.template";
-import { Stripe } from "stripe";
-import { API_DOMAIN, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from "../../../util/constants";
-import SuccessTemplate from "../../templates/Success.template";
-import { DonatorUserModel } from "@dodgeball/mongodb";
-import { Event } from "../../../events/register.events";
-import { OnDonatePayload } from "../../../events/Donations/OnDonateAdd.event";
-import { OnDonateUpdatePayload } from "../../../events/Donations/OnDonateUpdate.event";
+import { Application, Response, Request } from 'express';
+import Services from '../../../services/Services';
+import type { ControllerRouter } from '../register.router';
+import debug from 'debug';
+import { Client } from 'discord.js';
+import ErrorTemplate from '../../templates/Error.template';
+import { Stripe } from 'stripe';
+import { API_DOMAIN, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from '../../../util/constants';
+import SuccessTemplate from '../../templates/Success.template';
+import { DonatorUserModel } from '@dodgeball/mongodb';
+import { Event } from '../../../events/register.events';
+import { OnDonatePayload } from '../../../events/Donations/OnDonateAdd.event';
+import { OnDonateUpdatePayload } from '../../../events/Donations/OnDonateUpdate.event';
+import { OnErrorPayload } from '../../../events/Errors/OnError.event';
 
 const LOG = debug('dodgeball:bot:api:routes:donator:donator.controller');
 
@@ -27,7 +28,7 @@ export default class DonatorController implements ControllerRouter
     this.services = services;
     this.client = this.services.getDiscordClient();
     this.stripe = new Stripe(STRIPE_SECRET_KEY, {
-      apiVersion: "2022-11-15",
+      apiVersion: '2022-11-15'
     });
   }
 
@@ -46,7 +47,7 @@ export default class DonatorController implements ControllerRouter
     return {
       months,
       days,
-      date,
+      date
     };
   }
 
@@ -54,16 +55,13 @@ export default class DonatorController implements ControllerRouter
   {
     const { amount } = req.query;
     const user = req.user;
-    if (!user)
-      return res.status(401).send(ErrorTemplate("You are not logged in!"));
+    if (!user) return res.status(401).send(ErrorTemplate('You are not logged in!'));
 
-    if (!amount)
-      return res.status(400).send(ErrorTemplate("No amount specified!"));
+    if (!amount) return res.status(400).send(ErrorTemplate('No amount specified!'));
 
     const amountNum = parseFloat(String(amount));
 
-    if (amountNum < 2.5)
-      return res.status(400).send(ErrorTemplate("Minimum amount is $2.50!"));
+    if (amountNum < 2.5) return res.status(400).send(ErrorTemplate('Minimum amount is $2.50!'));
 
     const date = this.processDate(amountNum);
 
@@ -73,46 +71,45 @@ export default class DonatorController implements ControllerRouter
           price_data: {
             currency: 'usd',
             product_data: {
-              name: amountNum >= 25 ? 'Patron' : `Supporter (${date.months} months, ${date.days} days)`,
+              name: amountNum >= 25 ? 'Patron' : `Supporter (${date.months} months, ${date.days} days)`
             },
-            unit_amount: amountNum * 100,
+            unit_amount: amountNum * 100
           },
-          quantity: 1,
-        },
+          quantity: 1
+        }
       ],
       // Add metadata to the session
       metadata: {
-        // @ts-ignore
         steamId: user.steamId,
-        // @ts-ignore
-        steamName: user.steamName,
+        steamName: user.steamName
       },
       mode: 'payment',
       success_url: `${API_DOMAIN}/donator/stripe/success`,
-      cancel_url: `${API_DOMAIN}/donator/stripe/cancel`,
+      cancel_url: `${API_DOMAIN}/donator/stripe/cancel`
     });
 
-    if (!session.url)
-      return res.status(500).send(ErrorTemplate("Something went wrong!"));
+    if (!session.url) return res.status(500).send(ErrorTemplate('Something went wrong!'));
 
     return res.redirect(303, session.url);
   }
 
   public async stripeSuccess(req: Request, res: Response)
   {
-    return res.send(SuccessTemplate(`Payment successful! </br>
+    return res.send(
+      SuccessTemplate(`Payment successful! </br>
     Takes up to 48 hours to process! </br>
-    Please contact us at your <a href="https://forum.dodgeball.tf/category/4/support-suggestions">forum</a> if you have any issues.`));
+    Please contact us at your <a href="https://forum.dodgeball.tf/category/4/support-suggestions">forum</a> if you have any issues.`)
+    );
   }
 
   public async stripeCancel(req: Request, res: Response)
   {
-    return res.send(ErrorTemplate("Payment cancelled!"));
+    return res.send(ErrorTemplate('Payment cancelled!'));
   }
 
   public async stripeWebhook(req: Request, res: Response)
   {
-    const sig = req.headers["stripe-signature"] as string;
+    const sig = req.headers['stripe-signature'] as string;
     let event;
     try
     {
@@ -122,7 +119,7 @@ export default class DonatorController implements ControllerRouter
     catch (err)
     {
       // @ts-ignore
-      LOG(err.message)
+      LOG(err.message);
       // @ts-ignore
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
@@ -134,7 +131,18 @@ export default class DonatorController implements ControllerRouter
       // Assume we got steamId is in metadata,
       // so lets add the roles to the user
       if (!metadata.steamId)
+      {
+        LOG('No steamId in metadata!');
+        this.services
+          .getEventRegister()
+          ?.emit(
+            new Event<OnErrorPayload>('1', 'error', {
+              error: new Error('No steamId in metadata!'),
+              reason: 'We got a payment with no steamid in it, needs manual inspection!'
+            })
+          );
         return res.json({ received: true });
+      }
 
       const donator = await DonatorUserModel.findOne({ steamId: metadata.steamId });
       // If its 25 it will look like 250 for some reason?
@@ -153,15 +161,15 @@ export default class DonatorController implements ControllerRouter
             {
               amount: String(amount),
               currency: 'USD',
-              createdAt: new Date(),
+              createdAt: new Date()
             }
           ],
-          lastPaidAt: new Date(),
+          lastPaidAt: new Date()
         });
 
         await newDonator.save();
 
-        this.services.getEventRegister()?.emit(new Event<OnDonatePayload>("1", 'donator.added', { donator: newDonator }));
+        this.services.getEventRegister()?.emit(new Event<OnDonatePayload>('1', 'donator.added', { donator: newDonator }));
       }
       // If they are already a donator, lets update their info
       else
@@ -170,10 +178,8 @@ export default class DonatorController implements ControllerRouter
         if (donator.expiresAt)
         {
           // check if date has expired
-          if (donator.expiresAt.getTime() < Date.now())
-            date = this.processDate(amount).date;
-          else
-            date = new Date(donator.expiresAt.getTime() + this.processDate(amount).date.getTime());
+          if (donator.expiresAt.getTime() < Date.now()) date = this.processDate(amount).date;
+          else date = new Date(donator.expiresAt.getTime() + this.processDate(amount).date.getTime());
         }
         const currentTitle = donator.title;
         const wasActive = donator.isActive;
@@ -185,18 +191,18 @@ export default class DonatorController implements ControllerRouter
         donator.donations.push({
           amount: String(amount),
           currency: 'USD',
-          createdAt: new Date(),
+          createdAt: new Date()
         });
         await donator.save();
         if (!wasActive)
         {
-          this.services.getEventRegister()?.emit(new Event<OnDonatePayload>("1", 'donator.added', { donator }));
+          this.services.getEventRegister()?.emit(new Event<OnDonatePayload>('1', 'donator.added', { donator }));
         }
         else
         {
-          this.services.getEventRegister()?.emit(new Event<OnDonateUpdatePayload>("1", 'donator.updated',
-            { donator, beforeAmount: amount, beforeTitle: currentTitle }
-          ));
+          this.services
+            .getEventRegister()
+            ?.emit(new Event<OnDonateUpdatePayload>('1', 'donator.updated', { donator, beforeAmount: amount, beforeTitle: currentTitle }));
         }
       }
     }
@@ -220,17 +226,16 @@ export default class DonatorController implements ControllerRouter
     });
 
     // Lets also not include everything, we only want name and the amount
-    const donatorsToSend = sortedDonators.map(donator =>
+    const donatorsToSend = sortedDonators.map((donator) =>
     {
       const amount = donator.donations.reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
       return {
         name: donator.steamName,
         amount,
-        steamid: donator.steamId,
-      }
+        steamid: donator.steamId
+      };
     });
 
     return res.send(donatorsToSend);
   }
-
 }
