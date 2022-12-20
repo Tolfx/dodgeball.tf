@@ -8,6 +8,7 @@ import Services from "../../services/Services";
 import { Colors, DISCORD_OWNER_ID, DISCORD_WEBHOOKS } from "../../util/constants";
 import { webhookUrlToIdAndToken } from "../../util/discord";
 import { EventHandler, Event } from "../register.events";
+import DeleteCCCM from "../../mysql/queries/DeleteCCCM";
 
 const LOG = debug('dodgeball:bot:events:donations:OnDonateUpdate');
 
@@ -41,6 +42,7 @@ export default class OnDonateRemove implements EventHandler<OnDonateRemovePayloa
 
     const mysql = this.services.getMysqlConnection();
     await DeleteDonator(donator)(mysql);
+    await DeleteCCCM(donator)(mysql);
 
     // We also want to remove from cccm.cccm_users
     const steamid = (new SteamID(donator.steamId)).steam2();

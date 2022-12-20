@@ -38,7 +38,6 @@ export default class OnDonateAdd implements EventHandler<OnDonatePayload>
     if (!admin)
       this.services.getServerRegisterService()?.addDonator(donator);
 
-
     // Send webhook to discord
     const client = this.services.getDiscordClient();
     const webhookInfoUrl = DISCORD_WEBHOOKS['info'];

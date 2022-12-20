@@ -7,6 +7,8 @@ import Services from "../../services/Services";
 import { DISCORD_OWNER_ID, DISCORD_WEBHOOKS } from "../../util/constants";
 import { webhookUrlToIdAndToken } from "../../util/discord";
 import { EventHandler, Event } from "../register.events";
+import UpdateCCCM from "../../mysql/queries/UpdateCCCM";
+import { getDonatorCCC } from "../../mysql/queries/AddCCCM";
 
 const LOG = debug('dodgeball:bot:events:donations:OnDonateUpdate');
 
@@ -39,6 +41,11 @@ export default class OnDonateUpdate implements EventHandler<OnDonateUpdatePayloa
     if (beforeTitle !== 'patron' && beforeAmount >= 25 && !admin)
     {
       this.services.getServerRegisterService()?.updateDonator(donator);
+      const donatorcccm = getDonatorCCC(donator);
+      await UpdateCCCM({
+        steamid: donator.steamId,
+        tag: donatorcccm.tag,
+      })(this.services.getMysqlConnection());
     }
 
     // Send webhook to discord
