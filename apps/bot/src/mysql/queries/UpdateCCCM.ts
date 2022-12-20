@@ -19,7 +19,9 @@ export default function UpdateCCCM(options: UpdateCCCMOptions)
   // auth is the steamid2
   // hidetag is 0
   // We have different colors and stuff for different donator levels
-  const queryUpdateCCCM = `UPDATE cccm.cccm_users SET tag = '${options.tag}', chatcolor = '${options.chatcolor}', namecolor = '${options.namecolor}', tagcolor = '${options.tagcolor}' WHERE auth = '${(new SteamID(options.steamid).steam2())}';`;
+
+  // Just ensure not to update data that is null, aka don't add it in the query
+  const queryUpdateCCCM = `UPDATE cccm.cccm_users SET ${options.tag ? `tag = '${options.tag}', ` : ''}${options.chatcolor ? `chatcolor = '${options.chatcolor}', ` : ''}${options.namecolor ? `namecolor = '${options.namecolor}', ` : ''}${options.tagcolor ? `tagcolor = '${options.tagcolor}' ` : ''} WHERE auth = '${(new SteamID(options.steamid).steam2())}';`;
 
   return (connection: mysql.Connection): Promise<Array<any>> => new Promise((resolve, reject) =>
   {
