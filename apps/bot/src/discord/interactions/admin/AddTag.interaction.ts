@@ -33,10 +33,12 @@ export default class AddTagInteraction implements InteractionsHandler
 
     const steamid2 = new SteamID(String(steamid)).steam2();
 
+    const tagged = String(tag)
+
     await UpdateCCCM({
       steamid: steamid2,
       // Ensure there is a space at the end of the tag if there isn't one
-      tag: String(tag).endsWith(' ') ? String(tag) : `${tag} `
+      tag: tagged === 'blank' ? '' : tagged.endsWith(' ') ? tagged : `${tag} `
     })(this.services.getMysqlConnection());
 
     interaction.reply({ content: 'Tag updated', ephemeral: true });
