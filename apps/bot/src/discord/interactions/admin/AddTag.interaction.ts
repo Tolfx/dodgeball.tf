@@ -35,7 +35,8 @@ export default class AddTagInteraction implements InteractionsHandler
 
     await UpdateCCCM({
       steamid: steamid2,
-      tag: String(tag)
+      // Ensure there is a space at the end of the tag if there isn't one
+      tag: String(tag).endsWith(' ') ? String(tag) : `${tag} `
     })(this.services.getMysqlConnection());
 
     interaction.reply({ content: 'Tag updated', ephemeral: true });
