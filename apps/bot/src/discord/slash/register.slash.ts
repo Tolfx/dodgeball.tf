@@ -9,6 +9,7 @@ import HelpSlash from "./information/Help.slash";
 import LinkSlash from "./information/Link.slash";
 import Top10Slash from "./rank/Top10.slash";
 import TopspeedSlash from "./rank/Topspeed.slash";
+import AddTagSlash from "./admin/AddTag.slash";
 
 const LOG = debug('dodgeball:bot:slash:register.slash');
 
@@ -23,7 +24,8 @@ export default class SlashRegister
     InspectPlayerSlash,
     RemoveTopSpeedSlash,
     LinkSlash,
-    ManuallyLinkSlash
+    ManuallyLinkSlash,
+    AddTagSlash
   ];
 
   constructor(private services: Services)

@@ -8,6 +8,7 @@ import HelpInteraction from "./information/Help.interaction";
 import LinkInteraction from "./information/Link.interaction";
 import Top10Interactions from "./ranks/Top10.interactions";
 import TopSpeedInteractions from "./ranks/Topspeed.interactions";
+import AddTagInteraction from "./admin/AddTag.interaction";
 
 const LOG = debug('dodgeball:bot:interactions:register.interactions');
 
@@ -39,7 +40,8 @@ export default class InteractionsRegister
     new InspectPlayerInteractions(),
     new RemoveTopSpeedInteractions(),
     new LinkInteraction(),
-    new ManuallyLinkInteraction()
+    new ManuallyLinkInteraction(),
+    new AddTagInteraction()
   ];
 
   constructor(private services: Services)
