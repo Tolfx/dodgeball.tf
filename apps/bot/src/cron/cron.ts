@@ -4,6 +4,7 @@ import AddBoostersCron from "./jobs/AddBoosters.cron";
 import RemoveExpiredDonatorsCron from "./jobs/RemoveExpiredDonators.cron";
 import RemoveNoneBoosterCron from "./jobs/RemoveNoneBoosters.cron";
 import UpdateServersCron from "./jobs/UpdateServers.cron";
+import UpdateLiveStatsCron from "./jobs/UpdateLiveStats.cron";
 
 const LOG = debug("dodgeball:bot:cron");
 
@@ -13,7 +14,8 @@ export default class CronJobs
     AddBoostersCron,
     RemoveExpiredDonatorsCron,
     RemoveNoneBoosterCron,
-    UpdateServersCron
+    UpdateServersCron,
+    UpdateLiveStatsCron
   ];
 
   public static async init(services: Services)
