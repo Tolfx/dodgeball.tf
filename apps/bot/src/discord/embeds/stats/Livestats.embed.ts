@@ -14,13 +14,12 @@ interface LiveStatsEmbedOptions
 
 export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
 {
-
   const realPlayers = options.liveStats?.filter(player => player.steam_id !== 'BOT');
   const botsPlayers = options.liveStats?.filter(player => player.steam_id === 'BOT');
 
   return new EmbedBuilder()
     .setTitle(options.serverName.trim())
-    .setColor(options?.liveStats?.length ? Colors.GREEN : Colors.DARK_ORANGE)
+    .setColor(realPlayers?.length ? Colors.GREEN : Colors.DARK_ORANGE)
     .setFooter({
       text: `Server: ${options?.serverName}`,
     })
