@@ -36,7 +36,12 @@ export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
       },
       {
         name: 'Join',
-        value: `steam://connect/${options.serverIp}:${options.serverPort}`,
+        value: `[Click to join](steam://connect/${options.serverIp}:${options.serverPort})`,
+        inline: true,
+      },
+      {
+        name: 'Stats',
+        value: `[View stats](https://stats.dodgeball.tf/hlstats.php?game=${options.server.game})`,
         inline: true,
       }
     );
