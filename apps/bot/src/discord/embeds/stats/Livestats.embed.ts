@@ -16,7 +16,7 @@ export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
 
   return new EmbedBuilder()
     .setTitle(options.serverName.trim())
-    .setColor(options?.liveStats?.length ? Colors.GREEN : Colors.RED)
+    .setColor(options?.liveStats?.length ? Colors.GREEN : Colors.DARK_ORANGE)
     .setFooter({
       text: `Server: ${options?.serverName}`,
     })
@@ -34,7 +34,7 @@ export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
       },
       {
         name: 'Status',
-        value: options?.liveStats?.length ? 'Online' : 'Offline',
+        value: options?.liveStats?.length ? 'Active' : 'No players online',
         inline: true,
       }
     );
