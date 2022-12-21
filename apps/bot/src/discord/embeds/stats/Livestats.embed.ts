@@ -42,7 +42,7 @@ export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
       },
       {
         name: 'Join',
-        value: `[Click to join](steam://connect/${options.serverIp}:${options.serverPort})`,
+        value: `steam://connect/${options.serverIp}:${options.serverPort}`,
         inline: true,
       },
       {
