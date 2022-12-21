@@ -9,6 +9,7 @@ const PerksSupporter = [
   "Name color",
   "Chat color",
   "Reserved slot",
+  "Foot prints",
   "Customizable join message",
   "Resize your hands up to x2.5",
   "Resize your head up to x2.5",
@@ -18,7 +19,7 @@ const PerksSupporter = [
 
 const PerksPatron = [
   "Permanent Supporter perks for life",
-  "Patron tag in-game, discord & forum",
+  "[Patron] tag in-game, discord & forum",
   "Personalized tag in-game (one time)"
 ];
 
