@@ -7,6 +7,7 @@ import GetSBGroups, { SourcebansGroups } from "../../mysql/queries/GetSBGroups";
 import GetSBAdminsServerGroups from "../../mysql/queries/GetSBAdminsServerGroups";
 import AddSBAdminsServerGroups from "../../mysql/queries/AddSBAdminsServerGroups";
 import AsyncAwait from "../../util/AsyncAwait";
+import GetCCCM from "../../mysql/queries/GetCCCM";
 
 const LOG = debug("dodgeball:bot:cron:jobs:UpdateServersCron");
 
@@ -114,5 +115,25 @@ export default class UpdateServersCron
         LOG(`Added permission for admin ${permission.adminId} on server ${permission.serverId}`);
       }
     });
+
+    // While got all admins too, we can add them to the CCCM
+    const allCCCM = await GetCCCM()(mysqlConnection);
+    // Check which admins are not in the CCCM
+    const missingCCCM = admins.filter(admin => !allCCCM.find(cccm => cccm.auth === admin.authid));
+    // Add them to the CCCM
+    missingCCCM.forEach(async admin =>
+      {
+        const [_, failed] = await AsyncAwait(Promise.resolve(mysqlConnection.query(`INSERT INTO cccm.cccm_users (auth, hidetag, tagcolor, namecolor, chatcolor, tag) VALUES ('${admin.authid}', 0, '', '', '', '');`, (error) =>
+        {
+          if (error) throw error;
+          LOG(`Added ${admin.user} to the CCCM`);
+          return true;
+        })));
+
+        if (failed)
+        {
+          LOG(`Failed to add ${admin.user} to the CCCM`);
+        }
+      });
   }
 }

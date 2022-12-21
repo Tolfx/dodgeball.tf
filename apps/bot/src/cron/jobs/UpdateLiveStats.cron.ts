@@ -16,7 +16,6 @@ export default class UpdateLiveStatsCron
     // Every 1 minute
     new CronJob("* * * * *", async () =>
     {
-      LOG("Running cron job");
       await this.run();
     }, null, true, "Europe/Stockholm");
   }
