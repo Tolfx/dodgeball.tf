@@ -27,12 +27,12 @@ export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
     .setFields(
       {
         name: 'Players',
-        value: `${realPlayers ?? 0}/${options.server.max_players}`,
+        value: `${realPlayers?.length ?? 0}/${options.server.max_players}`,
         inline: true,
       },
       {
         name: 'Bots',
-        value: `${botsPlayers ?? 0}`,
+        value: `${botsPlayers?.length ?? 0}`,
         inline: true,
       },
       {
