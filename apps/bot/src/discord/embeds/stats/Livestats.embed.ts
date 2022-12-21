@@ -25,23 +25,18 @@ export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
     .setTimestamp()
     .setFields(
       {
+        name: 'Players',
+        value: `${options?.liveStats?.length ?? 0}/${options.server.max_players}`,
+        inline: true,
+      },
+      {
+        name: 'Current map',
+        value: options.server.act_map,
+        inline: true,
+      },
+      {
         name: 'Join',
         value: `steam://connect/${options.serverIp}:${options.serverPort}`,
-        inline: true,
-      },
-      {
-        name: 'Players',
-        value: `${options?.liveStats?.length ?? 0}/${options.server.max_players}}`,
-        inline: true,
-      },
-      {
-        name: 'Status',
-        value: options?.liveStats?.length ? 'Active' : 'No players online',
-        inline: true,
-      },
-      {
-        name: 'Current Map',
-        value: options.server.act_map,
         inline: true,
       }
     );
