@@ -1,10 +1,12 @@
 import { EmbedBuilder } from "discord.js";
 import { Colors } from "../../../util/constants";
 import { LiveStats } from "../../../mysql/queries/GetLiveStats";
+import { Server } from "../../../mysql/queries/GetServers";
 
 interface LiveStatsEmbedOptions
 {
   liveStats?: Array<LiveStats>;
+  server: Server;
   serverName: string;
   serverIp: string;
   serverPort: number;
@@ -29,12 +31,17 @@ export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
       },
       {
         name: 'Players',
-        value: String(options?.liveStats?.length || 0),
+        value: `${options?.liveStats?.length ?? 0}/${options.server.max_players}}`,
         inline: true,
       },
       {
         name: 'Status',
         value: options?.liveStats?.length ? 'Active' : 'No players online',
+        inline: true,
+      },
+      {
+        name: 'Current Map',
+        value: options.server.act_map,
         inline: true,
       }
     );

@@ -40,7 +40,13 @@ export default class UpdateLiveStatsCron
       discordGuildId: DISCORD_GUILD_ID
     });
 
-    const cachedServers = this.services.getCacheService()?.getAllCachedServers();
+    const cacheService = this.services.getCacheService();
+    if (cacheService)
+    {
+      await cacheService.startCache();
+    }
+
+    const cachedServers = cacheService?.getAllCachedServers();
 
     if (!cachedServers) return; // We don't have any servers cached, so we can't do anything
 
@@ -74,7 +80,8 @@ export default class UpdateLiveStatsCron
         liveStats: filteredLiveStats,
         serverName: server.server.name,
         serverIp: server.server.address,
-        serverPort: server.server.port
+        serverPort: server.server.port,
+        server: server.server
       });
 
       await message.edit({
@@ -104,7 +111,8 @@ export default class UpdateLiveStatsCron
         liveStats: filteredLiveStats,
         serverName: server.server.name,
         serverIp: server.server.address,
-        serverPort: server.server.port
+        serverPort: server.server.port,
+        server: server.server
       });
 
       const message = await channel.send({
