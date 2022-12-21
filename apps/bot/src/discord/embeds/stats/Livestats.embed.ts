@@ -15,6 +15,8 @@ interface LiveStatsEmbedOptions
 export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
 {
 
+  const realPlayers = options.liveStats?.filter(player => player.steam_id !== 'BOT');
+  const botsPlayers = options.liveStats?.filter(player => player.steam_id === 'BOT');
 
   return new EmbedBuilder()
     .setTitle(options.serverName.trim())
@@ -26,7 +28,12 @@ export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
     .setFields(
       {
         name: 'Players',
-        value: `${options?.liveStats?.length ?? 0}/${options.server.max_players}`,
+        value: `${realPlayers ?? 0}/${options.server.max_players}`,
+        inline: true,
+      },
+      {
+        name: 'Bots',
+        value: `${botsPlayers ?? 0}`,
         inline: true,
       },
       {
