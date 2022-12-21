@@ -66,10 +66,15 @@ export default class UpdateLiveStatsCron
 
       const liveStats = await GetLiveStats()(this.services.getMysqlConnection());
 
+      // Lets filter it to only have the stats for this server
+      const filteredLiveStats = liveStats.filter(liveStat => liveStat.server_id === server.server.serverId);
+
       // And update the message with the new stats
       const embed = LiveStatsEmbed({
-        liveStats,
-        serverName: server.server.name
+        liveStats: filteredLiveStats,
+        serverName: server.server.name,
+        serverIp: server.server.address,
+        serverPort: server.server.port
       });
 
       await message.edit({
@@ -92,10 +97,14 @@ export default class UpdateLiveStatsCron
 
       const liveStats = await GetLiveStats()(this.services.getMysqlConnection());
 
+      const filteredLiveStats = liveStats.filter(liveStat => liveStat.server_id === server.server.serverId);
+
       // And update the message with the new stats
       const embed = LiveStatsEmbed({
-        liveStats,
-        serverName: server.server.name
+        liveStats: filteredLiveStats,
+        serverName: server.server.name,
+        serverIp: server.server.address,
+        serverPort: server.server.port
       });
 
       const message = await channel.send({

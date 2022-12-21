@@ -6,32 +6,36 @@ interface LiveStatsEmbedOptions
 {
   liveStats?: Array<LiveStats>;
   serverName: string;
+  serverIp: string;
+  serverPort: number;
 }
 
 export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
 {
-  const fields: any = [];
 
-  // if we got no liveStats we can assume is empty
-
-  if (options?.liveStats?.length)
-  {
-    options.liveStats.forEach((liveStats, index) =>
-    {
-      fields.push({
-        name: `Player ${index + 1}`,
-        value: `Name: ${liveStats.name} | Ping: ${liveStats.ping}`,
-      });
-    });
-  }
 
   return new EmbedBuilder()
-    .setTitle(options.serverName)
-    .setDescription(`{${options?.liveStats?.length ? '✅' : '❌'}} Live Stats} | ${options?.liveStats?.length || 0} players} | ${options?.liveStats?.length ? 'Online' : 'Offline'}`)
+    .setTitle(options.serverName.trim())
     .setColor(options?.liveStats?.length ? Colors.GREEN : Colors.RED)
     .setFooter({
       text: `Server: ${options?.serverName}`,
     })
     .setTimestamp()
-    .addFields(...fields);
+    .setFields(
+      {
+        name: 'Join',
+        value: `steam://connect/${options.serverIp}:${options.serverPort}`,
+        inline: true,
+      },
+      {
+        name: 'Players',
+        value: String(options?.liveStats?.length || 0),
+        inline: true,
+      },
+      {
+        name: 'Status',
+        value: options?.liveStats?.length ? 'Online' : 'Offline',
+        inline: true,
+      }
+    );
 }
