@@ -17,7 +17,7 @@ export interface CCCMUser
 export default function GetCCCM()
 {
   // Delete auth from cccm table
-  const queryGetCCCM = `GET * FROM cccm.cccm_users;`;
+  const queryGetCCCM = `SELECT * FROM cccm.cccm_users;`;
 
   return (connection: mysql.Connection): Promise<Array<CCCMUser>> => new Promise((resolve, reject) =>
   {
