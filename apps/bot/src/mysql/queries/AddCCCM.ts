@@ -43,7 +43,7 @@ export function getDonatorCCC(donator: DonatorUser)
 export default function AddCCCM(donator: DonatorUser)
 {
   // Check first if we have a donator in the cccm table already
-  const queryCheckCCCM = `SELECT * FROM cccm.cccm WHERE auth = '${(new SteamID(donator.steamId).steam2())}';`;
+  const queryCheckCCCM = `SELECT * FROM cccm.cccm_users WHERE auth = '${(new SteamID(donator.steamId).steam2())}';`;
 
   return (connection: mysql.Connection): Promise<boolean> => new Promise((resolve, reject) =>
   {
