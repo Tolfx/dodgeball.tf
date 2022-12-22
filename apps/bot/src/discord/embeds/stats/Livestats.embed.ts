@@ -37,7 +37,7 @@ export default function LiveStatsEmbed(options: LiveStatsEmbedOptions)
       },
       {
         name: 'Current map',
-        value: options.server.act_map,
+        value: String(options.server.act_map),
         inline: true,
       },
       {
