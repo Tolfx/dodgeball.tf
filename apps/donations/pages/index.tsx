@@ -10,6 +10,7 @@ const PerksSupporter = [
   "Chat color",
   "Reserved slot",
   "Foot prints",
+  "Custom player models",
   "Customizable join message",
   "Resize your hands up to x2.5",
   "Resize your head up to x2.5",
