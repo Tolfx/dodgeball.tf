@@ -14,7 +14,6 @@ const bootstrap = async () =>
   await mongoDB.connect();
 
   const mysql = new MySQL();
-
   const services = new Services(mysql, mongoDB);
 
   // Runs on the first of the month
@@ -23,7 +22,6 @@ const bootstrap = async () =>
     LOG(`Running cron jobs`);
     purgeTopSpeed(services);
   }, null, true, "Europe/Stockholm");
-
 }
 
 bootstrap();
