@@ -1,3 +1,4 @@
+require('dotenv').config();
 import { MongoDb } from '@dodgeball/mongodb';
 import debug from "debug";
 import Services from './Services';
@@ -15,7 +16,7 @@ const bootstrap = async () =>
 
   const mysql = new MySQL();
   const services = new Services(mysql, mongoDB);
-
+  await mysql.connect();
   // Runs on the first of the month
   new CronJob("0 0 1 * *", () =>
   {

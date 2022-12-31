@@ -34,4 +34,32 @@ export default class MySQL
       this.connection = connection;
     });
   }
+
+  public async connect()
+  {
+    return new Promise((resolve, reject) =>
+    {
+      if (this.connection)
+        return resolve(this.connection);
+      const connection = mysql.createConnection({
+        host: this.host,
+        user: this.user,
+        password: this.password,
+        port: this.port
+      });
+  
+      connection.connect((err) =>
+      {
+        if (err)
+        {
+          LOG('Failed to connect to MySQL')
+          return reject(err);
+        }
+  
+        LOG('Connected to MySQL');
+        this.connection = connection;
+        return resolve(this.connection);
+      });
+    })
+  }
 }

@@ -9,7 +9,6 @@ export default function purgeTopSpeed(services: Services)
   // We will remove from topspeed.topspeed
 
   const mysql = services.getMysql();
-
   if (!mysql.connection)
   {
     throw new Error("No connection to MySQL");
@@ -21,7 +20,9 @@ export default function purgeTopSpeed(services: Services)
   const month = date.getMonth();
   const year = date.getFullYear();
 
-  mysql.connection.query(`CREATE TABLE IF NOT EXISTS topspeed.backup.${month}.${year} LIKE topspeed.topspeed`, (err) =>
+  const newTable = `topspeed.\`topspeed.backup.${month}.${year}\``
+
+  mysql.connection.query(`CREATE TABLE IF NOT EXISTS ${newTable} LIKE topspeed.topspeed`, (err) =>
   {
     if (err)
     {
@@ -29,20 +30,28 @@ export default function purgeTopSpeed(services: Services)
     }
 
     LOG("Created backup table");
-    // Not we can safely delete the data
-
-    // Idk? typescript lol
+    // Lets copy the data
     if (!mysql.connection) return;
-
-    mysql.connection.query("DELETE FROM topspeed.topspeed", (err) =>
-    {
-      if (err)
-      {
-        throw err;
-      }
-  
-      LOG("Purged topspeed");
-    });
+    mysql.connection
+    .query(
+      `INSERT INTO ${newTable} SELECT * FROM topspeed.topspeed`,
+      (err) =>
+        {
+          if (err)
+            throw err;
+          if (!mysql.connection) return;
+          // Idk? typescript lol
+          mysql.connection.query("DELETE FROM topspeed.topspeed", (err) =>
+          {
+            if (err)
+            {
+              throw err;
+            }
+        
+            LOG("Purged topspeed");
+          });
+        }
+      );
 
   });
 }
