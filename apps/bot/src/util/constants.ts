@@ -1,3 +1,5 @@
+import GetSBServers from "../mysql/queries/GetSBServers";
+import Services from "../services/Services";
 import getEnv from "./getEnv";
 
 export const DISCORD_TOKEN = getEnv("DISCORD_TOKEN");
@@ -38,10 +40,37 @@ export const DEFAULT_VALUE_SERVER_IDS = [
   },
 ];
 
-export const TOPSPEED_SERVERS_IDS: Array<{
-  id: string;
-  name: string;
-}> = JSON.parse(getEnv("TOPSPEED_SERVERS_IDS", JSON.stringify(DEFAULT_VALUE_SERVER_IDS)));
+export const TOPSPEED_SERVERS_IDS = async (services: Services) =>
+{
+  return new Promise<{id?: string, name?: string}[]>(async (resolve, reject) =>
+  {
+    const servers = await GetSBServers()(services.getMysqlConnection());
+    const cachedServers = services.getCacheService()?.getAllCachedServers();
+    if (!cachedServers)
+      return reject("No cached servers found");
+    
+    let mapped = [];
+    for (const server of servers)
+    {
+      const cachedServer = cachedServers.find(cachedServer =>
+      {
+        return cachedServer.server.address === server.ip && cachedServer.server.port === server.port;
+      });
+      if (!cachedServer)
+        continue;
+  
+      mapped.push({
+        id: String(server.sid),
+        name: cachedServer.server.name,
+      });
+    }
+    // I don't want to include servers that is not tfdb, and currently only 1 server is tfdb, so I'll just hardcode it
+    // and remove it when I have more servers.
+    const blacklistIds = ["6"];
+    mapped = mapped.filter(server => !blacklistIds.includes(server.id));
+    return resolve(mapped);
+  });
+}
 
 export enum Colors
 {

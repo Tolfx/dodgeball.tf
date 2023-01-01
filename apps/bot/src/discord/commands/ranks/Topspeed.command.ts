@@ -26,14 +26,16 @@ export default class TopSpeedCommand implements CommandHandler
   async on(message: Message, args: string[])
   {
     if (!this.services) return;
+    const topspeedservers = (await TOPSPEED_SERVERS_IDS(this.services));
+    if (!topspeedservers) return;
     const row = new ActionRowBuilder()
       .addComponents(
         new StringSelectMenuBuilder()
           .setCustomId('topspeed')
           .setPlaceholder('Select a server')
-          .addOptions(TOPSPEED_SERVERS_IDS.map((server) => ({
-            label: server.name,
-            value: server.id
+          .addOptions(topspeedservers.map((server) => ({
+            label: String(server.name),
+            value: String(server.id)
           })))
       )
 

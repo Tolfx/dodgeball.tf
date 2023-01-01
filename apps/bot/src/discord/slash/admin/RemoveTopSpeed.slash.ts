@@ -9,6 +9,9 @@ export default async (service: Services) =>
 
   // const serversArray = Array.from(servers);
 
+  const topspeedservers = (await TOPSPEED_SERVERS_IDS(service));
+  if (!topspeedservers) return;
+
   return new SlashCommandBuilder()
     .setName('remove-top-speed')
     .setDescription('Remove top speed from a server, not including the server id will remove it from all servers')
@@ -24,10 +27,10 @@ export default async (service: Services) =>
     {
       option.setName('server')
         .setDescription('Server you want to remove the top speed from')
-        .addChoices(...TOPSPEED_SERVERS_IDS.map(server =>
+        .addChoices(...topspeedservers.map(server =>
         {
           return {
-            name: server.name,
+            name: String(server.name),
             value: String(server.id)
           }
         }))
