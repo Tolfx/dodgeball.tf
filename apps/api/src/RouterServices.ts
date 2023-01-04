@@ -3,11 +3,14 @@ import type Service from './Services';
 
 export default class RouterService
 {
-  private service: Service;
+  // Singleton instance
+  static instance: RouterService | undefined;
 
+  private service: Service;
   private configs = [ServerRouterConfig];
 
-  constructor(service: Service)
+  // Make the constructor private to prevent instantiation outside of this class
+  private constructor(service: Service)
   {
     this.service = service;
 
@@ -20,5 +23,18 @@ export default class RouterService
       }
       new Config(express, this.service);
     });
+  }
+
+  // Create a static method to get the singleton instance
+  static getInstance(service: Service): RouterService
+  {
+    if (!RouterService.instance)
+    {
+      // If there is no instance, create a new one
+      RouterService.instance = new RouterService(service);
+    }
+
+    // Return the instance
+    return RouterService.instance;
   }
 }
