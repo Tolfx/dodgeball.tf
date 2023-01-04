@@ -39,6 +39,11 @@ export default function purgeTopSpeed(services: Services)
 
     LOG("Created backup table");
 
+
+    // If there is no connection to the MySQL database, return early
+    if (!mysql.connection) return;
+
+
     // Copy the data from the `topspeed` table to the new table using the `INSERT INTO` statement
     mysql.connection.query(
         `INSERT INTO ${newTable} SELECT * FROM topspeed.topspeed`,
@@ -49,6 +54,7 @@ export default function purgeTopSpeed(services: Services)
           {
             throw err;
           }
+
 
           // If there is no connection to the MySQL database, return early
           if (!mysql.connection) return;
