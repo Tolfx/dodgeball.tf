@@ -1,4 +1,4 @@
-import MongoDb from "@dodgeball/mongodb";
+import { MongoDb } from "@dodgeball/mongodb";
 import MySQL from "@dodgeball/mysql";
 
 /**
