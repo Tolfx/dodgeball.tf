@@ -1,4 +1,5 @@
 import "./styles/index.css";
+import '@fortawesome/fontawesome-svg-core/styles.css';
 
 // @ts-ignore
 function MyApp({ Component, pageProps })
