@@ -28,7 +28,6 @@ const bootstrap = async () =>
   // Create an instance of the Services class and store it in the services variable
   const services = Services.getInstance(mongoDB, mysql);
 
-
   // Set up the express API and socket.io server
   LOG(`Setting up API`);
   const { expressApi, socketIo } = setupAPI();
