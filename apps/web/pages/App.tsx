@@ -1,6 +1,11 @@
-import { Badge, Box, Button, Container, Link, Tooltip, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import ServerContainer from "../components/ServerContainer";
+import { Colors } from "../utils/constants";
+import MainContent from "../components/MainContent";
+import Main from "../components/Main";
+import ExtraContent from "../components/ExtraContent";
+import FooterContent from "../components/FooterContent";
 
 export default function App()
 {
@@ -9,7 +14,7 @@ export default function App()
       <Head>
         <title>Dodgeball.tf</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <meta name="description" content="dodgeball.tf, a website containing every dodgeball server in Team Fortress 2" />
+        <meta name="description" content="Dodgeball.tf, a community for dodgeball in team fortress 2." />
         <meta name="keywords" content="dodgeball.tf,dodgeball,tf2,team fortress 2, tfdb" />
         <meta name="author" content="Tolfx" />
         {/* Meta data about color */}
@@ -17,111 +22,128 @@ export default function App()
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-        <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="theme-color" content="#8650AE" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color={Colors.ORANGE} />
+        <meta name="msapplication-TileColor" content={Colors.ORANGE} />
+        <meta name="theme-color" content={Colors.ORANGE} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="https://tolfix.com/" />
-        <meta name="twitter:title" content="dodgeball.tf" />
+        <meta name="twitter:title" content="Dodgeball.tf" />
         <meta name="twitter:image" content="/logo.png" />
-        <meta name="twitter:description" content="dodgeball.tf, a website containing every dodgeball server in Team Fortress 2" />
+        <meta name="twitter:description" content="Dodgeball.tf, a community for dodgeball in team fortress 2." />
 
-        <meta property="og:title" content="dodgeball.tf" />
+        <meta property="og:title" content="Dodgeball.tf" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://dodgeball.tf/" />
         <meta property="og:image" content="/logo.png" />
-        <meta property="og:description" content="dodgeball.tf, a website containing every dodgeball server in Team Fortress 2" />
+        <meta property="og:description" content="Dodgeball.tf, a community for dodgeball in team fortress 2." />
       </Head>
+
       <Container>
-        {/* My vision, we have a text in the middle saying "dodgeball.tf" with some color on it */}
-        {/* We then have a servercontainer */}
-        <Typography sx={{
-          color: "white",
-          fontSize: "100px",
-          textAlign: "center",
+        <Box sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "2rem",
         }}>
-          <Badge anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }} badgeContent={'Beta v0.2.0'} color='primary'>
-            <Link href="/" underline="none" color="inherit" sx={{
-              "&:hover": {
-                color: "#8650AE",
-                fontSize: "120px",
-                transition: "0.4s",
-              },
-              transition: "0.4s",
-            }}>
-              Dodgeball.tf
-            </Link>
-          </Badge>
-        </Typography>
-        <Container sx={{
-          color: "white",
-          textAlign: "center",
-        }}>
-          <Container sx={{
-            "& > *": {
-              margin: "20px",
+          <Typography variant="h1" component="h1" sx={{
+            // needs mobile friendly font size
+            "@media screen and (max-width: 768px)": {
+              fontSize: "3rem",
             },
-            textAlign: "left",
-            border: "1px solid white",
-            borderRadius: "10px",
           }}>
-            <Button color='primary' sx={{
-              fontSize: "24px",
-            }}>
-              <Link target={'_blank'} href="https://stats.dodgeball.tf/" underline="none" color="inherit">
-                Stats
-              </Link>
-            </Button >
-            <Button color='primary' sx={{
-              fontSize: "24px",
-            }}>
-              <Link target={'_blank'} href="https://bans.dodgeball.tf/" underline="none" color="inherit">
-                Bans
-              </Link>
-            </Button>
-            <Button sx={{
-              fontSize: "24px",
-            }}>
-              <Link target={'_blank'} href="https://forum.dodgeball.tf/" color="inherit" underline="none">
-                Forums
-              </Link>
-            </Button>
-            <Button sx={{
-              fontSize: "24px",
-            }}>
-              <Link target={'_blank'} href="https://donations.dodgeball.tf/" color="inherit" underline="none">
-                Donate
-              </Link>
-            </Button>
-            <Button sx={{
-              fontSize: "24px",
-            }}>
-              <Link target={'_blank'} href="https://steamcommunity.com/groups/OfficialTFDB" color="inherit" underline="none">
-                Steam Group
-              </Link>
-            </Button>
-            <Button sx={{
-              fontSize: "24px",
-            }}>
-              <Link target={'_blank'} href="https://discord.dodgeball.tf" color="inherit" underline="none">
-                Discord
-              </Link>
-            </Button>
-            <Button sx={{
-              fontSize: "24px",
-            }}>
-              <Link target={'_blank'} href="https://github.com/Tolfx/dodgeball.tf" color="inherit" underline="none">
-                Github
-              </Link>
-            </Button>
-          </Container>
-        </Container>
-        <Box>
-          <ServerContainer />
+            Dodgeball.<span style={{
+              color: Colors.ORANGE,
+            }}>TF</span>
+          </Typography>
+        </Box>
+
+        {/* Lets have a grid layout
+            1. MAIN MAIN MAIN
+            2. CONTENT CONTENT EXTRA
+            3. FOOTER FOOTER FOOTER
+        */}
+
+        <Box sx={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateRows: "1fr 1fr",
+          gridTemplateAreas: `
+            "main main extra"
+            "content content extra"
+            "servers servers servers"
+            "footer footer footer"
+          `,
+          marginTop: "2rem",
+          // We also want to ensure it doesn't overflow the page
+          maxWidth: "100%",
+          // And we want to center it
+          margin: "0 auto",
+          // Lets make it mobile friendly
+          "@media screen and (max-width: 768px)": {
+            gridTemplateColumns: "1fr",
+            gridTemplateRows: "1fr",
+            gridTemplateAreas: `
+              "main"
+              "content"
+              "extra"
+              "servers"
+              "footer"
+            `,
+          },
+        }}>
+          <Box sx={{
+            gridArea: "main",
+            backgroundColor: Colors.GRAY,
+            padding: "1rem",
+            // Keep all content in the box
+            overflow: "hidden",
+            // If it overflows, we want to break the words
+            wordBreak: "break-word",
+          }}>
+            <Main />
+          </Box>
+          <Box sx={{
+            gridArea: "content",
+            backgroundColor: Colors.DARKER_DARK,
+            wordBreak: "break-word",
+            position: "relative",
+          }}>
+            <MainContent />
+          </Box>
+          <Box sx={{
+            gridArea: "extra",
+            backgroundColor: Colors.LIGHTER_DARK,
+            padding: "1rem",
+            // Keep all content in the box
+            overflow: "hidden",
+            // If it overflows, we want to break the words
+            wordBreak: "break-word",
+          }}>
+            <ExtraContent />
+          </Box>
+          <Box sx={{
+            gridArea: "servers",
+            // backgroundColor: Colors.DARK_BLUE,
+            borderRadius: "10px",
+            padding: "1rem",
+            // Keep all content in the box
+            overflow: "hidden",
+            // If it overflows, we want to break the words
+            wordBreak: "break-word",
+          }}>
+            <ServerContainer />
+          </Box>
+          <Box sx={{
+            gridArea: "footer",
+            padding: "1rem",
+            // Keep all content in the box
+            overflow: "hidden",
+            // If it overflows, we want to break the words
+            wordBreak: "break-word",
+          }}>
+            <FooterContent />
+          </Box>
         </Box>
       </Container>
     </>

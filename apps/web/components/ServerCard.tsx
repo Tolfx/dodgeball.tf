@@ -1,19 +1,15 @@
 import { Button, Card, CardActions, CardContent, Collapse, IconButton, IconButtonProps, Skeleton, styled, Typography } from "@mui/material";
 import CachedIcon from '@mui/icons-material/Cached';
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { useEffect, useState } from "react";
 import useOnScreen from "../hooks/useOnScreen";
 import { IServerInfoData } from "./ServerContainer";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import HighlightIcon from '@mui/icons-material/Highlight';
 import PlayersTable from "./PlayersTable";
 
 interface Props
 {
   server: IServerInfoData;
-  highlight?: boolean;
-  setHighlightCache: Dispatch<SetStateAction<string[]>>;
-  highlightCache: string[];
 }
 
 export interface player
@@ -39,6 +35,7 @@ interface ExpandMoreProps extends IconButtonProps
 
 const ExpandMore = styled((props: ExpandMoreProps) =>
 {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
@@ -49,13 +46,12 @@ const ExpandMore = styled((props: ExpandMoreProps) =>
   }),
 }));
 
-export default function ServerCard({ server, highlight, highlightCache, setHighlightCache }: Props)
+export default function ServerCard({ server }: Props)
 {
   const [additionInfo, setAdditionInfo] = useState<fullServerInfo>();
   const ref = React.useRef<HTMLDivElement>(null);
   const [hasBeenVisible, setHasBeenVisible] = useState(false);
   const [expanded, setExpanded] = React.useState(false);
-  const [isHighlighted, setIsHighlighted] = useState(highlight || false);
   const isVisable = useOnScreen(ref);
   const isPROD = process.env.NODE_ENV === "production";
 
@@ -80,7 +76,6 @@ export default function ServerCard({ server, highlight, highlightCache, setHighl
     <>
       <Card ref={ref} sx={{
         margin: "2rem",
-        border: isHighlighted ? "2px solid #FED801" : "none",
       }}>
         <CardContent>
           <Typography component={'span'} variant="h5">
@@ -107,7 +102,6 @@ export default function ServerCard({ server, highlight, highlightCache, setHighl
                   expand={expanded}
                   onClick={() => setExpanded(!expanded)}
                   aria-label="show more"
-
                 >
                   <ExpandMoreIcon />
                 </ExpandMore>
@@ -121,45 +115,6 @@ export default function ServerCard({ server, highlight, highlightCache, setHighl
         <CardActions>
           <Button href={`steam://connect/${server.connect}`} color='success'>
             Connect
-          </Button>
-          <Button
-            sx={{
-              marginLeft: "auto"
-            }}
-            onClick={() =>
-            {
-              setIsHighlighted(!isHighlighted)
-              if (!isHighlighted)
-              {
-                // Set to local storage
-                setHighlightCache([...highlightCache, server.connect]);
-                const cache = [...highlightCache, server.connect]
-                // Check if we got more than 1
-                if (cache.length === 1)
-                {
-                  const host = window.location.host;
-                  navigator.clipboard.writeText(`${host}/?highlight=${server.connect}`);
-                }
-                else
-                {
-                  const host = window.location.host;
-                  // Use highlightedServers to make a link
-                  const text = `${host}/?highlights=${cache.join(",")}`;
-                  navigator.clipboard.writeText(text);
-                }
-              }
-              else
-              {
-                // remove from local storage and remove from url
-                setHighlightCache(highlightCache.filter((s) => s !== server.connect));
-                const host = window.location.host;
-                const text = `${host}/?highlights=${highlightCache.join(",")}`;
-                navigator.clipboard.writeText(text);
-              }
-            }}
-            title="Highlight"
-          >
-            <HighlightIcon />
           </Button>
           <Button
             sx={{

@@ -2,6 +2,7 @@ import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@m
 import { styled } from '@mui/material/styles';
 import { player } from "./ServerCard";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import { Colors } from "../utils/constants";
 
 interface Props
 {
@@ -10,7 +11,7 @@ interface Props
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: Colors.DARK_ORANGE,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -18,9 +19,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: Colors.DARKER_DARK,
   },
   // hide last border
   '&:last-child td, &:last-child th': {
