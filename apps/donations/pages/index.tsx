@@ -1,7 +1,7 @@
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import DonationPerk from "../components/DonationPerk";
-import { Colors } from "../utils/constants";
+import { Colors } from "@dodgeball/core";
 
 const PerksSupporter = [
   "[Supporter] Tag in-game, discord & forum",
@@ -24,19 +24,38 @@ const PerksPatron = [
   "Personalized tag in-game (one time)"
 ];
 
-export default function App()
-{
+export default function App() {
   return (
     <>
       <Head>
         <title>Donations | Dodgeball.tf</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <meta name="description" content="Donation website for supporting dodgeball.tf" />
-        <meta name="keywords" content="dodgeball.tf,dodgeball,tf2,team fortress 2, tfdb" />
+        <meta
+          name="description"
+          content="Donation website for supporting dodgeball.tf"
+        />
+        <meta
+          name="keywords"
+          content="dodgeball.tf,dodgeball,tf2,team fortress 2, tfdb"
+        />
         <meta name="author" content="Tolfx" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
         <link rel="manifest" href="/site.webmanifest" />
 
         {/* Meta data about color */}
@@ -48,33 +67,48 @@ export default function App()
         <meta name="twitter:site" content="https://tolfix.com/" />
         <meta name="twitter:title" content="dodgeball.tf" />
         <meta name="twitter:image" content="/logo.png" />
-        <meta name="twitter:description" content="Donation website for supporting dodgeball.tf" />
+        <meta
+          name="twitter:description"
+          content="Donation website for supporting dodgeball.tf"
+        />
 
         <meta property="og:title" content="dodgeball.tf" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://dodgeball.tf/" />
         <meta property="og:image" content="/logo.png" />
-        <meta property="og:description" content="Donation website for supporting dodgeball.tf" />
+        <meta
+          property="og:description"
+          content="Donation website for supporting dodgeball.tf"
+        />
       </Head>
       <Container>
-        <Box sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "2rem",
-        }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "2rem"
+          }}
+        >
           <Typography variant="h2" component="h1">
-            Donations | Dodgeball.<span style={{
-              color: Colors.ORANGE,
-            }}>TF</span>
+            Donations | Dodgeball.
+            <span
+              style={{
+                color: Colors.ORANGE
+              }}
+            >
+              TF
+            </span>
           </Typography>
         </Box>
-        <Box sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          marginTop: "2rem",
-        }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            marginTop: "2rem"
+          }}
+        >
           <DonationPerk
             heading="Supporter"
             price={2.5}
@@ -90,8 +124,7 @@ export default function App()
             isPermanent={true}
           />
         </Box>
-
       </Container>
     </>
-  )
+  );
 }
