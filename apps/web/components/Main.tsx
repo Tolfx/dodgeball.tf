@@ -6,22 +6,22 @@ const Main: FC = () =>
 {
   return (
     <>
-    <Box
-      sx={{
-        marginBottom: "1rem",
-      }}
-    >
-      <Typography variant="h4">
-        Welcome to Dodgeball.<span style={{
-              color: Colors.ORANGE,
-            }}>TF</span>!
-      </Typography>
-      <Typography variant="h6">
-        Dodgeball.<span style={{
-          color: Colors.ORANGE,
-        }}>TF</span> is a community for the gamemode Team Fortress called <span style={{color: Colors.ORANGE}}>Dodgeball</span>, where baller strive. We have community servers where you as the player can play dodgeball fore free!
-      </Typography>
-    </Box>
+      <Box
+        sx={{
+          marginBottom: "1rem",
+        }}
+      >
+        <Typography variant="h4">
+          Welcome to Dodgeball.<span style={{
+                color: Colors.ORANGE,
+              }}>TF</span>!
+        </Typography>
+        <Typography variant="h6">
+          Dodgeball.<span style={{
+            color: Colors.ORANGE,
+          }}>TF</span> is a community for the gamemode <span style={{color: Colors.ORANGE}}>Dodgeball</span> in Team Fortress 2, where baller strive. We have community servers where you as the player can play dodgeball!
+        </Typography>
+      </Box>
     </>
   )
 }
