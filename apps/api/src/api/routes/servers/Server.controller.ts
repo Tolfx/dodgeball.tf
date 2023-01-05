@@ -27,42 +27,48 @@ export default class ServerController
    * @param req - Express request object
    * @param res - Express response object
    */
-  async getServers(req: Request, res: Response)
-  {
+  async getServers(req: Request, res: Response) {
     // Log that we are getting the servers
     LOG(`Getting servers`);
     // We will be a bit biased and add put our servers on the top
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const servers = await GetServers()(this.service.getMySQL().connection!);
 
-    LOG(`Got servers ${servers.length}`);
-    // Iterate over each server
-    for await (const server of servers)
+    if (this.service.getMySQL().connection === undefined)
     {
-      const hasBeenFormatted = this.service.formattedServers.has(`${server.address}:${server.port}`);
-      if (hasBeenFormatted)
-        continue;
-
-      try
-      {
-        const formattedServer = await getServerInfo(server.address, server.port);
-        // Filter if map isn't tfdb_ in the beginning
-        if (!formattedServer.map.startsWith('tfdb_'))
-          continue;
-        this.service.formattedServers.set(`${server.address}:${server.port}`, formattedServer);
-      }
-      catch (err)
-      {
-        // Log the error and continue to the next server
-        LOG(`Error getting server info for ${server.address}:${server.port}`);
-        LOG(err);
-      }
+      throw new Error('MySQL connection is undefined!');
     }
+    else
+    {
+      // @ts-ignore
+      const servers = await GetServers()(this.service.getMySQL().connection);
 
-    // Return the formatted server information as a JSON array
-    return res.status(200).json([...this.service.formattedServers.values()]);
+      LOG(`Got servers ${servers.length}`);
+      // Iterate over each server
+      for await (const server of servers)
+      {
+        const hasBeenFormatted = this.service.formattedServers.has(`${server.address}:${server.port}`);
+        if (hasBeenFormatted)
+          continue;
+
+        try
+        {
+          const formattedServer = await getServerInfo(server.address, server.port);
+          // Filter if map isn't tfdb_ in the beginning
+          if (!formattedServer.map.startsWith('tfdb_'))
+            continue;
+          this.service.formattedServers.set(`${server.address}:${server.port}`, formattedServer);
+        }
+        catch (err)
+        {
+          // Log the error and continue to the next server
+          LOG(`Error getting server info for ${server.address}:${server.port}`);
+          LOG(err);
+        }
+      }
+
+      // Return the formatted server information as a JSON array
+      return res.status(200).json([...this.service.formattedServers.values()]);
+    }
   }
-
   /**
    * Route handler for retrieving information about a specific server.
    *
