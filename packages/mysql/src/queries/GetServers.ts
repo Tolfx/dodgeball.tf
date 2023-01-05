@@ -1,4 +1,4 @@
-import mysql from 'mysql';
+import * as mysql from 'mysql2';
 
 export type Server = {
   serverId: number;
@@ -22,7 +22,7 @@ export default function GetServers()
           if (err)
             return reject(err);
 
-          resolve(results);
+          resolve(Object.values(JSON.parse(JSON.stringify(results))));
         }
       );
   });

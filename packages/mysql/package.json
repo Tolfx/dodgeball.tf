@@ -1,7 +1,7 @@
 {
     "name": "@dodgeball/mysql",
     "version": "0.0.0",
-    "license": "MIT",
+    "license": "ISC",
     "private": true,
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -30,11 +30,10 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
     "dependencies": {
         "debug": "^4.3.4",
         "dotenv": "^16.0.3",
-        "mysql": "^2.18.1",
+        "mysql2": "^2.3.3",
         "nodemon": "^2.0.20"
     }
 }

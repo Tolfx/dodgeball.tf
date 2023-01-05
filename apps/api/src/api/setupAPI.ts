@@ -6,32 +6,28 @@ import { PORT } from '../util/constants';
 
 const LOG = debug('dodgeball:api:setupAPI');
 
+// Initialize Express and Socket.io servers
 const expressApi = express();
 const server = http.createServer(expressApi);
+const socketIo = new Server(server, { cors: { origin: '*' } });
 
-export default () =>
+// Enable JSON parsing and URL encoding on Express server
+expressApi.use(express.json());
+expressApi.use(express.urlencoded({ extended: true }));
+
+// Set CORS headers on Express server
+expressApi.use((req, res, next) =>
 {
-  LOG(`Creating socket.io server`);
-  const socketIo = new Server(server, {
-    cors: {
-      origin: '*'
-    }
-  });
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
+});
 
-  expressApi.use(express.json());
-  expressApi.use(express.urlencoded({ extended: true }));
+// Start the server
+server.listen(PORT, () =>
+{
+  LOG(`Listening on port ${PORT}`);
+});
 
-  // Set cors on express 
-  expressApi.use((req, res, next) =>
-  {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    next();
-  });
-
-  server.listen(PORT, () =>
-  {
-    LOG('listening on port: %s', PORT);
-  });
-  return { socketIo, expressApi };
-};
+// Return the initialized servers
+export default () => ({ socketIo, expressApi });

@@ -1,10 +1,10 @@
 import debug from "debug";
 import gamedig from "gamedig";
 
+// Initialize debug function with namespace
 const LOG = debug("dodgeball:api:hl2:getServerInfo");
 
-export interface IServerInfoData
-{
+export interface IServerInfoData {
   name: string;
   map: string;
   maxplayers: number;
@@ -13,9 +13,15 @@ export interface IServerInfoData
   raw: {
     game?: string;
     tags?: string[];
-  }
+  };
 }
 
+/**
+ * Retrieves server information for a given IP and port.
+ * @param ip - IP address of the server
+ * @param port - Port number of the server
+ * @returns Promise containing server information
+ */
 export default function getServerInfo(ip: string, port: number): Promise<IServerInfoData>
 {
   return new Promise((resolve, reject) =>

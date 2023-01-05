@@ -1,12 +1,12 @@
 import debug from "debug";
-import mysql from "mysql";
+import mysql from "mysql2";
 import { MYSQL_HOST, MYSQL_PASSWORD, MYSQL_PORT, MYSQL_USER } from "./utils/constants";
 
 const LOG = debug("dodgeball:mysql")
 
 export default class MySQL
 {
-  public connection?: mysql.Connection;
+  public connection: mysql.Connection | undefined;
 
   constructor(
     private host: string = MYSQL_HOST || '',

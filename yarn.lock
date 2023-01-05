@@ -947,7 +947,7 @@
   "resolved" "https://registry.npmjs.org/@discordjs/util/-/util-0.1.0.tgz"
   "version" "0.1.0"
 
-"@dodgeball/api@file:E:\\Programming\\Typescript\\dodgeball.tf\\apps\\api":
+"@dodgeball/api@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\apps\\api":
   "resolved" "file:apps/api"
   "version" "0.0.0"
   dependencies:
@@ -955,12 +955,13 @@
     "@dodgeball/mysql" "*"
     "@types/gamedig" "^4.0.0"
     "debug" "^4.3.4"
+    "dotenv" "^16.0.3"
     "esbuild-register" "^3.4.2"
     "express" "^4.18.2"
     "gamedig" "^4.0.5"
     "socket.io" "^4.5.3"
 
-"@dodgeball/bot@file:E:\\Programming\\Typescript\\dodgeball.tf\\apps\\bot":
+"@dodgeball/bot@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\apps\\bot":
   "resolved" "file:apps/bot"
   "version" "1.0.0"
   dependencies:
@@ -986,7 +987,7 @@
     "steamid" "^2.0.0"
     "stripe" "^11.3.0"
 
-"@dodgeball/donations@file:E:\\Programming\\Typescript\\dodgeball.tf\\apps\\donations":
+"@dodgeball/donations@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\apps\\donations":
   "resolved" "file:apps/donations"
   "version" "0.1.0"
   dependencies:
@@ -1003,7 +1004,7 @@
     "react" "18.2.0"
     "react-dom" "18.2.0"
 
-"@dodgeball/fetchserver@file:E:\\Programming\\Typescript\\dodgeball.tf\\microservices\\fetchServer":
+"@dodgeball/fetchserver@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\microservices\\fetchServer":
   "resolved" "file:microservices/fetchServer"
   "version" "0.0.0"
   dependencies:
@@ -1013,13 +1014,13 @@
     "cron" "^2.1.0"
     "debug" "^4.3.4"
 
-"@dodgeball/mongodb@*", "@dodgeball/mongodb@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\mongodb":
+"@dodgeball/mongodb@*", "@dodgeball/mongodb@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\packages\\mongodb":
   "resolved" "file:packages/mongodb"
   "version" "0.0.0"
   dependencies:
     "mongoose" "^6.7.0"
 
-"@dodgeball/mysql@*", "@dodgeball/mysql@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\mysql":
+"@dodgeball/mysql@*", "@dodgeball/mysql@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\packages\\mysql":
   "resolved" "file:packages/mysql"
   "version" "0.0.0"
   dependencies:
@@ -1028,7 +1029,7 @@
     "mysql" "^2.18.1"
     "nodemon" "^2.0.20"
 
-"@dodgeball/purgetopspeed@file:E:\\Programming\\Typescript\\dodgeball.tf\\microservices\\purgeTopSpeed":
+"@dodgeball/purgetopspeed@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\microservices\\purgeTopSpeed":
   "resolved" "file:microservices/purgeTopSpeed"
   "version" "0.0.0"
   dependencies:
@@ -1039,11 +1040,11 @@
     "debug" "^4.3.4"
     "dotenv" "^16.0.3"
 
-"@dodgeball/ui@*", "@dodgeball/ui@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\ui":
+"@dodgeball/ui@*", "@dodgeball/ui@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\packages\\ui":
   "resolved" "file:packages/ui"
   "version" "0.0.0"
 
-"@dodgeball/web@file:E:\\Programming\\Typescript\\dodgeball.tf\\apps\\web":
+"@dodgeball/web@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\apps\\web":
   "resolved" "file:apps/web"
   "version" "0.0.0"
   dependencies:
@@ -2645,7 +2646,7 @@
   "resolved" "https://registry.npmjs.org/dotenv/-/dotenv-16.0.3.tgz"
   "version" "16.0.3"
 
-"dummy@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\dummy":
+"dummy@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\packages\\dummy":
   "resolved" "file:packages/dummy"
   "version" "0.0.0"
 
@@ -2827,7 +2828,7 @@
   "resolved" "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
   "version" "4.0.0"
 
-"eslint-config-custom@*", "eslint-config-custom@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\eslint-config-custom":
+"eslint-config-custom@*", "eslint-config-custom@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\packages\\eslint-config-custom":
   "resolved" "file:packages/eslint-config-custom"
   "version" "0.0.0"
   dependencies:
@@ -5313,7 +5314,7 @@
     "minimist" "^1.2.6"
     "strip-bom" "^3.0.0"
 
-"tsconfig@*", "tsconfig@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\tsconfig":
+"tsconfig@*", "tsconfig@file:C:\\Users\\user\\WebstormProjects\\dodgeball.tf\\packages\\tsconfig":
   "resolved" "file:packages/tsconfig"
   "version" "0.0.0"
 

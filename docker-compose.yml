@@ -7,12 +7,26 @@ services:
     container_name: mongodb_dodgeball
     restart: unless-stopped
     volumes:
-      - mongodb-dodegaball-storage:/var/lib/mongodb
+      - mongodb-dodgeball-storage:/var/lib/mongodb
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
     ports:
       - "27017:27017"
+    networks:
+      - dodgeball-network
+
+  mysql:
+    image: mysql
+    container_name: mysql_dodgeball
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-dodgeball-storage:/var/lib/mysql
     networks:
       - dodgeball-network
 
@@ -32,8 +46,12 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - MONGO_HOST=mongodb_dodgeball
-      - DEBUG=dodgeball*
+      MYSQL_HOST: mysql_dodgeball
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+      MONGO_HOST: mongodb_dodgeball
+      DEBUG: dodgeball*
     networks:
       - dodgeball-network
 
@@ -48,7 +66,8 @@ services:
       - dodgeball-network
 
 volumes:
-  mongodb-dodegaball-storage:
+  mongodb-dodgeball-storage:
+  mysql-dodgeball-storage:
 
 
 networks:

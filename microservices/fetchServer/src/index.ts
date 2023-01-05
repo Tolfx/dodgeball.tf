@@ -3,32 +3,41 @@ import debug from "debug";
 import Services from './Services';
 import { CronJob } from "cron";
 import fetchServer from './crons/fetchServers.cron';
-import { MONGO_DATABASE, MONGO_HOST, MONGO_PASSWORD, MONGO_PORT, MONG_USEERNAME, RUN_ALL_ON_STARTUP } from './utils/constants';
+import { MONGO_DATABASE, MONGO_HOST, MONGO_PASSWORD, MONGO_PORT, MONGO_USERNAME, RUN_ALL_ON_STARTUP } from './utils/constants';
 
+// Create a debug logger
 const LOG = debug("dodgeball:bootstrap");
 
-const bootstrap = async () =>
+/**
+ * Bootstrap the server application.
+ * Connect to the MongoDB database and start the cron jobs.
+ */
+const bootstrap = async () => 
 {
   LOG("Starting bootstrap");
-  const mongoDB = new MongoDb(MONGO_HOST, MONGO_PORT, MONGO_DATABASE, MONG_USEERNAME, MONGO_PASSWORD);
+
+  // Connect to the MongoDB database
+  const mongoDB = new MongoDb(MONGO_HOST, MONGO_PORT, MONGO_DATABASE, MONGO_USERNAME, MONGO_PASSWORD);
   LOG(`Connecting to MongoDB: ${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}`);
   await mongoDB.connect();
 
-  const services = new Services(mongoDB);
+  // Create a new Services instance
+  Services.getInstance(mongoDB);
 
-  new CronJob("0 12 * * *", () =>
+  // Create a new cron job that runs every day at 12:00pm
+  new CronJob("0 12 * * *", () => 
   {
     LOG(`Running cron jobs`);
-    fetchServer(services);
+    fetchServer();
   }, null, true, "Europe/Stockholm");
 
-  // Run all crons on startup
-  if (RUN_ALL_ON_STARTUP)
+  // If the RUN_ALL_ON_STARTUP constant is true, run all cron jobs immediately
+  if (RUN_ALL_ON_STARTUP) 
   {
     LOG(`Running all crons on startup`);
-    fetchServer(services);
+    await fetchServer();
   }
+};
 
-}
-
+// Start the application
 bootstrap();
