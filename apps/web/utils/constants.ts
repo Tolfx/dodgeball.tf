@@ -13,3 +13,5 @@ export enum Colors {
   DARK_BLUE = "#27939D",
   DARK_ORANGE = "#EE6B35"
 }
+
+export const IS_PROD = process.env.NODE_ENV === "production";

@@ -1,6 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { FC, useState } from "react";
 import { Colors } from "../utils/constants";
+import Generic from "./pages/Generic.page";
 
 const ButtonStyle = {
   color: `${Colors.ORANGE}`,
@@ -24,9 +25,10 @@ enum Pages {
 
 const RenderPage: FC<{ page: Pages }> = ({ page }) => {
   return {
-    [Pages.Home]: <>Home.. coming soon!</>,
-    [Pages.Updates]: <>Updates.. coming soon!</>,
-    [Pages.News]: <>News.. coming soon!</>
+    // [Pages.Home]: <>Home.. coming soon!</>,
+    [Pages.Home]: <Generic />,
+    [Pages.Updates]: <Generic category="updates" />,
+    [Pages.News]: <Generic category="news" />
   }[page];
 };
 

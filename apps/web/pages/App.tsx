@@ -101,7 +101,6 @@ export default function App() {
           sx={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
-            gridTemplateRows: "1fr 1fr",
             gridTemplateAreas: `
             "main main extra"
             "content content extra"
@@ -132,7 +131,7 @@ export default function App() {
               gridArea: "main",
               backgroundColor: Colors.GRAY,
               padding: "1rem",
-              // Keep all content in the box
+              // Keep fixed height
               overflow: "hidden",
               // If it overflows, we want to break the words
               wordBreak: "break-word"
