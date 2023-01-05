@@ -59,6 +59,23 @@ const Generic: FC<Props> = ({ category }) => {
               __html: rawMarkdown.rawMarkdown
             }}
           ></div>
+          {/* Lets have date */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "1rem"
+            }}
+          >
+            <Box
+              sx={{
+                color: Colors.ORANGE,
+                fontSize: "0.8rem"
+              }}
+            >
+              {new Date(rawMarkdown.createdAt).toLocaleDateString()}
+            </Box>
+          </Box>
         </Box>
       ))}
       {/* Lets have pagination at the bottom
