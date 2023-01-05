@@ -3,6 +3,8 @@ import { Client, Message } from "discord.js";
 import Services from "../../services/Services";
 import HelpCommand from "./information/Help.command";
 import TopSpeedCommand from "./ranks/Topspeed.command";
+import CreatePostCommand from "./admin/CreatePost.command";
+import EditPostCommand from "./admin/EditPost.command";
 
 const LOG = debug("dodgeball:bot:commands:register.commands");
 
@@ -23,8 +25,10 @@ export default class CommandRegister {
   private client: Client;
 
   private Commands: CommandHandler[] = [
-    new HelpCommand(),
-    new TopSpeedCommand()
+    new TopSpeedCommand(),
+    new CreatePostCommand(),
+    new EditPostCommand(),
+    new HelpCommand()
   ];
 
   constructor(private services: Services) {

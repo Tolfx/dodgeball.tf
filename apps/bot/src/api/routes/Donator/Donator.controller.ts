@@ -116,8 +116,8 @@ export default class DonatorController implements ControllerRouter {
     const sig = req.headers["stripe-signature"] as string;
     let event;
     try {
-      // @ts-ignore
       event = this.stripe.webhooks.constructEvent(
+        // @ts-ignore
         req.rawBody,
         sig,
         STRIPE_WEBHOOK_SECRET
