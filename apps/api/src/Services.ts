@@ -1,10 +1,9 @@
-import type { MongoDb } from '@dodgeball/mongodb';
-import MySQL from '@dodgeball/mysql';
-import { Express } from 'express';
-import { Server as SocketServer } from 'socket.io';
+import type { MongoDb } from "@dodgeball/mongodb";
+import MySQL from "@dodgeball/mysql";
+import { Express } from "express";
+import { Server as SocketServer } from "socket.io";
 
-export default class Services
-{
+export default class Services {
   private mongoDB?: MongoDb;
   private mysql: MySQL;
   private express?: Express;
@@ -12,45 +11,37 @@ export default class Services
 
   public formattedServers: Map<string, any>;
 
-  constructor(mongoDB: MongoDb, mysql: MySQL)
-  {
+  constructor(mongoDB: MongoDb, mysql: MySQL) {
     this.mongoDB = mongoDB;
     this.mysql = mysql;
     this.formattedServers = new Map();
   }
 
-  setMongoDB(mongoDB: MongoDb)
-  {
+  setMongoDB(mongoDB: MongoDb) {
     this.mongoDB = mongoDB;
   }
 
-  getMongoDB()
-  {
+  getMongoDB() {
     return this.mongoDB;
   }
 
-  setExpress(express: Express)
-  {
+  setExpress(express: Express) {
     this.express = express;
   }
 
-  getExpress()
-  {
+  getExpress() {
     return this.express;
   }
 
-  setSocketIo(socketIo: SocketServer)
-  {
+  setSocketIo(socketIo: SocketServer) {
     this.socketIo = socketIo;
   }
 
-  getSocketIo()
-  {
+  getSocketIo() {
     return this.socketIo;
   }
 
-  getMySQL()
-  {
+  getMySQL() {
     return this.mysql;
   }
 }
