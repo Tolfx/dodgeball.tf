@@ -1,28 +1,21 @@
-import mysql from 'mysql';
+import mysql from "mysql";
 
-export interface SourcebansGroups
-{
+export interface SourcebansGroups {
   id: number;
   flags: string;
   immunity: number;
   name: string;
 }
 
-export default function GetSBGroups()
-{
+export default function GetSBGroups() {
   const query = `SELECT * FROM sourcebans.sb_srvgroups`;
 
-  return (connection: mysql.Connection): Promise<Array<SourcebansGroups>> => new Promise((resolve, reject) =>
-  {
-    connection
-      .query(query,
-        (err, results) =>
-        {
-          if (err)
-            return reject(err);
+  return (connection: mysql.Connection): Promise<Array<SourcebansGroups>> =>
+    new Promise((resolve, reject) => {
+      connection.query(query, (err, results) => {
+        if (err) return reject(err);
 
-          resolve(results);
-        }
-      );
-  });
+        resolve(results);
+      });
+    });
 }

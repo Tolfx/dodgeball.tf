@@ -5,15 +5,13 @@ import OnInteractions from "./OnInteractions";
 import OnMessage from "./OnMessage";
 import OnReady from "./OnReady";
 
-const LOG = debug('dodgeball:bot:events:register.events');
+const LOG = debug("dodgeball:bot:events:register.events");
 
-export interface EventHandler
-{
+export interface EventHandler {
   setup: (client: Client, services: Services) => void;
 }
 
-export default class EventRegister
-{
+export default class EventRegister {
   private client: Client;
 
   private Events: EventHandler[] = [
@@ -22,16 +20,13 @@ export default class EventRegister
     new OnInteractions()
   ];
 
-  constructor(private services: Services)
-  {
+  constructor(private services: Services) {
     this.client = services.getDiscordClient();
   }
 
-  registerEvents()
-  {
-    LOG('Registering events');
-    this.Events.forEach((event) =>
-    {
+  registerEvents() {
+    LOG("Registering events");
+    this.Events.forEach((event) => {
       event.setup(this.client, this.services);
     });
   }

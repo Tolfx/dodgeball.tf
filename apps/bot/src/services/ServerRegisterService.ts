@@ -7,54 +7,56 @@ import Services from "./Services";
 import AddCCCM from "../mysql/queries/AddCCCM";
 import debug from "debug";
 
-const LOG = debug('dodgeball:bot:services:ServerRegisterService');
-export default class ServerRegisterService
-{
+const LOG = debug("dodgeball:bot:services:ServerRegisterService");
+export default class ServerRegisterService {
   public services: Services;
   private servers: Map<Server["address"], ServerService>;
 
-  constructor(services: Services)
-  {
+  constructor(services: Services) {
     this.services = services;
     this.servers = new Map();
   }
 
-  public async start()
-  {
+  public async start() {
     const servers = await GetServers()(this.services.getMysqlConnection());
-    servers.forEach((server) => this.servers.set(`${server.address}:${server.port}`, new ServerService(this.services, server)));
+    servers.forEach((server) =>
+      this.servers.set(
+        `${server.address}:${server.port}`,
+        new ServerService(this.services, server)
+      )
+    );
   }
 
-  public getServer(address: Server["address"], port: Server['port']): ServerService | undefined
-  {
+  public getServer(
+    address: Server["address"],
+    port: Server["port"]
+  ): ServerService | undefined {
     return this.servers.get(`${address}:${port}`);
   }
 
-  public getAllServers(): ServerService[]
-  {
+  public getAllServers(): ServerService[] {
     return Array.from(this.servers.values());
   }
 
-  public async addDonator(donator: DonatorUser)
-  {
-    await AddDonator(donator, this.services.getCacheService()?.getAllCachedServers()?.length)(this.services.getMysqlConnection());
+  public async addDonator(donator: DonatorUser) {
+    await AddDonator(
+      donator,
+      this.services.getCacheService()?.getAllCachedServers()?.length
+    )(this.services.getMysqlConnection());
     const addCCCM = await AddCCCM(donator)(this.services.getMysqlConnection());
-    if (!addCCCM) LOG(`Failed to add donator ${donator.steamName} to CCCM, already exists`);
+    if (!addCCCM)
+      LOG(`Failed to add donator ${donator.steamName} to CCCM, already exists`);
     const servers = this.getAllServers();
-    for (const server of servers)
-    {
+    for (const server of servers) {
       await server.addDonator(donator);
     }
   }
 
-  public async updateDonator(donator: DonatorUser)
-  {
+  public async updateDonator(donator: DonatorUser) {
     await UpdateDonator(donator)(this.services.getMysqlConnection());
     const servers = this.getAllServers();
-    for (const server of servers)
-    {
+    for (const server of servers) {
       await server.updateDonator(donator);
     }
   }
-
 }

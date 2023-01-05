@@ -1,18 +1,14 @@
-import { DonatorUserModel, DonatorUser } from '@dodgeball/mongodb';
-import SteamStrategy from 'passport-steam';
-import { API_DOMAIN, STEAM_API_KEY } from '../../util/constants';
-declare global
-{
+import { DonatorUserModel, DonatorUser } from "@dodgeball/mongodb";
+import SteamStrategy from "passport-steam";
+import { API_DOMAIN, STEAM_API_KEY } from "../../util/constants";
+declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express
-  {
-    export interface User extends DonatorUser
-    {
+  namespace Express {
+    export interface User extends DonatorUser {
       identifier: string;
     }
   }
 }
-
 
 // @ts-ignore
 export default new SteamStrategy(
@@ -22,15 +18,13 @@ export default new SteamStrategy(
     apiKey: STEAM_API_KEY
   },
   // @ts-ignore
-  async function (identifier, profile, done)
-  {
+  async function (identifier, profile, done) {
     // Will use this for donators for now?
     const user = await DonatorUserModel.findOne({
       steamId: profile.id
     });
 
-    if (!user)
-    {
+    if (!user) {
       // Create new user
       const newUser = await new DonatorUserModel({
         steamId: profile.id,

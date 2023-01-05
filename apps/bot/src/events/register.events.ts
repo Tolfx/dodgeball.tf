@@ -6,68 +6,57 @@ import OnDonateRemove from "./Donations/OnDonateRemove.event";
 import OnDonateUpdate from "./Donations/OnDonateUpdate.event";
 import OnError from "./Errors/OnError.event";
 
-const LOG = debug('dodgeball:bot:events:register.events');
+const LOG = debug("dodgeball:bot:events:register.events");
 
-export type Events = "donator.added" | "donator.updated" | "donator.removed" | "error";
+export type Events =
+  | "donator.added"
+  | "donator.updated"
+  | "donator.removed"
+  | "error";
 
-export interface EventHandler<Payload>
-{
+export interface EventHandler<Payload> {
   event: Events;
   services: Services;
   handle: (event: Event<Payload>) => Promise<void>;
 }
 
-export class Event<Payload>
-{
+export class Event<Payload> {
   public id: string;
   public event: Events;
-  public payload: Payload
+  public payload: Payload;
 
-  constructor(id: string, event: Events, payload: Payload)
-  {
+  constructor(id: string, event: Events, payload: Payload) {
     this.id = id;
     this.event = event;
     this.payload = payload;
   }
 }
 
-export default class RegisterEvents
-{
+export default class RegisterEvents {
   private services: Services;
 
   private Events = new Map<Events, EventHandler<any>>();
 
-  private OnEvents = [
-    OnDonateAdd,
-    OnDonateUpdate,
-    OnDonateRemove,
-    OnError
-  ];
+  private OnEvents = [OnDonateAdd, OnDonateUpdate, OnDonateRemove, OnError];
 
-  constructor(services: Services)
-  {
-    LOG('Registering events');
+  constructor(services: Services) {
+    LOG("Registering events");
     this.services = services;
     NodeEvents(services);
   }
 
-  public async register()
-  {
-    for (const event of this.OnEvents)
-    {
+  public async register() {
+    for (const event of this.OnEvents) {
       LOG(`Registering event: ${event.name}`);
       const instance = new event(this.services);
       this.Events.set(instance.event, instance);
     }
   }
 
-  public async emit<Payload>(event: Event<Payload>)
-  {
+  public async emit<Payload>(event: Event<Payload>) {
     const handler = this.Events.get(event.event);
-    if (handler)
-    {
+    if (handler) {
       await handler.handle(event);
     }
   }
-
 }

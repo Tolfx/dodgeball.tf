@@ -4,26 +4,22 @@ import Services from "../../services/Services";
 import HelpCommand from "./information/Help.command";
 import TopSpeedCommand from "./ranks/Topspeed.command";
 
-const LOG = debug('dodgeball:bot:commands:register.commands');
+const LOG = debug("dodgeball:bot:commands:register.commands");
 
-declare module 'discord.js'
-{
-  interface Client
-  {
+declare module "discord.js" {
+  interface Client {
     commands: Map<string, CommandHandler>;
   }
 }
 
-export interface CommandHandler
-{
+export interface CommandHandler {
   name: string;
   category: string;
   init: (client: Client, services: Services) => void;
   on: (message: Message, args: string[]) => void;
 }
 
-export default class CommandRegister
-{
+export default class CommandRegister {
   private client: Client;
 
   private Commands: CommandHandler[] = [
@@ -31,17 +27,14 @@ export default class CommandRegister
     new TopSpeedCommand()
   ];
 
-  constructor(private services: Services)
-  {
+  constructor(private services: Services) {
     this.client = services.getDiscordClient();
     this.client.commands = new Map<string, CommandHandler>();
   }
 
-  registerCommands()
-  {
-    LOG('Registering commands');
-    this.Commands.forEach((command) =>
-    {
+  registerCommands() {
+    LOG("Registering commands");
+    this.Commands.forEach((command) => {
       command.init(this.client, this.services);
     });
   }

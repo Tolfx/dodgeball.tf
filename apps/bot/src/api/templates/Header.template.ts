@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export default () => `
 <div style="margin-bottom: 5px;
 padding: 10px 0;

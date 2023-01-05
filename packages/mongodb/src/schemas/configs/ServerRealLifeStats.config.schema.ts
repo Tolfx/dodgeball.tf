@@ -1,7 +1,6 @@
 import { model, Schema, Document } from "mongoose";
 
-export interface ServerRealLifeStats
-{
+export interface ServerRealLifeStats {
   serverId: string;
   discordChannelId: string;
   discordGuildId: string;
@@ -15,4 +14,7 @@ export const ServerRealLifeStatsSchema: Schema = new Schema({
   discordMessageId: { type: String, required: true }
 });
 
-export const ServerRealLifeStatsModel = model<ServerRealLifeStats & Document>("configs", ServerRealLifeStatsSchema);
+export const ServerRealLifeStatsModel = model<ServerRealLifeStats & Document>(
+  "configs",
+  ServerRealLifeStatsSchema
+);

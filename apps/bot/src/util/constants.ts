@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import GetSBServers from "../mysql/queries/GetSBServers";
 import Services from "../services/Services";
 import getEnv from "./getEnv";
@@ -19,7 +20,7 @@ export const MYSQL_PORT = getEnv("MYSQL_PORT", "3306");
 export const API_PORT = process.env.API_PORT;
 export const API_HOST = getEnv("API_HOST", "localhost");
 export const API_PROTOCOL = getEnv("API_PROTOCOL", "http");
-export const API_DOMAIN = `${API_PROTOCOL}://${API_HOST}${API_PROTOCOL === 'http' ? `:${API_PORT}` : ""}`;
+export const API_DOMAIN = `${API_PROTOCOL}://${API_HOST}${API_PROTOCOL === "http" ? `:${API_PORT}` : ""}`;
 
 export const STRIPE_SECRET_KEY = getEnv("STRIPE_SECRET_KEY", "secret");
 export const STRIPE_WEBHOOK_SECRET = getEnv("STRIPE_WEBHOOK_SECRET", "secret");
@@ -31,62 +32,55 @@ export const STRIPE_WEBHOOK_SECRET = getEnv("STRIPE_WEBHOOK_SECRET", "secret");
  */
 export const DEFAULT_VALUE_SERVER_IDS = [
   {
-    "id": "tf2",
-    "name": "Dodgeball.tf | Advanced | EU",
+    id: "tf2",
+    name: "Dodgeball.tf | Advanced | EU"
   },
   {
-    "id": "tf4",
-    "name": "Dodgeball.tf | EU",
-  },
+    id: "tf4",
+    name: "Dodgeball.tf | EU"
+  }
 ];
 
-export const TOPSPEED_SERVERS_IDS = async (services: Services) =>
-{
-  return new Promise<{id?: string, name?: string}[]>(async (resolve, reject) =>
-  {
+export const TOPSPEED_SERVERS_IDS = async (services: Services) => {
+  return new Promise<{ id?: string; name?: string }[]>(async (resolve, reject) => {
     const servers = await GetSBServers()(services.getMysqlConnection());
     const cachedServers = services.getCacheService()?.getAllCachedServers();
-    if (!cachedServers)
-      return reject("No cached servers found");
-    
+    if (!cachedServers) return reject("No cached servers found");
+
     let mapped = [];
-    for (const server of servers)
-    {
-      const cachedServer = cachedServers.find(cachedServer =>
-      {
+    for (const server of servers) {
+      const cachedServer = cachedServers.find((cachedServer) => {
         return cachedServer.server.address === server.ip && cachedServer.server.port === server.port;
       });
-      if (!cachedServer)
-        continue;
-  
+      if (!cachedServer) continue;
+
       mapped.push({
         id: String(server.sid),
-        name: cachedServer.server.name,
+        name: cachedServer.server.name
       });
     }
     // I don't want to include servers that is not tfdb, and currently only 1 server is tfdb, so I'll just hardcode it
     // and remove it when I have more servers.
     const blacklistIds = ["6"];
-    mapped = mapped.filter(server => !blacklistIds.includes(server.id));
+    mapped = mapped.filter((server) => !blacklistIds.includes(server.id));
     return resolve(mapped);
   });
-}
+};
 
-export enum Colors
-{
-  RED = '#F4070D',
-  GREEN = '#95F3E3',
-  BlUE = '#08C4CD',
-  ORANGE = '#FE902E',
-  DARK_RED = '#D22426',
-  DARK_GREEN = '#71CFB7',
-  DARK_BLUE = '#27939D',
-  DARK_ORANGE = '#EE6B35',
+export enum Colors {
+  RED = "#F4070D",
+  GREEN = "#95F3E3",
+  BlUE = "#08C4CD",
+  ORANGE = "#FE902E",
+  DARK_RED = "#D22426",
+  DARK_GREEN = "#71CFB7",
+  DARK_BLUE = "#27939D",
+  DARK_ORANGE = "#EE6B35"
 }
 
 export const DISCORD_WEBHOOKS = {
-  "error": getEnv("DISCORD_WEBHOOK_ERROR", "secret"),
-  "info": getEnv("DISCORD_WEBHOOK_INFO", "secret"),
-  "warn": getEnv("DISCORD_WEBHOOK_WARN", "secret"),
-  "debug": getEnv("DISCORD_WEBHOOK_DEBUG", "secret"),
+  error: getEnv("DISCORD_WEBHOOK_ERROR", "secret"),
+  info: getEnv("DISCORD_WEBHOOK_INFO", "secret"),
+  warn: getEnv("DISCORD_WEBHOOK_WARN", "secret"),
+  debug: getEnv("DISCORD_WEBHOOK_DEBUG", "secret")
 };

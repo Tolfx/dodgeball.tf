@@ -9,21 +9,23 @@ import SteamID from "steamid";
 
 const LOG = debug("dodgeball:bot:cron:jobs:RemoveExpiredDonatorsCron");
 
-export default class RemoveExpiredDonatorsCron
-{
-  constructor(private services: Services)
-  {
+export default class RemoveExpiredDonatorsCron {
+  constructor(private services: Services) {
     // Every day at 01:00 in midnight
     // in Europe/Stockholm
-    new CronJob("0 1 * * *", () =>
-    {
-      LOG(`Running cron job`);
-      this.run();
-    }, null, true, "Europe/Stockholm");
+    new CronJob(
+      "0 1 * * *",
+      () => {
+        LOG(`Running cron job`);
+        this.run();
+      },
+      null,
+      true,
+      "Europe/Stockholm"
+    );
   }
 
-  public async run()
-  {
+  public async run() {
     // We want to get all donators who is not Permanent and has expired
     // We then want to make them inActive and remove them from our system "aka remove them from the donator table"
 
@@ -41,22 +43,24 @@ export default class RemoveExpiredDonatorsCron
     // Lets do a sanity check that expiresAt is today or was any day before today
     // If not, we should not remove them
     const donatorsToRemove = [];
-    for await (const donator of donators)
-    {
-      if (!donator.expiresAt)
-      {
+    for await (const donator of donators) {
+      if (!donator.expiresAt) {
         LOG(`Donator ${donator.id} has no expiresAt date`);
         continue;
       }
 
-      if (donator.expiresAt > new Date())
-      {
-        LOG(`Donator ${donator.id} has not expired yet, but is in the expired donator list`);
+      if (donator.expiresAt > new Date()) {
+        LOG(
+          `Donator ${donator.id} has not expired yet, but is in the expired donator list`
+        );
         continue;
       }
 
-      if (admins.find(admin => admin.authid === (new SteamID(donator.steamId).steam2())))
-      {
+      if (
+        admins.find(
+          (admin) => admin.authid === new SteamID(donator.steamId).steam2()
+        )
+      ) {
         LOG(`Donator ${donator.id} is an admin, skipping`);
         continue;
       }
@@ -66,17 +70,19 @@ export default class RemoveExpiredDonatorsCron
 
     LOG(`Found ${donatorsToRemove.length} donators to remove`);
 
-    if (donatorsToRemove.length === 0)
-    {
+    if (donatorsToRemove.length === 0) {
       LOG(`No donators to remove`);
       return;
     }
 
     // Loop through all donators
-    for await (const donator of donatorsToRemove)
-    {
+    for await (const donator of donatorsToRemove) {
       // Send event
-      this.services.getEventRegister()?.emit(new Event<OnDonateRemovePayload>(donator.id, "donator.removed", { donator }));
+      this.services.getEventRegister()?.emit(
+        new Event<OnDonateRemovePayload>(donator.id, "donator.removed", {
+          donator
+        })
+      );
     }
   }
 }

@@ -1,4 +1,4 @@
-import mysql from 'mysql';
+import mysql from "mysql";
 
 export type HlstatsPlayers = {
   playerId: number;
@@ -12,25 +12,17 @@ export type HlstatsPlayers = {
   flag: string;
   lat: number;
   lng: number;
-}
+};
 
-export default function GetPlayer(playerId: string)
-{
+export default function GetPlayer(playerId: string) {
   const query = `SELECT * FROM hlstatsx.hlstats_Players WHERE playerId = '${playerId}'`;
 
-  return (connection: mysql.Connection): Promise<Array<HlstatsPlayers>> => new Promise((resolve, reject) =>
-  {
-    connection
-      .query(query,
-        (err, results) =>
-        {
-          if (err)
-            return reject(err);
+  return (connection: mysql.Connection): Promise<Array<HlstatsPlayers>> =>
+    new Promise((resolve, reject) => {
+      connection.query(query, (err, results) => {
+        if (err) return reject(err);
 
-          resolve(results);
-        }
-      );
-  });
-
-
+        resolve(results);
+      });
+    });
 }

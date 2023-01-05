@@ -8,8 +8,7 @@ import UpdateLiveStatsCron from "./jobs/UpdateLiveStats.cron";
 
 const LOG = debug("dodgeball:bot:cron");
 
-export default class CronJobs
-{
+export default class CronJobs {
   private static crons = [
     AddBoostersCron,
     RemoveExpiredDonatorsCron,
@@ -18,12 +17,10 @@ export default class CronJobs
     UpdateLiveStatsCron
   ];
 
-  public static async init(services: Services)
-  {
+  public static async init(services: Services) {
     LOG("Initializing cron jobs");
-    for (const cron of this.crons)
-    {
-      LOG(`Initializing ${cron.name}`)
+    for (const cron of this.crons) {
+      LOG(`Initializing ${cron.name}`);
       new cron(services);
     }
   }

@@ -9,19 +9,21 @@ import GetLiveStats from "../../mysql/queries/GetLiveStats";
 
 const LOG = debug("dodgeball:bot:cron:jobs:UpdateLiveStatsCron");
 
-export default class UpdateLiveStatsCron
-{
-  constructor(private services: Services)
-  {
+export default class UpdateLiveStatsCron {
+  constructor(private services: Services) {
     // Every 1 minute
-    new CronJob("* * * * *", async () =>
-    {
-      await this.run();
-    }, null, true, "Europe/Stockholm");
+    new CronJob(
+      "* * * * *",
+      async () => {
+        await this.run();
+      },
+      null,
+      true,
+      "Europe/Stockholm"
+    );
   }
 
-  private async run()
-  {
+  private async run() {
     // For now we will make a little dirty hack, because you know me
     // I don't have time to do this properly
 
@@ -40,8 +42,7 @@ export default class UpdateLiveStatsCron
     });
 
     const cacheService = this.services.getCacheService();
-    if (cacheService)
-    {
+    if (cacheService) {
       await cacheService.startCache();
     }
 
@@ -54,9 +55,11 @@ export default class UpdateLiveStatsCron
 
     // Lets first check what messages we have
 
-    serverRealLifeStats.forEach(async serverRealLifeStat =>
-    {
-      const server = cachedServers.find(server => String(server.server.serverId) === serverRealLifeStat.serverId);
+    serverRealLifeStats.forEach(async (serverRealLifeStat) => {
+      const server = cachedServers.find(
+        (server) =>
+          String(server.server.serverId) === serverRealLifeStat.serverId
+      );
       if (!server) return; // We don't have a server for this message, so we can't do anything
 
       // We have a server for this message, so we can update the message
@@ -66,13 +69,19 @@ export default class UpdateLiveStatsCron
       // We need to get the message from discord
       const channel = (await client.channels.fetch(CHANNEL_ID)) as TextChannel;
       if (!channel) return; // We don't have a channel, so we can't do anything
-      const message = await channel.messages.fetch(serverRealLifeStat.discordMessageId);
+      const message = await channel.messages.fetch(
+        serverRealLifeStat.discordMessageId
+      );
       if (!message) return; // We don't have a message, so we can't do anything
 
-      const liveStats = await GetLiveStats()(this.services.getMysqlConnection());
+      const liveStats = await GetLiveStats()(
+        this.services.getMysqlConnection()
+      );
 
       // Lets filter it to only have the stats for this server
-      const filteredLiveStats = liveStats.filter(liveStat => liveStat.server_id === server.server.serverId);
+      const filteredLiveStats = liveStats.filter(
+        (liveStat) => liveStat.server_id === server.server.serverId
+      );
 
       // And update the message with the new stats
       const embed = LiveStatsEmbed({
@@ -89,21 +98,26 @@ export default class UpdateLiveStatsCron
     });
 
     // Lets now check what servers we have left that we don't have a message for
-    const serversWithoutMessage = cachedServers.filter(server =>
-    {
-      return !serverRealLifeStats.find(serverRealLifeStat => String(serverRealLifeStat.serverId) === String(server.server.serverId));
+    const serversWithoutMessage = cachedServers.filter((server) => {
+      return !serverRealLifeStats.find(
+        (serverRealLifeStat) =>
+          String(serverRealLifeStat.serverId) === String(server.server.serverId)
+      );
     });
 
     // We have a list of servers that we don't have a message for
     // So we need to create a message for them
-    serversWithoutMessage.forEach(async server =>
-    {
+    serversWithoutMessage.forEach(async (server) => {
       const channel = (await client.channels.fetch(CHANNEL_ID)) as TextChannel;
       if (!channel) return; // We don't have a channel, so we can't do anything
 
-      const liveStats = await GetLiveStats()(this.services.getMysqlConnection());
+      const liveStats = await GetLiveStats()(
+        this.services.getMysqlConnection()
+      );
 
-      const filteredLiveStats = liveStats.filter(liveStat => liveStat.server_id === server.server.serverId);
+      const filteredLiveStats = liveStats.filter(
+        (liveStat) => liveStat.server_id === server.server.serverId
+      );
 
       // And update the message with the new stats
       const embed = LiveStatsEmbed({
@@ -118,7 +132,9 @@ export default class UpdateLiveStatsCron
         embeds: [embed]
       });
 
-      LOG(`Created message for server ${server.server.name} (${server.server.serverId})`);
+      LOG(
+        `Created message for server ${server.server.name} (${server.server.serverId})`
+      );
 
       await ServerRealLifeStatsModel.create({
         serverId: server.server.serverId,

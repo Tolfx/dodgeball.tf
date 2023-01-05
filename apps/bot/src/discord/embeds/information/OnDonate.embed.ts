@@ -2,72 +2,69 @@ import { DonatorUser } from "@dodgeball/mongodb";
 import { EmbedBuilder } from "discord.js";
 import { Colors } from "../../../util/constants";
 
-export default function OnDonateEmbed(donator: DonatorUser, isNew: boolean)
-{
-  const title = isNew ? 'New Donator' : 'Donator Updated';
-  const description = isNew ?
-    `A new donation from ${donator.steamName} (${donator.steamId})`
-    :
-    `Donator ${donator.steamName} (${donator.steamId}) has donated again!`;
+export default function OnDonateEmbed(donator: DonatorUser, isNew: boolean) {
+  const title = isNew ? "New Donator" : "Donator Updated";
+  const description = isNew
+    ? `A new donation from ${donator.steamName} (${donator.steamId})`
+    : `Donator ${donator.steamName} (${donator.steamId}) has donated again!`;
   const embed = new EmbedBuilder()
     .setTitle(title)
     .setDescription(description)
     .setAuthor({
-      name: 'Dodgeball Bot',
+      name: "Dodgeball Bot"
     })
-    .setColor(donator.title === 'patron' ? Colors.DARK_ORANGE : Colors.ORANGE)
+    .setColor(donator.title === "patron" ? Colors.DARK_ORANGE : Colors.ORANGE)
     .setFooter({
-      text: 'Dodgeball Bot',
+      text: "Dodgeball Bot"
     })
     .setTimestamp();
 
   const fields = [
     {
-      name: 'Donator',
+      name: "Donator",
       value: donator.steamName,
-      inline: true,
+      inline: true
     },
     {
-      name: 'SteamID',
+      name: "SteamID",
       value: donator.steamId,
-      inline: true,
+      inline: true
     },
     {
-      name: 'Title',
+      name: "Title",
       value: donator.title,
-      inline: true,
+      inline: true
     },
     {
-      name: 'Donations',
-      value: donator.donations.map(donation => `${donation.amount} ${donation.currency}`).join(', '),
-      inline: true,
-    },
+      name: "Donations",
+      value: donator.donations
+        .map((donation) => `${donation.amount} ${donation.currency}`)
+        .join(", "),
+      inline: true
+    }
   ];
 
-  if (donator.isPermanent)
-  {
+  if (donator.isPermanent) {
     fields.push({
-      name: 'Expires',
-      value: 'Never',
-      inline: true,
+      name: "Expires",
+      value: "Never",
+      inline: true
     });
   }
 
-  if (donator.expiresAt)
-  {
+  if (donator.expiresAt) {
     fields.push({
-      name: 'Expires',
+      name: "Expires",
       value: donator.expiresAt.toDateString(),
-      inline: true,
+      inline: true
     });
   }
 
-  if (donator.lastPaidAt)
-  {
+  if (donator.lastPaidAt) {
     fields.push({
-      name: 'Last Paid',
+      name: "Last Paid",
       value: donator.lastPaidAt.toDateString(),
-      inline: true,
+      inline: true
     });
   }
 

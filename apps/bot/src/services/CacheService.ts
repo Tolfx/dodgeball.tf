@@ -2,53 +2,45 @@ import debug from "debug";
 import GetServers, { Server } from "../mysql/queries/GetServers";
 import Services from "./Services";
 
-const LOG = debug('dodgeball:bot:CacheService')
+const LOG = debug("dodgeball:bot:CacheService");
 
 export type CachedServer = {
   server: Server;
   lastTimeUpdated: Date;
-}
+};
 
-export default class CacheService
-{
-  public cachedServers = new Map<Server['serverId'], CachedServer>()
+export default class CacheService {
+  public cachedServers = new Map<Server["serverId"], CachedServer>();
 
-  constructor(private services: Services)
-  {
+  constructor(private services: Services) {
     // Each 5 minutes, we want to re-cache the servers
-    setInterval(async () =>
-    {
+    setInterval(async () => {
       this.reCacheServers();
     }, 1000 * 60 * 5);
 
     this.reCacheServers();
   }
 
-  public async startCache()
-  {
+  public async startCache() {
     await this.reCacheServers();
   }
 
-  public getCachedServer(serverId: Server['serverId']): CachedServer | undefined
-  {
+  public getCachedServer(
+    serverId: Server["serverId"]
+  ): CachedServer | undefined {
     return this.cachedServers.get(serverId);
   }
 
-  public getAllCachedServers(): CachedServer[]
-  {
+  public getAllCachedServers(): CachedServer[] {
     return Array.from(this.cachedServers.values());
   }
 
-  private updateCachedServer(server: Server): void
-  {
+  private updateCachedServer(server: Server): void {
     const cachedServer = this.getCachedServer(server.serverId);
-    if (cachedServer)
-    {
+    if (cachedServer) {
       cachedServer.server = server;
       cachedServer.lastTimeUpdated = new Date();
-    }
-    else
-    {
+    } else {
       this.cachedServers.set(server.serverId, {
         server,
         lastTimeUpdated: new Date()
@@ -56,9 +48,8 @@ export default class CacheService
     }
   }
 
-  private async reCacheServers()
-  {
-    LOG('Re-caching servers');
+  private async reCacheServers() {
+    LOG("Re-caching servers");
     const servers = await GetServers()(this.services.getMysqlConnection());
     servers.forEach((server) => this.updateCachedServer(server));
   }

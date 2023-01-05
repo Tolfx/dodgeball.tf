@@ -1,8 +1,7 @@
 import HeaderTemplate from "./Header.template";
 
-export default function SuccessTemplate(message?: string)
-{
-    return `
+export default function SuccessTemplate(message?: string) {
+  return `
   <html>
         <head>
             <style>
@@ -41,5 +40,5 @@ export default function SuccessTemplate(message?: string)
                 </div>
             </div>
         </body>
-    </html>`
+    </html>`;
 }

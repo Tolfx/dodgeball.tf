@@ -1,7 +1,6 @@
 import HeaderTemplate from "./Header.template";
 
-export default function ErrorTemplate(error: string)
-{
+export default function ErrorTemplate(error: string) {
   return `
   <html>
         <head>
@@ -38,5 +37,5 @@ export default function ErrorTemplate(error: string)
                 </div>
             </div>
         </body>
-    </html>`
+    </html>`;
 }

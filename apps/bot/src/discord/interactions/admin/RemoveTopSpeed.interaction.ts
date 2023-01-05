@@ -5,45 +5,57 @@ import GetTopSpeedPlayers from "../../../mysql/queries/GetTopSpeedPlayers";
 import Services from "../../../services/Services";
 import { InteractionsHandler } from "../register.interactions";
 
-const LOG = debug('dodgeball:bot:interactions:admin:RemoveTopSpeed');
+const LOG = debug("dodgeball:bot:interactions:admin:RemoveTopSpeed");
 
-export default class RemoveTopSpeedInteractions implements InteractionsHandler
-{
-  name = 'remove-top-speed';
-  category = 'admin';
+export default class RemoveTopSpeedInteractions implements InteractionsHandler {
+  name = "remove-top-speed";
+  category = "admin";
 
   private services?: Services;
   private client?: Client;
 
-  init(client: Client, services: Services)
-  {
-    LOG('Setting up remove top speed interactions');
+  init(client: Client, services: Services) {
+    LOG("Setting up remove top speed interactions");
     this.client = client;
     this.services = services;
     this.client.interactions.set(this.name, this);
   }
 
-  async command(interaction: ChatInputCommandInteraction)
-  {
+  async command(interaction: ChatInputCommandInteraction) {
     if (!this.services) return;
-    const steamid = interaction.options.data.find((option) => option.name === 'steamid')?.value;
+    const steamid = interaction.options.data.find(
+      (option) => option.name === "steamid"
+    )?.value;
     if (!steamid) return;
 
     // Can also check if we had server
-    const server = interaction.options.data.find((option) => option.name === 'server')?.value;
+    const server = interaction.options.data.find(
+      (option) => option.name === "server"
+    )?.value;
 
     // Check if we steamid in server
-    const Player = await GetTopSpeedPlayers(undefined, String(steamid))(this.services.getMysqlConnection());
+    const Player = await GetTopSpeedPlayers(
+      undefined,
+      String(steamid)
+    )(this.services.getMysqlConnection());
 
     if (!Player)
-      return interaction.reply({ content: 'Player not found', ephemeral: true });
+      return interaction.reply({
+        content: "Player not found",
+        ephemeral: true
+      });
 
     // Remove player from server
-    await DeleteTopSpeedPlayer(String(steamid), server ? String(server) : undefined)(this.services.getMysqlConnection());
+    await DeleteTopSpeedPlayer(
+      String(steamid),
+      server ? String(server) : undefined
+    )(this.services.getMysqlConnection());
 
-    LOG('Player removed from top speed', steamid, server);
+    LOG("Player removed from top speed", steamid, server);
 
-    interaction.reply({ content: 'Player removed from top speed', ephemeral: true });
+    interaction.reply({
+      content: "Player removed from top speed",
+      ephemeral: true
+    });
   }
-
 }

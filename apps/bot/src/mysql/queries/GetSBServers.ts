@@ -1,7 +1,6 @@
-import mysql from 'mysql';
+import mysql from "mysql";
 
-export interface SourcebansServers
-{
+export interface SourcebansServers {
   sid: number;
   ip: string;
   port: number;
@@ -10,21 +9,15 @@ export interface SourcebansServers
   enabled: number;
 }
 
-export default function GetSBServers()
-{
+export default function GetSBServers() {
   const query = `SELECT * FROM sourcebans.sb_servers`;
 
-  return (connection: mysql.Connection): Promise<Array<SourcebansServers>> => new Promise((resolve, reject) =>
-  {
-    connection
-      .query(query,
-        (err, results) =>
-        {
-          if (err)
-            return reject(err);
+  return (connection: mysql.Connection): Promise<Array<SourcebansServers>> =>
+    new Promise((resolve, reject) => {
+      connection.query(query, (err, results) => {
+        if (err) return reject(err);
 
-          resolve(results);
-        }
-      );
-  });
+        resolve(results);
+      });
+    });
 }

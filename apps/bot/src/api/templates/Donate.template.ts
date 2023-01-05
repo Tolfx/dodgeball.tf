@@ -1,7 +1,6 @@
-import HeaderTemplate from "./Header.template"
+import HeaderTemplate from "./Header.template";
 
-export default (amount = 2.5) =>
-{
+export default (amount = 2.5) => {
   // @ts-ignore
   return `<html>
   <head>
@@ -104,5 +103,5 @@ export default (amount = 2.5) =>
     </script>
   </body>
   
-  </html>`
-}
+  </html>`;
+};

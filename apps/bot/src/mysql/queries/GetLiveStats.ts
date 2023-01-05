@@ -1,7 +1,6 @@
-import mysql from 'mysql';
+import mysql from "mysql";
 
-export interface LiveStats
-{
+export interface LiveStats {
   player_id: number;
   server_id: number;
   cli_address: string;
@@ -28,21 +27,15 @@ export interface LiveStats
   skill: number;
 }
 
-export default function GetLiveStats()
-{
+export default function GetLiveStats() {
   const query = `SELECT * FROM hlstatsx.hlstats_Livestats`;
 
-  return (connection: mysql.Connection): Promise<Array<LiveStats>> => new Promise((resolve, reject) =>
-  {
-    connection
-      .query(query,
-        (err, results) =>
-        {
-          if (err)
-            return reject(err);
+  return (connection: mysql.Connection): Promise<Array<LiveStats>> =>
+    new Promise((resolve, reject) => {
+      connection.query(query, (err, results) => {
+        if (err) return reject(err);
 
-          resolve(results);
-        }
-      );
-  });
+        resolve(results);
+      });
+    });
 }
