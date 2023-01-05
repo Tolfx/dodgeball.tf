@@ -100,7 +100,7 @@ const ExtraContent: FC = () => {
       <SocialMediaCard
         name="Forums"
         icon={<FontAwesomeIcon icon={faUser} size="2xl" />}
-        link={"https://forums.dodgeball.tf/"}
+        link={"https://forum.dodgeball.tf/"}
         color={Colors.DARK_BLUE}
       />
       <SocialMediaCard
