@@ -1,37 +1,42 @@
-import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { player } from "./ServerCard";
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { Colors } from "../utils/constants";
 
-interface Props
-{
+interface Props {
   players: player[];
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: Colors.DARK_ORANGE,
-    color: theme.palette.common.white,
+    color: theme.palette.common.white
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 }));
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: Colors.DARKER_DARK,
+  "&:nth-of-type(odd)": {
+    backgroundColor: Colors.DARKER_DARK
   },
   // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  "&:last-child td, &:last-child th": {
+    border: 0
+  }
 }));
 
-export default function PlayersTable({ players }: Props)
-{
+export default function PlayersTable({ players }: Props) {
   // Sort players by score
   const sortedPlayers = players.sort((a, b) => b.raw.score - a.raw.score);
 
@@ -49,7 +54,7 @@ export default function PlayersTable({ players }: Props)
           {sortedPlayers.map((player) => (
             <StyledTableRow
               key={player.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <StyledTableCell component="th" scope="row">
                 {player.name}

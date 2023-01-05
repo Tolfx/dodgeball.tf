@@ -5,66 +5,54 @@ import { Colors } from "../utils/constants";
 const ButtonStyle = {
   color: `${Colors.ORANGE}`,
   backgroundColor: `${Colors.DARKER_DARK}`,
-  '&:hover': {
-    backgroundColor: `${Colors.DARKER_DARK}aa`,
+  "&:hover": {
+    backgroundColor: `${Colors.DARKER_DARK}aa`
   },
   padding: "0",
   paddingLeft: "5px",
   paddingRight: "5px",
   marginRight: "2px",
   marginLeft: "2px",
-  borderRadius: "2px 2px 0 0",
-}
+  borderRadius: "2px 2px 0 0"
+};
 
-enum Pages
-{
+enum Pages {
   Home,
   Updates,
-  News,
+  News
 }
 
-const RenderPage: FC<{ page: Pages }> = ({ page }) =>
-{
+const RenderPage: FC<{ page: Pages }> = ({ page }) => {
   return {
     [Pages.Home]: <>Home.. coming soon!</>,
     [Pages.Updates]: <>Updates.. coming soon!</>,
-    [Pages.News]: <>News.. coming soon!</>,
-  }[page]
-}
+    [Pages.News]: <>News.. coming soon!</>
+  }[page];
+};
 
-const MainContent: FC = () =>
-{
+const MainContent: FC = () => {
   const [page, setPage] = useState(Pages.Home);
 
   return (
     <>
-      <Box 
+      <Box
         sx={{
           // Our parent is positioned relative
           // We want to be positioned absolute
           // And move up a little
           marginTop: "1rem",
           position: "absolute",
-          top: "-40px",
+          top: "-40px"
         }}
       >
         {/* Lets have some buttons that will render different pages */}
-        <Button
-          sx={ButtonStyle}
-          onClick={() => setPage(Pages.Home)}
-        >
+        <Button sx={ButtonStyle} onClick={() => setPage(Pages.Home)}>
           Home
         </Button>
-        <Button
-          sx={ButtonStyle}
-          onClick={() => setPage(Pages.Updates)}
-        >
+        <Button sx={ButtonStyle} onClick={() => setPage(Pages.Updates)}>
           Updates
         </Button>
-        <Button
-          sx={ButtonStyle}
-          onClick={() => setPage(Pages.News)}
-        >
+        <Button sx={ButtonStyle} onClick={() => setPage(Pages.News)}>
           News
         </Button>
       </Box>
@@ -72,7 +60,7 @@ const MainContent: FC = () =>
         <RenderPage page={page} />
       </Box>
     </>
-  )
-}
+  );
+};
 
 export default MainContent;

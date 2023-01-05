@@ -1,21 +1,20 @@
-import { Ref, useEffect, useState } from "react"
+import { Ref, useEffect, useState } from "react";
 
-export default function useOnScreen<T>(ref: Ref<T>)
-{
+export default function useOnScreen<T>(ref: Ref<T>) {
+  const [isIntersecting, setIntersecting] = useState(false);
 
-  const [isIntersecting, setIntersecting] = useState(false)
+  const observer = new IntersectionObserver(([entry]) =>
+    setIntersecting(entry.isIntersecting)
+  );
 
-  const observer = new IntersectionObserver(
-    ([entry]) => setIntersecting(entry.isIntersecting)
-  )
-
-  useEffect(() =>
-  {
+  useEffect(() => {
     // @ts-ignore
-    observer.observe(ref?.current)
+    observer.observe(ref?.current);
     // Remove the observer as soon as the component is unmounted
-    return () => { observer.disconnect() }
-  }, [])
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
-  return isIntersecting
+  return isIntersecting;
 }

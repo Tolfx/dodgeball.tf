@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import ServerCard from "./ServerCard";
 import Loading from "./Loading";
 
-export interface IServerInfoData
-{
+export interface IServerInfoData {
   name: string;
   map: string;
   maxplayers: number;
@@ -13,26 +12,25 @@ export interface IServerInfoData
   raw: {
     game?: string;
     tags?: string[];
-  }
+  };
 }
 
-export default function ServerContainer()
-{
+export default function ServerContainer() {
   const [servers, setServers] = useState<IServerInfoData[] | []>([]);
   const [isLoading, setIsLoading] = useState(true);
   const isPROD = process.env.NODE_ENV === "production";
 
-  const fetchServers = async () =>
-  {
+  const fetchServers = async () => {
     setIsLoading(true);
-    const res = await fetch(`${isPROD ? "https://api.dodgeball.tf" : "http://localhost:3001"}/servers`);
+    const res = await fetch(
+      `${isPROD ? "https://api.dodgeball.tf" : "http://localhost:3001"}/servers`
+    );
     const data = await res.json();
     setIsLoading(false);
     setServers(data);
-  }
+  };
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     fetchServers();
   }, []);
 
@@ -45,14 +43,13 @@ export default function ServerContainer()
           justifyContent: "center",
           flexDirection: "column",
           margin: "2rem"
-        }}>
-        <Typography variant="h3">
-          Our community servers
-        </Typography>
+        }}
+      >
+        <Typography variant="h3">Our community servers</Typography>
       </Box>
       {isLoading && <Loading />}
-      {!isLoading && servers.map((server, i) => <ServerCard server={server} key={i} />)}
+      {!isLoading &&
+        servers.map((server, i) => <ServerCard server={server} key={i} />)}
     </>
   );
-
 }
