@@ -4,11 +4,12 @@ import {
   faBarChart,
   faBan,
   faHandHoldingDollar,
-  faCrown
+  faCrown,
+  faUser
 } from "@fortawesome/free-solid-svg-icons";
 import { Box, Card, Link } from "@mui/material";
 import React, { FC } from "react";
-import { Colors } from "../utils/constants";
+import { Colors } from "@dodgeball/core";
 
 interface SocialMediaCardProps {
   name: string;
@@ -94,6 +95,12 @@ const ExtraContent: FC = () => {
         name="Steam Group"
         icon={<FontAwesomeIcon icon={faSteam} size="2xl" />}
         link="https://steamcommunity.com/groups/OfficialTFDB"
+        color="#1B2838"
+      />
+      <SocialMediaCard
+        name="Forums"
+        icon={<FontAwesomeIcon icon={faUser} size="2xl" />}
+        link={Colors.DARK_BLUE}
         color="#1B2838"
       />
       <SocialMediaCard
