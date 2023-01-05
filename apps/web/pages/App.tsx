@@ -97,13 +97,6 @@ export default function App() {
             </span>
           </Typography>
         </Box>
-
-        {/* Lets have a grid layout
-            1. MAIN MAIN MAIN
-            2. CONTENT CONTENT EXTRA
-            3. FOOTER FOOTER FOOTER
-        */}
-
         <Box
           sx={{
             display: "grid",
