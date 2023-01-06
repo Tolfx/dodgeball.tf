@@ -967,6 +967,7 @@
   dependencies:
     "@dodgeball/core" "*"
     "@dodgeball/mongodb" "*"
+    "@types/marked" "^4.0.8"
     "cron" "^2.1.0"
     "debug" "^4.3.4"
     "discord.js" "^14.7.1"
@@ -1020,6 +1021,13 @@
     "cron" "^2.1.0"
     "debug" "^4.3.4"
 
+"@dodgeball/logger@*", "@dodgeball/logger@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\logger":
+  "resolved" "file:packages/logger"
+  "version" "0.0.0"
+  dependencies:
+    "@types/debug" "^4.1.7"
+    "debug" "^4.3.4"
+
 "@dodgeball/mongodb@*", "@dodgeball/mongodb@file:E:\\Programming\\Typescript\\dodgeball.tf\\packages\\mongodb":
   "resolved" "file:packages/mongodb"
   "version" "0.0.0"
@@ -1055,6 +1063,7 @@
   "version" "0.0.0"
   dependencies:
     "@dodgeball/core" "*"
+    "@dodgeball/mongodb" "*"
     "@dodgeball/ui" "*"
     "@emotion/react" "^11.10.5"
     "@emotion/server" "^11.10.0"
