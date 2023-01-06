@@ -1,22 +1,22 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client } from "discord.js";
 import Services from "../../services/Services";
 import { DISCORD_PREFIX } from "../../util/constants";
 import { EventHandler } from "./register.events";
 
-const LOG = debug("dodgeball:bot:events:onMessage");
+const LOG = new Logger("dodgeball:bot:events:onMessage");
 
 export default class OnMessage implements EventHandler {
   private services?: Services;
 
   setup(client: Client, services: Services) {
-    LOG("Setting up OnMessage event");
+    LOG.info("Setting up OnMessage event");
     this.setupListeners(client);
     this.services = services;
   }
 
   setupListeners(client: Client) {
-    LOG("Listening for messages");
+    LOG.info("Listening for messages");
     client.on("messageCreate", async (message) => {
       if (message.author.bot) return;
       if (!message.content.startsWith(DISCORD_PREFIX)) return;

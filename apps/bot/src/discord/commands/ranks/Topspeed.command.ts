@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import {
   ActionRowBuilder,
   Client,
@@ -9,7 +9,7 @@ import Services from "../../../services/Services";
 import { TOPSPEED_SERVERS_IDS } from "../../../util/constants";
 import { CommandHandler } from "../register.command";
 
-const LOG = debug("dodgeball:bot:commands:topspeed");
+const LOG = new Logger("dodgeball:bot:commands:topspeed");
 
 export default class TopSpeedCommand implements CommandHandler {
   name = "topspeed";
@@ -19,7 +19,7 @@ export default class TopSpeedCommand implements CommandHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up topspeed command");
+    LOG.info("Setting up topspeed command");
     this.client = client;
     this.services = services;
     // Add commands to client

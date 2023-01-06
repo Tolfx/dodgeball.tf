@@ -32,6 +32,7 @@
   "dependencies": {
     "@dodgeball/core": "*",
     "@dodgeball/mongodb": "*",
+    "@dodgeball/logger": "*",
     "@types/marked": "^4.0.8",
     "cron": "^2.1.0",
     "debug": "^4.3.4",

@@ -1,10 +1,10 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client, Message } from "discord.js";
 import Services from "../../../services/Services";
 import HelpEmbed from "../../embeds/information/Help.embed";
 import { CommandHandler } from "../register.command";
 
-const LOG = debug("dodgeball:bot:commands:help");
+const LOG = new Logger("dodgeball:bot:commands:help");
 
 export default class HelpCommand implements CommandHandler {
   name = "help";
@@ -14,7 +14,7 @@ export default class HelpCommand implements CommandHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up help command");
+    LOG.info("Setting up help command");
     this.client = client;
     this.services = services;
     // Add commands to client

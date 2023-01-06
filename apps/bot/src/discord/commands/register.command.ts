@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client, Message } from "discord.js";
 import Services from "../../services/Services";
 import HelpCommand from "./information/Help.command";
@@ -6,7 +6,7 @@ import TopSpeedCommand from "./ranks/Topspeed.command";
 import CreatePostCommand from "./admin/CreatePost.command";
 import EditPostCommand from "./admin/EditPost.command";
 
-const LOG = debug("dodgeball:bot:commands:register.commands");
+const LOG = new Logger("dodgeball:bot:discord:commands:register.commands");
 
 declare module "discord.js" {
   interface Client {
@@ -37,7 +37,7 @@ export default class CommandRegister {
   }
 
   registerCommands() {
-    LOG("Registering commands");
+    LOG.info("Registering commands");
     this.Commands.forEach((command) => {
       command.init(this.client, this.services);
     });

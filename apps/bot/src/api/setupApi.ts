@@ -1,15 +1,14 @@
-import { DonatorUserModel } from "@dodgeball/mongodb";
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import express from "express";
 import session from "express-session";
 import passport from "passport";
 import { API_PORT } from "../util/constants";
 import SteamPassport from "./passport/Steam.passport";
 
-const LOG = debug("dodgeball:bot:api:setupApi");
+const LOG = new Logger("dodgeball:bot:api:setupApi");
 
 export default function setupApi() {
-  LOG("Setting up API");
+  LOG.info("Setting up API");
   const server = express();
 
   // Setup cors
@@ -64,7 +63,7 @@ export default function setupApi() {
   server.use(passport.initialize());
   server.use(passport.session());
 
-  server.listen(API_PORT, () => LOG(`API listening on port ${API_PORT}`));
+  server.listen(API_PORT, () => LOG.info(`API listening on port ${API_PORT}`));
 
   return server;
 }

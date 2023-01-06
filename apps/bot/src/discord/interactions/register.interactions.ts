@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import {
   CacheType,
   ChatInputCommandInteraction,
@@ -15,7 +15,9 @@ import Top10Interactions from "./ranks/Top10.interactions";
 import TopSpeedInteractions from "./ranks/Topspeed.interactions";
 import AddTagInteraction from "./admin/AddTag.interaction";
 
-const LOG = debug("dodgeball:bot:interactions:register.interactions");
+const LOG = new Logger(
+  "dodgeball:bot:discord:interactions:register.interactions"
+);
 
 declare module "discord.js" {
   interface Client {
@@ -51,7 +53,7 @@ export default class InteractionsRegister {
   }
 
   registerInteractions() {
-    LOG("Registering interactions");
+    LOG.info("Registering interactions");
     this.Interactions.forEach((inter) => {
       inter.init(this.client, this.services);
     });

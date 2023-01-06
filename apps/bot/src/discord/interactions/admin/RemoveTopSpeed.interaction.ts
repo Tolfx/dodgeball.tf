@@ -1,11 +1,11 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client, ChatInputCommandInteraction } from "discord.js";
 import DeleteTopSpeedPlayer from "../../../mysql/queries/DeleteTopSpeedPlayer";
 import GetTopSpeedPlayers from "../../../mysql/queries/GetTopSpeedPlayers";
 import Services from "../../../services/Services";
 import { InteractionsHandler } from "../register.interactions";
 
-const LOG = debug("dodgeball:bot:interactions:admin:RemoveTopSpeed");
+const LOG = new Logger("dodgeball:bot:interactions:admin:RemoveTopSpeed");
 
 export default class RemoveTopSpeedInteractions implements InteractionsHandler {
   name = "remove-top-speed";
@@ -15,7 +15,7 @@ export default class RemoveTopSpeedInteractions implements InteractionsHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up remove top speed interactions");
+    LOG.info("Setting up remove top speed interactions");
     this.client = client;
     this.services = services;
     this.client.interactions.set(this.name, this);
@@ -51,7 +51,7 @@ export default class RemoveTopSpeedInteractions implements InteractionsHandler {
       server ? String(server) : undefined
     )(this.services.getMysqlConnection());
 
-    LOG("Player removed from top speed", steamid, server);
+    LOG.info("Player removed from top speed", steamid, server);
 
     interaction.reply({
       content: "Player removed from top speed",

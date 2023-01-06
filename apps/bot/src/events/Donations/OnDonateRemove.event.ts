@@ -1,6 +1,6 @@
 import { EmbedBuilder } from "discord.js";
 import { DonatorUser, DonatorUserModel } from "@dodgeball/mongodb";
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import SteamID from "steamid";
 import DeleteDonator from "../../mysql/queries/DeleteDonator";
 import GetAdmins from "../../mysql/queries/GetAdmins";
@@ -14,7 +14,7 @@ import { webhookUrlToIdAndToken } from "../../util/discord";
 import { EventHandler, Event } from "../register.events";
 import DeleteCCCM from "../../mysql/queries/DeleteCCCM";
 
-const LOG = debug("dodgeball:bot:events:donations:OnDonateUpdate");
+const LOG = new Logger("dodgeball:bot:events:donations:OnDonateUpdate");
 
 export interface OnDonateRemovePayload {
   donator: DonatorUser;
@@ -42,7 +42,7 @@ export default class OnDonateRemove
     // Lets make a safety check that this donator is not a patron or permanent
     if (donator.title === "patron" || donator.isPermanent || admin) return;
 
-    LOG(
+    LOG.warn(
       `Deleting donator: ${event.payload.donator.steamName}, steamid: ${event.payload.donator.steamId}`
     );
 
@@ -56,8 +56,8 @@ export default class OnDonateRemove
     const query = `DELETE FROM cccm.cccm_users WHERE auth = ${steamid}`;
 
     mysql.query(query, (err, results) => {
-      if (err) LOG(`Error deleting donator from cccm.cccm_users: ${err}`);
-      else LOG(`Deleted donator from cccm.cccm_users: ${results}`);
+      if (err) LOG.error(`Error deleting donator from cccm.cccm_users: ${err}`);
+      else LOG.warn(`Deleted donator from cccm.cccm_users: ${results}`);
     });
 
     const servers = this.services.getServerRegisterService()?.getAllServers();
@@ -115,7 +115,9 @@ export default class OnDonateRemove
       embeds: [embed]
     });
 
-    LOG(`Donator ${donator.steamName} has been removed from the database.`);
+    LOG.warn(
+      `Donator ${donator.steamName} has been removed from the database.`
+    );
 
     // We should also set donator inactive in the database
     await DonatorUserModel.updateOne(

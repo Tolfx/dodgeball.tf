@@ -1,11 +1,13 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client, ChatInputCommandInteraction } from "discord.js";
 import Services from "../../../services/Services";
 import { InteractionsHandler } from "../register.interactions";
 import SteamID from "steamid";
 import UpdateCCCM from "../../../mysql/queries/UpdateCCCM";
 
-const LOG = debug("dodgeball:bot:interactions:admin:AddTagInteraction");
+const LOG = new Logger(
+  "dodgeball:bot:discord:interactions:admin:AddTagInteraction"
+);
 
 export default class AddTagInteraction implements InteractionsHandler {
   name = "add-tag";
@@ -15,7 +17,7 @@ export default class AddTagInteraction implements InteractionsHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up add-tag interactions");
+    LOG.info("Setting up add-tag interactions");
     this.client = client;
     this.services = services;
     this.client.interactions.set(this.name, this);

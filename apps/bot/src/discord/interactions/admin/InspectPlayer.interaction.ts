@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client, ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import GetPlayer from "../../../mysql/queries/GetPlayer";
 import GetPlayerUniqueId from "../../../mysql/queries/GetPlayerUniqueId";
@@ -6,7 +6,7 @@ import Services from "../../../services/Services";
 import { Colors } from "../../../util/constants";
 import { InteractionsHandler } from "../register.interactions";
 
-const LOG = debug("dodgeball:bot:interactions:InspectPlayer");
+const LOG = new Logger("dodgeball:bot:interactions:InspectPlayer");
 
 export default class InspectPlayerInteractions implements InteractionsHandler {
   name = "inspect";
@@ -16,7 +16,7 @@ export default class InspectPlayerInteractions implements InteractionsHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up inspect player interactions");
+    LOG.info("Setting up inspect player interactions");
     this.client = client;
     this.services = services;
     this.client.interactions.set(this.name, this);

@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import mysql from "mysql";
 import {
   MYSQL_HOST,
@@ -7,11 +7,11 @@ import {
   MYSQL_USER
 } from "../util/constants";
 
-const LOG = debug("dodgeball:bot:setupMysql");
+const LOG = new Logger("dodgeball:bot:mysql:setupMysql");
 
 export default async function setupMysql(): Promise<mysql.Connection> {
   return new Promise((resolve, reject) => {
-    LOG("Setting up MySQL connection");
+    LOG.info("Setting up MySQL connection");
     const connection = mysql.createConnection({
       host: MYSQL_HOST,
       user: MYSQL_USER,
@@ -22,11 +22,11 @@ export default async function setupMysql(): Promise<mysql.Connection> {
     connection.connect((err) => {
       if (err) {
         reject(err);
-        LOG("Failed to connect to MySQL");
+        LOG.error("Failed to connect to MySQL");
         return;
       }
 
-      LOG("Connected to MySQL");
+      LOG.info("Connected to MySQL");
       resolve(connection);
     });
   });

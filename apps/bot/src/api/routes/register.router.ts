@@ -1,10 +1,10 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Application, Router } from "express";
 import Services from "../../services/Services";
 import DonatorConfig from "./Donator/Donator.config";
 import Oauth2Config from "./Oauth2/Oauth2.config";
 
-const LOG = debug("dodgeball:bot:api:routes:register.router");
+const LOG = new Logger("dodgeball:bot:api:routes:register.router");
 
 export interface ConfigRouter {
   server: Application;
@@ -29,9 +29,9 @@ export default class RegisterRouters {
   }
 
   public registerRouters() {
-    LOG("Registering Routers");
+    LOG.info("Registering Routers");
     this.Routes.forEach((route) => {
-      LOG("Registering Route: " + route.name);
+      LOG.info("Registering Route: " + route.name);
       new route(this.server, this.services);
     });
   }

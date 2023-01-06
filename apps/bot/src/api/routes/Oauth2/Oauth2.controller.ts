@@ -17,12 +17,12 @@ import { isError } from "../../../util/errors";
 import { LinkedAccountModel } from "@dodgeball/mongodb";
 // @ts-ignore
 import SteamAuth from "node-steam-openid";
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client } from "discord.js";
 import ErrorTemplate from "../../templates/Error.template";
 import SuccessTemplate from "../../templates/Success.template";
 
-const LOG = debug("dodgeball:bot:api:routes:Oauth2:Oauth2.controller");
+const LOG = new Logger("dodgeball:bot:api:routes:Oauth2:Oauth2.controller");
 
 declare module "express-session" {
   interface SessionData {
@@ -75,7 +75,7 @@ export default class Oauth2Controller implements ControllerRouter {
     const discordInfo = await resolveDiscordToken(discordToken);
 
     if (!discordInfo) {
-      LOG("Error resolving discord token");
+      LOG.error("Error resolving discord token");
       return res
         .status(500)
         .send(ErrorTemplate(`Error resolving discord token`));
@@ -124,9 +124,9 @@ export default class Oauth2Controller implements ControllerRouter {
         accessToken: req?.session.discord_token ?? ""
       })
       .then((user: any) =>
-        LOG(`Added user ${user.user.username} to the server`)
+        LOG.info(`Added user ${user.user.username} to the server`)
       )
-      .catch((e: Error) => LOG(`Error adding user to the server: ${e}`));
+      .catch((e: Error) => LOG.error(`Error adding user to the server: ${e}`));
 
     return res.send(
       SuccessTemplate(`Successfully linked your discord and steam accounts.`)
@@ -142,21 +142,21 @@ export default class Oauth2Controller implements ControllerRouter {
       steamAuth.authenticate(req)
     );
     if (!steamuser) {
-      LOG("Error authenticating steam user, eror: ", eSteamuser);
+      LOG.error("Error authenticating steam user, eror: ", eSteamuser);
       return res
         .status(500)
         .send(ErrorTemplate(`Error authenticating steam user`));
     }
 
     if (eSteamuser) {
-      LOG("Error authenticating steam user, error: ", eSteamuser);
+      LOG.error("Error authenticating steam user, error: ", eSteamuser);
       return res
         .status(500)
         .send(ErrorTemplate(`Error authenticating steam user`));
     }
 
     if (isError(steamuser)) {
-      LOG("Error authenticating steam user");
+      LOG.error("Error authenticating steam user");
       return res
         .status(500)
         .send(ErrorTemplate(`Error authenticating steam user`));
@@ -197,12 +197,12 @@ export default class Oauth2Controller implements ControllerRouter {
     );
 
     if (eAuth) {
-      LOG(`Unknown error from discord: `, eAuth);
+      LOG.error(`Unknown error from discord: `, eAuth);
       return res.status(500).send(ErrorTemplate(`Unknown error from discord`));
     }
 
     if (!auth || isError(auth)) {
-      LOG(`Got an error from auth: `, auth);
+      LOG.error(`Got an error from auth: `, auth);
       return res.status(500).send(ErrorTemplate(`Got an error from auth`));
     }
 
@@ -211,7 +211,7 @@ export default class Oauth2Controller implements ControllerRouter {
     const token = authJson["access_token"];
 
     if (!token) {
-      LOG("Failed to get token from discord");
+      LOG.error("Failed to get token from discord");
       return res
         .status(500)
         .send(ErrorTemplate(`Failed to get token from discord`));

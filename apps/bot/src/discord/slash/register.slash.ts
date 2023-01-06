@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client, REST, Routes } from "discord.js";
 import Services from "../../services/Services";
 import {
@@ -15,7 +15,7 @@ import Top10Slash from "./rank/Top10.slash";
 import TopspeedSlash from "./rank/Topspeed.slash";
 import AddTagSlash from "./admin/AddTag.slash";
 
-const LOG = debug("dodgeball:bot:slash:register.slash");
+const LOG = new Logger("dodgeball:bot:discord:slash:register.slash");
 
 export default class SlashRegister {
   private client: Client;
@@ -50,6 +50,6 @@ export default class SlashRegister {
       Routes.applicationGuildCommands(DISCORD_BOT_ID, DISCORD_GUILD_ID),
       { body: this.SlashCommands }
     );
-    LOG("Registered all slash commands");
+    LOG.info("Registered all slash commands");
   }
 }

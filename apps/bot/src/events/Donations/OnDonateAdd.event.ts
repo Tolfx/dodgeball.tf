@@ -1,5 +1,5 @@
 import { DonatorUser } from "@dodgeball/mongodb";
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import SteamID from "steamid";
 import OnDonateEmbed from "../../discord/embeds/information/OnDonate.embed";
 import GetAdmins from "../../mysql/queries/GetAdmins";
@@ -8,7 +8,7 @@ import { DISCORD_OWNER_ID, DISCORD_WEBHOOKS } from "../../util/constants";
 import { webhookUrlToIdAndToken } from "../../util/discord";
 import { EventHandler, Event } from "../register.events";
 
-const LOG = debug("dodgeball:bot:events:donations:onDonateAdd");
+const LOG = new Logger("dodgeball:bot:events:donations:onDonateAdd");
 
 export interface OnDonatePayload {
   donator: DonatorUser;
@@ -24,7 +24,7 @@ export default class OnDonateAdd implements EventHandler<OnDonatePayload> {
   }
 
   async handle(event: Event<OnDonatePayload>) {
-    LOG(
+    LOG.info(
       `Donator added: ${event.payload.donator.steamName}, steamid: ${event.payload.donator.steamId}`
     );
     const { donator } = event.payload;

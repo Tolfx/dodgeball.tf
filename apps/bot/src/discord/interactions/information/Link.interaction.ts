@@ -1,11 +1,11 @@
+import Logger from "@dodgeball/logger";
 import { LinkedAccountModel } from "@dodgeball/mongodb";
-import debug from "debug";
 import { ChatInputCommandInteraction, Client, EmbedBuilder } from "discord.js";
 import Services from "../../../services/Services";
 import { Colors } from "../../../util/constants";
 import { InteractionsHandler } from "../register.interactions";
 
-const LOG = debug("dodgeball:bot:interactions:link");
+const LOG = new Logger("dodgeball:bot:discord:interactions:link");
 
 export default class LinkInteraction implements InteractionsHandler {
   name = "link";
@@ -15,7 +15,7 @@ export default class LinkInteraction implements InteractionsHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up link interaction");
+    LOG.info("Setting up link interaction");
     this.client = client;
     this.services = services;
     // Add interactions to client

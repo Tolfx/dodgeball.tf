@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import NodeEvents from "./Node.events";
 import Services from "../services/Services";
 import OnDonateAdd from "./Donations/OnDonateAdd.event";
@@ -6,7 +6,7 @@ import OnDonateRemove from "./Donations/OnDonateRemove.event";
 import OnDonateUpdate from "./Donations/OnDonateUpdate.event";
 import OnError from "./Errors/OnError.event";
 
-const LOG = debug("dodgeball:bot:events:register.events");
+const LOG = new Logger("dodgeball:bot:discord:events:register.events");
 
 export type Events =
   | "donator.added"
@@ -40,14 +40,14 @@ export default class RegisterEvents {
   private OnEvents = [OnDonateAdd, OnDonateUpdate, OnDonateRemove, OnError];
 
   constructor(services: Services) {
-    LOG("Registering events");
+    LOG.info("Registering events");
     this.services = services;
     NodeEvents(services);
   }
 
   public async register() {
     for (const event of this.OnEvents) {
-      LOG(`Registering event: ${event.name}`);
+      LOG.info(`Registering event: ${event.name}`);
       const instance = new event(this.services);
       this.Events.set(instance.event, instance);
     }

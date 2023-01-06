@@ -1,21 +1,21 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client } from "discord.js";
 import Services from "../../services/Services";
 import { EventHandler } from "./register.events";
 
-const LOG = debug("dodgeball:bot:events:OnInteractions");
+const LOG = new Logger("dodgeball:bot:discord:events:OnInteractions");
 
 export default class OnInteractions implements EventHandler {
   private services?: Services;
 
   setup(client: Client, services: Services) {
-    LOG("Setting up OnInteractions event");
+    LOG.info("Setting up OnInteractions event");
     this.setupListeners(client);
     this.services = services;
   }
 
   setupListeners(client: Client) {
-    LOG("Listening for Interactions");
+    LOG.info("Listening for Interactions");
     client.on("interactionCreate", async (interaction) => {
       if (interaction.isStringSelectMenu()) {
         const { customId } = interaction;

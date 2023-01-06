@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { CronJob } from "cron";
 import Services from "../../services/Services";
 import { ServerRealLifeStatsModel } from "@dodgeball/mongodb";
@@ -7,7 +7,7 @@ import { TextChannel } from "discord.js";
 import LiveStatsEmbed from "../../discord/embeds/stats/Livestats.embed";
 import GetLiveStats from "../../mysql/queries/GetLiveStats";
 
-const LOG = debug("dodgeball:bot:cron:jobs:UpdateLiveStatsCron");
+const LOG = new Logger("dodgeball:bot:cron:jobs:UpdateLiveStatsCron");
 
 export default class UpdateLiveStatsCron {
   constructor(private services: Services) {
@@ -132,7 +132,7 @@ export default class UpdateLiveStatsCron {
         embeds: [embed]
       });
 
-      LOG(
+      LOG.info(
         `Created message for server ${server.server.name} (${server.server.serverId})`
       );
 

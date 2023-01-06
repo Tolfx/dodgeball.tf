@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { CronJob } from "cron";
 import Services from "../../services/Services";
 import { DonatorUserModel, LinkedAccountModel } from "@dodgeball/mongodb";
@@ -6,7 +6,7 @@ import { DISCORD_GUILD_ID } from "../../util/constants";
 import { Event } from "../../events/register.events";
 import { OnDonatePayload } from "../../events/Donations/OnDonateAdd.event";
 
-const LOG = debug("dodgeball:bot:cron:jobs:AddBoosters");
+const LOG = new Logger("dodgeball:bot:cron:jobs:AddBoosters");
 
 export default class AddBoostersCron {
   constructor(private services: Services) {
@@ -15,7 +15,7 @@ export default class AddBoostersCron {
     new CronJob(
       "0 3 * * *",
       async () => {
-        LOG("Running cron job");
+        LOG.info("Running cron job");
         await this.run();
       },
       null,
@@ -38,7 +38,7 @@ export default class AddBoostersCron {
     const guild = client.guilds.cache.get(DISCORD_GUILD_ID);
 
     if (!guild) {
-      LOG("Failed to find guild");
+      LOG.error("Failed to find guild");
       return;
     }
 
@@ -48,7 +48,7 @@ export default class AddBoostersCron {
     );
 
     if (!boosters) {
-      LOG("No boosters found");
+      LOG.warn("No boosters found");
       return;
     }
 
@@ -61,7 +61,7 @@ export default class AddBoostersCron {
       );
 
       if (!linkedAccount) {
-        LOG(`No linked account found for ${booster.displayName}`);
+        LOG.warn(`No linked account found for ${booster.displayName}`);
         continue;
       }
 
@@ -70,7 +70,7 @@ export default class AddBoostersCron {
         steamId: linkedAccount.steamId
       });
       if (isDonator) {
-        LOG(`Donator already exists for ${booster.displayName}`);
+        LOG.warn(`Donator already exists for ${booster.displayName}`);
         continue;
       }
 

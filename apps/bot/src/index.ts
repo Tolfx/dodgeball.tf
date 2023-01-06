@@ -1,5 +1,5 @@
 require("dotenv").config();
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import Services from "./services/Services";
 import setupApi from "./api/setupApi";
 import setupMysql from "./mysql/setupMysql";
@@ -15,10 +15,10 @@ import ServerRegisterService from "./services/ServerRegisterService";
 import RegisterEvents from "./events/register.events";
 import CronJobs from "./cron/cron";
 
-const LOG = debug("dodgeball:bot:bootstrap");
+const LOG = new Logger("dodgeball:bot:bootstrap");
 
 const bootstrap = async () => {
-  LOG("Starting bot");
+  LOG.info("Starting bot");
 
   const mysql = await setupMysql();
   const mongodb = new MongoDb();
@@ -58,7 +58,7 @@ const bootstrap = async () => {
 
   CronJobs.init(services);
 
-  LOG("Bot started");
+  LOG.info("Bot started");
 };
 
 bootstrap();

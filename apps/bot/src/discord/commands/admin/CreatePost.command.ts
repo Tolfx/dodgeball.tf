@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client, Message } from "discord.js";
 import marked from "marked";
 import Services from "../../../services/Services";
@@ -6,7 +6,7 @@ import { CommandHandler } from "../register.command";
 import { DISCORD_OWNER_ID } from "../../../util/constants";
 import { PostsModel } from "@dodgeball/mongodb";
 
-const LOG = debug("dodgeball:bot:commands:admin:CreatePostCommand");
+const LOG = new Logger("dodgeball:bot:commands:admin:CreatePostCommand");
 
 export default class CreatePostCommand implements CommandHandler {
   name = "createpost";
@@ -16,7 +16,7 @@ export default class CreatePostCommand implements CommandHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up create post command");
+    LOG.info("Setting up create post command");
     this.client = client;
     this.services = services;
     // Add commands to client

@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { CronJob } from "cron";
 import Services from "../../services/Services";
 import GetAdmins, { AdminSourcebans } from "../../mysql/queries/GetAdmins";
@@ -9,7 +9,7 @@ import AddSBAdminsServerGroups from "../../mysql/queries/AddSBAdminsServerGroups
 import AsyncAwait from "../../util/AsyncAwait";
 import GetCCCM from "../../mysql/queries/GetCCCM";
 
-const LOG = debug("dodgeball:bot:cron:jobs:UpdateServersCron");
+const LOG = new Logger("dodgeball:bot:cron:jobs:UpdateServersCron");
 
 export default class UpdateServersCron {
   constructor(private services: Services) {
@@ -18,7 +18,7 @@ export default class UpdateServersCron {
     new CronJob(
       "0 1 * * *",
       () => {
-        LOG(`Running cron job`);
+        LOG.info(`Running cron job`);
         this.run();
       },
       null,
@@ -93,7 +93,7 @@ export default class UpdateServersCron {
       });
 
       if (!found) {
-        LOG(
+        LOG.warn(
           `Missing permission for admin ${exception.adminId} on server ${exception.serverId}`
         );
         missingPermissions.push({
@@ -116,11 +116,11 @@ export default class UpdateServersCron {
       );
 
       if (failed) {
-        LOG(
+        LOG.error(
           `Failed to add permission for admin ${permission.adminId} on server ${permission.serverId}`
         );
       } else {
-        LOG(
+        LOG.warn(
           `Added permission for admin ${permission.adminId} on server ${permission.serverId}`
         );
       }
@@ -140,7 +140,7 @@ export default class UpdateServersCron {
             `INSERT INTO cccm.cccm_users (auth, hidetag, tagcolor, namecolor, chatcolor, tag) VALUES ('${admin.authid}', 0, '', '', '', '');`,
             (error) => {
               if (error) throw error;
-              LOG(`Added ${admin.user} to the CCCM`);
+              LOG.info(`Added ${admin.user} to the CCCM`);
               return true;
             }
           )
@@ -148,7 +148,7 @@ export default class UpdateServersCron {
       );
 
       if (failed) {
-        LOG(`Failed to add ${admin.user} to the CCCM`);
+        LOG.error(`Failed to add ${admin.user} to the CCCM`);
       }
     });
   }

@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { CronJob } from "cron";
 import Services from "../../services/Services";
 import { DonatorUserModel } from "@dodgeball/mongodb";
@@ -7,7 +7,7 @@ import { OnDonateRemovePayload } from "../../events/Donations/OnDonateRemove.eve
 import GetAdmins from "../../mysql/queries/GetAdmins";
 import SteamID from "steamid";
 
-const LOG = debug("dodgeball:bot:cron:jobs:RemoveExpiredDonatorsCron");
+const LOG = new Logger("dodgeball:bot:cron:jobs:RemoveExpiredDonatorsCron");
 
 export default class RemoveExpiredDonatorsCron {
   constructor(private services: Services) {
@@ -16,7 +16,7 @@ export default class RemoveExpiredDonatorsCron {
     new CronJob(
       "0 1 * * *",
       () => {
-        LOG(`Running cron job`);
+        LOG.info(`Running cron job`);
         this.run();
       },
       null,
@@ -45,12 +45,12 @@ export default class RemoveExpiredDonatorsCron {
     const donatorsToRemove = [];
     for await (const donator of donators) {
       if (!donator.expiresAt) {
-        LOG(`Donator ${donator.id} has no expiresAt date`);
+        LOG.warn(`Donator ${donator.id} has no expiresAt date`);
         continue;
       }
 
       if (donator.expiresAt > new Date()) {
-        LOG(
+        LOG.error(
           `Donator ${donator.id} has not expired yet, but is in the expired donator list`
         );
         continue;
@@ -61,17 +61,17 @@ export default class RemoveExpiredDonatorsCron {
           (admin) => admin.authid === new SteamID(donator.steamId).steam2()
         )
       ) {
-        LOG(`Donator ${donator.id} is an admin, skipping`);
+        LOG.warn(`Donator ${donator.id} is an admin, skipping`);
         continue;
       }
 
       donatorsToRemove.push(donator);
     }
 
-    LOG(`Found ${donatorsToRemove.length} donators to remove`);
+    LOG.info(`Found ${donatorsToRemove.length} donators to remove`);
 
     if (donatorsToRemove.length === 0) {
-      LOG(`No donators to remove`);
+      LOG.info(`No donators to remove`);
       return;
     }
 

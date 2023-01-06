@@ -1,11 +1,11 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client, Partials } from "discord.js";
 import { DISCORD_TOKEN } from "../util/constants";
 
-const LOG = debug("dodgeball:bot:setupDiscord");
+const LOG = new Logger("dodgeball:bot:discord:setupDiscord");
 
 export default () => {
-  LOG("Setting up Discord client");
+  LOG.info("Setting up Discord client");
   const discordClient = new Client({
     partials: [
       Partials.Channel,
@@ -23,7 +23,7 @@ export default () => {
     ]
   });
 
-  LOG("Logging in to Discord");
+  LOG.info("Logging in to Discord");
   discordClient.login(DISCORD_TOKEN);
 
   return discordClient;

@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import {
   Client,
   StringSelectMenuInteraction,
@@ -9,7 +9,7 @@ import Services from "../../../services/Services";
 import TopSpeedPlayerEmbed from "../../embeds/ranks/Topspeedplayer.embed";
 import { InteractionsHandler } from "../register.interactions";
 
-const LOG = debug("dodgeball:bot:interactions:topspeed");
+const LOG = new Logger("dodgeball:bot:discord:interactions:topspeed");
 
 export default class TopSpeedInteractions implements InteractionsHandler {
   name = "topspeed";
@@ -19,7 +19,7 @@ export default class TopSpeedInteractions implements InteractionsHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up topspeed interactions");
+    LOG.info("Setting up topspeed interactions");
     this.client = client;
     this.services = services;
     this.client.interactions.set(this.name, this);

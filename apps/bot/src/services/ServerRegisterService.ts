@@ -5,9 +5,9 @@ import UpdateDonator from "../mysql/queries/UpdateDonator";
 import ServerService from "./ServerService";
 import Services from "./Services";
 import AddCCCM from "../mysql/queries/AddCCCM";
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 
-const LOG = debug("dodgeball:bot:services:ServerRegisterService");
+const LOG = new Logger("dodgeball:bot:services:ServerRegisterService");
 export default class ServerRegisterService {
   public services: Services;
   private servers: Map<Server["address"], ServerService>;
@@ -45,7 +45,9 @@ export default class ServerRegisterService {
     )(this.services.getMysqlConnection());
     const addCCCM = await AddCCCM(donator)(this.services.getMysqlConnection());
     if (!addCCCM)
-      LOG(`Failed to add donator ${donator.steamName} to CCCM, already exists`);
+      LOG.error(
+        `Failed to add donator ${donator.steamName} to CCCM, already exists`
+      );
     const servers = this.getAllServers();
     for (const server of servers) {
       await server.addDonator(donator);

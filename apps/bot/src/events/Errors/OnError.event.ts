@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import Services from "../../services/Services";
 import {
   DISCORD_OWNER_ID,
@@ -9,7 +9,7 @@ import { webhookUrlToIdAndToken } from "../../util/discord";
 import { EventHandler, Event } from "../register.events";
 import { EmbedBuilder } from "discord.js";
 
-const LOG = debug("dodgeball:bot:events:errors:OnError");
+const LOG = new Logger("dodgeball:bot:events:errors:OnError");
 
 export interface OnErrorPayload {
   error: any;
@@ -35,11 +35,11 @@ export default class OnError implements EventHandler<OnErrorPayload> {
   }
 
   async handle(event: Event<OnErrorPayload>) {
-    LOG(`Error: `, event.payload.error);
+    LOG.error(event.payload.error);
     // Send webhook to discord
     const client = this.services.getDiscordClient();
     const webhookInfoUrl = DISCORD_WEBHOOKS["error"];
-    if (!webhookInfoUrl) return LOG("No webhook url found for info");
+    if (!webhookInfoUrl) return LOG.warn("No webhook url found for info");
     const webhookData = webhookUrlToIdAndToken(webhookInfoUrl);
     const webhook = await client.fetchWebhook(
       webhookData.id,

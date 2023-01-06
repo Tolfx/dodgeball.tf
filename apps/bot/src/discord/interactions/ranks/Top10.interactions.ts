@@ -1,11 +1,11 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client, ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import GetTopPlayers from "../../../mysql/queries/GetTopPlayers";
 import Services from "../../../services/Services";
 import { Colors } from "../../../util/constants";
 import { InteractionsHandler } from "../register.interactions";
 
-const LOG = debug("dodgeball:bot:interactions:top10");
+const LOG = new Logger("dodgeball:bot:discord:interactions:top10");
 
 export default class Top10Interactions implements InteractionsHandler {
   name = "top10";
@@ -15,7 +15,7 @@ export default class Top10Interactions implements InteractionsHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up top10 interactions");
+    LOG.info("Setting up top10 interactions");
     this.client = client;
     this.services = services;
     this.client.interactions.set(this.name, this);

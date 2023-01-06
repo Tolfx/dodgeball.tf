@@ -1,7 +1,7 @@
 import { Application, Response, Request } from "express";
 import Services from "../../../services/Services";
 import type { ControllerRouter } from "../register.router";
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { Client } from "discord.js";
 import ErrorTemplate from "../../templates/Error.template";
 import { Stripe } from "stripe";
@@ -17,7 +17,7 @@ import { OnDonatePayload } from "../../../events/Donations/OnDonateAdd.event";
 import { OnDonateUpdatePayload } from "../../../events/Donations/OnDonateUpdate.event";
 import { OnErrorPayload } from "../../../events/Errors/OnError.event";
 
-const LOG = debug("dodgeball:bot:api:routes:donator:donator.controller");
+const LOG = new Logger("dodgeball:bot:api:routes:donator:donator.controller");
 
 export default class DonatorController implements ControllerRouter {
   public server: Application;
@@ -124,7 +124,7 @@ export default class DonatorController implements ControllerRouter {
       );
     } catch (err) {
       // @ts-ignore
-      LOG(err.message);
+      LOG.error(err.message);
       // @ts-ignore
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
@@ -135,7 +135,7 @@ export default class DonatorController implements ControllerRouter {
       // Assume we got steamId is in metadata,
       // so lets add the roles to the user
       if (!metadata.steamId) {
-        LOG("No steamId in metadata!");
+        LOG.error("No steamId in metadata!");
         this.services.getEventRegister()?.emit(
           new Event<OnErrorPayload>("1", "error", {
             error: new Error("No steamId in metadata!"),

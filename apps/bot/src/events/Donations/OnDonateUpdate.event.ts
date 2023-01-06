@@ -1,5 +1,5 @@
 import { DonatorUser } from "@dodgeball/mongodb";
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import SteamID from "steamid";
 import OnDonateEmbed from "../../discord/embeds/information/OnDonate.embed";
 import GetAdmins from "../../mysql/queries/GetAdmins";
@@ -10,7 +10,7 @@ import { EventHandler, Event } from "../register.events";
 import UpdateCCCM from "../../mysql/queries/UpdateCCCM";
 import { getDonatorCCC } from "../../mysql/queries/AddCCCM";
 
-const LOG = debug("dodgeball:bot:events:donations:OnDonateUpdate");
+const LOG = new Logger("dodgeball:bot:events:donations:OnDonateUpdate");
 
 export interface OnDonateUpdatePayload {
   donator: DonatorUser;
@@ -30,7 +30,7 @@ export default class OnDonateUpdate
   }
 
   async handle(event: Event<OnDonateUpdatePayload>) {
-    LOG(
+    LOG.info(
       `Donator updated: ${event.payload.donator.steamName}, steamid: ${event.payload.donator.steamId}`
     );
     const { donator, beforeAmount, beforeTitle } = event.payload;
@@ -52,7 +52,7 @@ export default class OnDonateUpdate
     // Send webhook to discord
     const client = this.services.getDiscordClient();
     const webhookInfoUrl = DISCORD_WEBHOOKS["info"];
-    if (!webhookInfoUrl) return LOG("No webhook url found for info");
+    if (!webhookInfoUrl) return LOG.warn("No webhook url found for info");
     const webhookData = webhookUrlToIdAndToken(webhookInfoUrl);
     const webhook = await client.fetchWebhook(
       webhookData.id,

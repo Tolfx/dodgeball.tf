@@ -1,8 +1,8 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import GetServers, { Server } from "../mysql/queries/GetServers";
 import Services from "./Services";
 
-const LOG = debug("dodgeball:bot:CacheService");
+const LOG = new Logger("dodgeball:bot:CacheService");
 
 export type CachedServer = {
   server: Server;
@@ -49,7 +49,7 @@ export default class CacheService {
   }
 
   private async reCacheServers() {
-    LOG("Re-caching servers");
+    LOG.debug("Re-caching servers");
     const servers = await GetServers()(this.services.getMysqlConnection());
     servers.forEach((server) => this.updateCachedServer(server));
   }

@@ -1,4 +1,4 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { CronJob } from "cron";
 import Services from "../../services/Services";
 import { DonatorUserModel, LinkedAccountModel } from "@dodgeball/mongodb";
@@ -8,7 +8,7 @@ import GetAdmins from "../../mysql/queries/GetAdmins";
 import SteamID from "steamid";
 import { DISCORD_GUILD_ID } from "../../util/constants";
 
-const LOG = debug("dodgeball:bot:cron:jobs:RemoveNoneBoosterCron");
+const LOG = new Logger("dodgeball:bot:cron:jobs:RemoveNoneBoosterCron");
 
 export default class RemoveNoneBoosterCron {
   constructor(private services: Services) {
@@ -17,7 +17,7 @@ export default class RemoveNoneBoosterCron {
     new CronJob(
       "0 1 * * *",
       () => {
-        LOG(`Running cron job`);
+        LOG.info(`Running cron job`);
         this.run();
       },
       null,
@@ -50,7 +50,7 @@ export default class RemoveNoneBoosterCron {
     const guild = client.guilds.cache.get(DISCORD_GUILD_ID);
 
     if (!guild) {
-      LOG("Failed to find guild");
+      LOG.error("Failed to find guild");
       return;
     }
 
@@ -60,7 +60,7 @@ export default class RemoveNoneBoosterCron {
     );
 
     if (!boosters) {
-      LOG("No boosters found");
+      LOG.error("No boosters found");
       return;
     }
 
@@ -73,7 +73,7 @@ export default class RemoveNoneBoosterCron {
       );
 
       if (!linkedAccount) {
-        LOG(
+        LOG.warn(
           `Donator ${donator.id} has no linked account, skipping, possible way to remove boosters`
         );
         continue;
@@ -84,19 +84,19 @@ export default class RemoveNoneBoosterCron {
           (admin) => admin.authid === new SteamID(donator.steamId).steam2()
         )
       ) {
-        LOG(`Donator ${donator.id} is an admin, skipping`);
+        LOG.warn(`Donator ${donator.id} is an admin, skipping`);
         continue;
       }
 
       if (boosters.find((booster) => booster.id === linkedAccount.discordId)) {
-        LOG(`Donator ${donator.id} is a booster, skipping`);
+        LOG.warn(`Donator ${donator.id} is a booster, skipping`);
         continue;
       }
 
       donatorsToRemove.push(donator);
     }
 
-    LOG(`Found ${donatorsToRemove.length} donators to remove`);
+    LOG.info(`Found ${donatorsToRemove.length} donators to remove`);
 
     if (donatorsToRemove.length === 0) {
       return;

@@ -1,10 +1,10 @@
-import debug from "debug";
+import Logger from "@dodgeball/logger";
 import { ChatInputCommandInteraction, Client } from "discord.js";
 import Services from "../../../services/Services";
 import HelpEmbed from "../../embeds/information/Help.embed";
 import { InteractionsHandler } from "../register.interactions";
 
-const LOG = debug("dodgeball:bot:interactions:help");
+const LOG = new Logger("dodgeball:bot:discord:interactions:help");
 
 export default class HelpInteraction implements InteractionsHandler {
   name = "help";
@@ -14,7 +14,7 @@ export default class HelpInteraction implements InteractionsHandler {
   private client?: Client;
 
   init(client: Client, services: Services) {
-    LOG("Setting up help interaction");
+    LOG.info("Setting up help interaction");
     this.client = client;
     this.services = services;
     // Add interactions to client
