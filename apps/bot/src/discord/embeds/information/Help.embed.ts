@@ -16,17 +16,22 @@ export default function HelpEmbed() {
     .addFields([
       {
         name: "Information",
-        value: "`/help`",
+        value: "</help:1050445803816243221>",
         inline: true
       },
       {
         name: "Ranks",
-        value: "`/topspeed`",
+        value: "</topspeed:1050364752666312745>",
         inline: true
       },
       {
         name: "Top10",
-        value: "`/top10`",
+        value: "</top10:1050518682264154132>",
+        inline: true
+      },
+      {
+        name: "Link",
+        value: "</link:1051257579109629993>",
         inline: true
       }
     ]);
