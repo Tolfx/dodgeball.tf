@@ -5,6 +5,7 @@ import Services from "../../../services/Services";
 import { CommandHandler } from "../register.command";
 import { DISCORD_OWNER_ID } from "../../../util/constants";
 import { PostsModel } from "@dodgeball/mongodb";
+import { stripIndent } from "common-tags";
 
 const LOG = new Logger("dodgeball:bot:commands:admin:CreatePostCommand");
 
@@ -58,9 +59,9 @@ export default class CreatePostCommand implements CommandHandler {
 
     // Lets clean it up a bit
     // By removing the ```md and ```
-    const cleanedMarkdown = markdown.replace("```md", "").replace("```", "");
+    const cleanedMarkdown = markdown.slice(5, -3);
 
-    const rawMarkdown = marked.marked(cleanedMarkdown);
+    const rawMarkdown = marked.marked.parse(stripIndent(cleanedMarkdown));
 
     // Create post
     const post = await new PostsModel({

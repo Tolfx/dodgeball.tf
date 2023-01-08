@@ -5,6 +5,7 @@ import Services from "../../../services/Services";
 import { CommandHandler } from "../register.command";
 import { DISCORD_OWNER_ID } from "../../../util/constants";
 import { PostsModel } from "@dodgeball/mongodb";
+import { stripIndent } from "common-tags";
 
 const LOG = new Logger("dodgeball:bot:commands:admin:EditPostCommand");
 
@@ -65,9 +66,9 @@ export default class EditPostCommand implements CommandHandler {
 
     // Lets clean it up a bit
     // By removing the ```md and ```
-    const cleanedMarkdown = markdown.replace("```md", "").replace("```", "");
+    const cleanedMarkdown = markdown.slice(5, -3);
 
-    const rawMarkdown = marked.marked(cleanedMarkdown);
+    const rawMarkdown = marked.marked.parse(stripIndent(cleanedMarkdown));
 
     post.category = category as "news" | "updates";
     post.homePrint = isHome;

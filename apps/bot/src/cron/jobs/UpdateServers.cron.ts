@@ -8,6 +8,9 @@ import GetSBAdminsServerGroups from "../../mysql/queries/GetSBAdminsServerGroups
 import AddSBAdminsServerGroups from "../../mysql/queries/AddSBAdminsServerGroups";
 import AsyncAwait from "../../util/AsyncAwait";
 import GetCCCM from "../../mysql/queries/GetCCCM";
+import { DonatorUserModel } from "@dodgeball/mongodb";
+import SteamID from "steamid";
+import { getDonatorCCC } from "../../mysql/queries/AddCCCM";
 
 const LOG = new Logger("dodgeball:bot:cron:jobs:UpdateServersCron");
 
@@ -134,21 +137,48 @@ export default class UpdateServersCron {
     );
     // Add them to the CCCM
     missingCCCM.forEach(async (admin) => {
-      const [_, failed] = await AsyncAwait(
-        Promise.resolve(
-          mysqlConnection.query(
-            `INSERT INTO cccm.cccm_users (auth, hidetag, tagcolor, namecolor, chatcolor, tag) VALUES ('${admin.authid}', 0, '', '', '', '');`,
-            (error) => {
-              if (error) throw error;
-              LOG.info(`Added ${admin.user} to the CCCM`);
-              return true;
-            }
-          )
-        )
-      );
+      // Lets check this admin, to give correct permissions
+      // Lets check if also is a donator
+      const donator = await DonatorUserModel.findOne({
+        steamId: new SteamID(admin.authid).getSteamID64()
+      });
 
-      if (failed) {
-        LOG.error(`Failed to add ${admin.user} to the CCCM`);
+      if (donator) {
+        const cccDonator = getDonatorCCC(donator);
+        const [_, failed] = await AsyncAwait(
+          Promise.resolve(
+            mysqlConnection.query(
+              // eslint-disable-next-line max-len
+              `INSERT INTO cccm.cccm_users (auth, hidetag, tagcolor, namecolor, chatcolor, tag) VALUES ('${admin.authid}', 0, '${cccDonator.tagcolor}', '', '', '${cccDonator.tag}');`,
+              (error) => {
+                if (error) throw error;
+                LOG.info(`Added ${admin.user} to the CCCM`);
+                return true;
+              }
+            )
+          )
+        );
+
+        if (failed) {
+          LOG.error(`Failed to add ${admin.user} to the CCCM`);
+        }
+      } else {
+        const [_, failed] = await AsyncAwait(
+          Promise.resolve(
+            mysqlConnection.query(
+              `INSERT INTO cccm.cccm_users (auth, hidetag, tagcolor, namecolor, chatcolor, tag) VALUES ('${admin.authid}', 0, '', '', '', '');`,
+              (error) => {
+                if (error) throw error;
+                LOG.info(`Added ${admin.user} to the CCCM`);
+                return true;
+              }
+            )
+          )
+        );
+
+        if (failed) {
+          LOG.error(`Failed to add ${admin.user} to the CCCM`);
+        }
       }
     });
   }
