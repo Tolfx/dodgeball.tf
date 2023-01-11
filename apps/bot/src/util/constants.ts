@@ -5,10 +5,15 @@ import getEnv from "./getEnv";
 
 export const DISCORD_TOKEN = getEnv("DISCORD_TOKEN");
 export const DISCORD_PREFIX = getEnv("DISCORD_PREFIX", "odb!");
-export const DISCORD_OWNER_ID = JSON.parse(getEnv("DISCORD_OWNER_ID", "[]")) as string[];
+export const DISCORD_OWNER_ID = JSON.parse(
+  getEnv("DISCORD_OWNER_ID", "[]")
+) as string[];
 export const DISCORD_BOT_ID = getEnv("DISCORD_BOT_ID", "1049982109571371078");
 export const DISCORD_CLIENT_SECRET = getEnv("DISCORD_CLIENT_SECRET", "secret");
-export const DISCORD_GUILD_ID = getEnv("DISCORD_GUILD_ID", "1014257373688369304");
+export const DISCORD_GUILD_ID = getEnv(
+  "DISCORD_GUILD_ID",
+  "1014257373688369304"
+);
 
 export const STEAM_API_KEY = getEnv("STEAM_API_KEY", "secret");
 
@@ -20,12 +25,17 @@ export const MYSQL_PORT = getEnv("MYSQL_PORT", "3306");
 export const API_PORT = process.env.API_PORT;
 export const API_HOST = getEnv("API_HOST", "localhost");
 export const API_PROTOCOL = getEnv("API_PROTOCOL", "http");
-export const API_DOMAIN = `${API_PROTOCOL}://${API_HOST}${API_PROTOCOL === "http" ? `:${API_PORT}` : ""}`;
+export const API_DOMAIN = `${API_PROTOCOL}://${API_HOST}${
+  API_PROTOCOL === "http" ? `:${API_PORT}` : ""
+}`;
 
 export const STRIPE_SECRET_KEY = getEnv("STRIPE_SECRET_KEY", "secret");
 export const STRIPE_WEBHOOK_SECRET = getEnv("STRIPE_WEBHOOK_SECRET", "secret");
 
 export const IS_PROD = process.env.NODE_ENV === "production";
+
+export const PAYPAL_CLIENT_ID = getEnv("PAYPAL_CLIENT_ID", "secret");
+export const PAYPAL_CLIENT_SECRET = getEnv("PAYPAL_CLIENT_SECRET", "secret");
 
 /**
  * @deprecated This was a stupid idea, when I can fetch from the database on bootstrap, but since when
@@ -44,29 +54,34 @@ export const DEFAULT_VALUE_SERVER_IDS = [
 ];
 
 export const TOPSPEED_SERVERS_IDS = async (services: Services) => {
-  return new Promise<{ id?: string; name?: string }[]>(async (resolve, reject) => {
-    const servers = await GetSBServers()(services.getMysqlConnection());
-    const cachedServers = services.getCacheService()?.getAllCachedServers();
-    if (!cachedServers) return reject("No cached servers found");
+  return new Promise<{ id?: string; name?: string }[]>(
+    async (resolve, reject) => {
+      const servers = await GetSBServers()(services.getMysqlConnection());
+      const cachedServers = services.getCacheService()?.getAllCachedServers();
+      if (!cachedServers) return reject("No cached servers found");
 
-    let mapped = [];
-    for (const server of servers) {
-      const cachedServer = cachedServers.find((cachedServer) => {
-        return cachedServer.server.address === server.ip && cachedServer.server.port === server.port;
-      });
-      if (!cachedServer) continue;
+      let mapped = [];
+      for (const server of servers) {
+        const cachedServer = cachedServers.find((cachedServer) => {
+          return (
+            cachedServer.server.address === server.ip &&
+            cachedServer.server.port === server.port
+          );
+        });
+        if (!cachedServer) continue;
 
-      mapped.push({
-        id: String(server.sid),
-        name: cachedServer.server.name
-      });
+        mapped.push({
+          id: String(server.sid),
+          name: cachedServer.server.name
+        });
+      }
+      // I don't want to include servers that is not tfdb, and currently only 1 server is tfdb, so I'll just hardcode it
+      // and remove it when I have more servers.
+      const blacklistIds = ["6"];
+      mapped = mapped.filter((server) => !blacklistIds.includes(server.id));
+      return resolve(mapped);
     }
-    // I don't want to include servers that is not tfdb, and currently only 1 server is tfdb, so I'll just hardcode it
-    // and remove it when I have more servers.
-    const blacklistIds = ["6"];
-    mapped = mapped.filter((server) => !blacklistIds.includes(server.id));
-    return resolve(mapped);
-  });
+  );
 };
 
 export enum Colors {
