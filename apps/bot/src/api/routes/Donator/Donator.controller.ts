@@ -16,6 +16,8 @@ import { Event } from "../../../events/register.events";
 import { OnDonatePayload } from "../../../events/Donations/OnDonateAdd.event";
 import { OnDonateUpdatePayload } from "../../../events/Donations/OnDonateUpdate.event";
 import { OnErrorPayload } from "../../../events/Errors/OnError.event";
+import PaypalModule from "../../../modules/Paypal.module";
+import AsyncAwait from "../../../util/AsyncAwait";
 
 const LOG = new Logger("dodgeball:bot:api:routes:donator:donator.controller");
 
@@ -24,6 +26,7 @@ export default class DonatorController implements ControllerRouter {
   public services: Services;
   private client: Client;
   private stripe: Stripe;
+  private paypalModule: PaypalModule;
 
   constructor(server: Application, services: Services) {
     this.server = server;
@@ -32,6 +35,7 @@ export default class DonatorController implements ControllerRouter {
     this.stripe = new Stripe(STRIPE_SECRET_KEY, {
       apiVersion: "2022-11-15"
     });
+    this.paypalModule = new PaypalModule();
   }
 
   private processDate(amount: number) {
@@ -235,6 +239,126 @@ export default class DonatorController implements ControllerRouter {
 
     // Return a response to acknowledge receipt of the event
     res.json({ received: true });
+  }
+
+  public async startPaypalPayment(req: Request, res: Response) {
+    const { amount } = req.query;
+    const user = req.user;
+
+    if (!user)
+      return res.status(401).send(ErrorTemplate("You are not logged in!"));
+
+    if (!amount)
+      return res.status(400).send(ErrorTemplate("No amount specified!"));
+
+    const amountNum = parseFloat(String(amount));
+
+    if (amountNum < 2.5)
+      return res.status(400).send(ErrorTemplate("Minimum amount is $2.50!"));
+
+    const date = this.processDate(amountNum);
+
+    const processPaypal = await this.paypalModule.createPayment(
+      amountNum,
+      user.steamId,
+      amountNum >= 25
+        ? "Patron"
+        : `Supporter (${date.months} months, ${date.days} days)`
+    );
+
+    if (!processPaypal)
+      return res.status(500).send(ErrorTemplate("Something went wrong!"));
+
+    return res.redirect(processPaypal);
+  }
+
+  public async paypalPaymentSuccess(req: Request, res: Response) {
+    const { PayerID, paymentId } = req.query;
+    if (!PayerID || !paymentId)
+      return res.status(400).send(ErrorTemplate("No payment id or payer id!"));
+
+    const [paymentPayload, paymentError] = await AsyncAwait(
+      this.paypalModule.executePayment(String(paymentId), String(PayerID))
+    );
+
+    if (paymentError || !paymentPayload)
+      return res.status(500).send(ErrorTemplate("Something went wrong!"));
+
+    if (paymentPayload instanceof Error)
+      return res.status(500).send(ErrorTemplate(paymentPayload.message));
+
+    // Assume they paid
+    const { payment, donator } = paymentPayload;
+
+    const { transactions } = payment;
+    const { amount } = transactions[0];
+
+    const { total } = amount;
+
+    const amountNum = parseFloat(total);
+
+    const mongoDonator = await DonatorUserModel.findOne({
+      steamId: donator.steamId
+    });
+
+    if (!mongoDonator) {
+      // Can't happen
+      return res.status(500).send(ErrorTemplate("Something went wrong!"));
+    }
+
+    // We got enough info to update the donator
+    const currentTitle = mongoDonator.title;
+    const wasActive = mongoDonator.isActive;
+    const date = this.processDate(amountNum).date;
+    mongoDonator.isActive = true;
+    mongoDonator.title =
+      currentTitle === "patron"
+        ? "patron"
+        : amountNum >= 25
+        ? "patron"
+        : "supporter";
+    mongoDonator.isPermanent =
+      currentTitle === "patron" ? true : amountNum >= 25 ? true : false;
+    mongoDonator.expiresAt =
+      currentTitle === "patron"
+        ? undefined
+        : amountNum >= 25
+        ? undefined
+        : date;
+    mongoDonator.lastPaidAt = new Date();
+    mongoDonator.donations.push({
+      amount: String(amountNum),
+      currency: "USD",
+      createdAt: new Date()
+    });
+
+    await mongoDonator.save();
+
+    if (!wasActive) {
+      this.services
+        .getEventRegister()
+        ?.emit(new Event<OnDonatePayload>("1", "donator.added", { donator }));
+    } else {
+      this.services.getEventRegister()?.emit(
+        new Event<OnDonateUpdatePayload>("1", "donator.updated", {
+          donator,
+          beforeAmount: amountNum,
+          beforeTitle: currentTitle
+        })
+      );
+    }
+
+    return res.send(
+      SuccessTemplate(`Payment successful! </br>
+    Takes up to 48 hours to process! </br>
+    Please contact us at your <a href="https://forum.dodgeball.tf/category/4/support-suggestions">forum</a> if you have any issues.`)
+    );
+  }
+
+  public async paypalPaymentCancel(req: Request, res: Response) {
+    return res.send(
+      ErrorTemplate("Payment cancelled! </br> Please try again later!")
+    );
   }
 
   public async getDonators(req: Request, res: Response) {

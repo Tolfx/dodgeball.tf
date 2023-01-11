@@ -78,12 +78,19 @@ export default (amount = 2.5) => {
               Pay with credit card
             </a>
           </div>
+          <div id="paypal">
+            <a id="click-paypal">
+              Pay with paypal
+            </a>
+          </div>
         </div>
       </div>
     </div>
   
     <script>
       const clickStripe = document.getElementById('click-stripe');
+      const clickPaypal = document.getElementById('click-paypal');
+
   
       document.getElementById('amount').onchange = () => {
         const amount = document.getElementById('amount').value;
@@ -99,6 +106,11 @@ export default (amount = 2.5) => {
       clickStripe.addEventListener('click', () => {
         const amount = document.getElementById('amount').value;
         window.location.href = '/donator/stripe?amount=' + amount;
+      });
+
+      clickPaypal.addEventListener('click', () => {
+        const amount = document.getElementById('amount').value;
+        window.location.href = '/donator/paypal?amount=' + amount;
       });
     </script>
   </body>

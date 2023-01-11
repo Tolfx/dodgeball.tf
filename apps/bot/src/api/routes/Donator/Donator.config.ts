@@ -51,6 +51,18 @@ export default class DonatorConfig implements ConfigRouter {
       "/stripe/webhook",
       this.controller.stripeWebhook.bind(this.controller)
     );
+    this.router.get(
+      "/paypal",
+      this.controller.startPaypalPayment.bind(this.controller)
+    );
+    this.router.get(
+      "/paypal/success",
+      this.controller.paypalPaymentSuccess.bind(this.controller)
+    );
+    this.router.get(
+      "/paypal/cancel",
+      this.controller.paypalPaymentCancel.bind(this.controller)
+    );
 
     this.router.get(
       "/hall-of-fame",
