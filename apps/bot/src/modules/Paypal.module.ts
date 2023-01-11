@@ -61,7 +61,7 @@ export default class PaypalModule {
                 currency
               },
               description,
-              reference_id: steamid
+              invoice_number: steamid
             }
           ]
         },
@@ -70,6 +70,8 @@ export default class PaypalModule {
             log.error(err);
             return reject(err);
           }
+          console.log(payment.transactions[0].reference_id);
+          console.log(payment.links);
           resolve(
             payment?.links?.find((link) => link.rel === "approval_url")?.href
           );
@@ -99,7 +101,7 @@ export default class PaypalModule {
 
           // Go through the transactions and find the one with the reference id
           const transaction = payment?.transactions?.find(
-            (transaction) => transaction.reference_id
+            (transaction) => transaction.invoice_number
           );
           if (!transaction) {
             // Major issue
@@ -108,7 +110,7 @@ export default class PaypalModule {
           }
 
           // We found our transaction, lets get steamid and check if we a donator
-          const steamid = transaction.reference_id;
+          const steamid = transaction.invoice_number;
           if (!steamid) {
             log.error("No steamid found");
             return reject("No steamid found");
