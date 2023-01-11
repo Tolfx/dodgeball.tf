@@ -5,6 +5,7 @@ import HelpCommand from "./information/Help.command";
 import TopSpeedCommand from "./ranks/Topspeed.command";
 import CreatePostCommand from "./admin/CreatePost.command";
 import EditPostCommand from "./admin/EditPost.command";
+import AddDonatorCommand from "./admin/AddDonator.command";
 
 const LOG = new Logger("dodgeball:bot:discord:commands:register.commands");
 
@@ -28,6 +29,7 @@ export default class CommandRegister {
     new TopSpeedCommand(),
     new CreatePostCommand(),
     new EditPostCommand(),
+    new AddDonatorCommand(),
     new HelpCommand()
   ];
 
