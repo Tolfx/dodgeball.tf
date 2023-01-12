@@ -40,7 +40,12 @@ export default class OnDonateRemove
     );
 
     // Lets make a safety check that this donator is not a patron or permanent
-    if (donator.title === "patron" || donator.isPermanent || admin) return;
+    if (donator.title === "patron" || donator.isPermanent || admin) {
+      LOG.error(
+        `Donator ${donator.steamName} is a patron, permanent or admin, and should not be removed`
+      );
+      return;
+    }
 
     LOG.warn(
       `Deleting donator: ${event.payload.donator.steamName}, steamid: ${event.payload.donator.steamId}`
@@ -70,9 +75,9 @@ export default class OnDonateRemove
 
     // Send webhook to discord
     const embed = new EmbedBuilder()
-      .setTitle("Donator Removed")
+      .setTitle("Donator Expired")
       .setDescription(
-        `Donator ${donator.steamName} has been removed from the database.`
+        `Donator ${donator.steamName} has been removed from game servers, and set as inactive.`
       )
       .setColor(Colors.DARK_ORANGE)
       .addFields(
