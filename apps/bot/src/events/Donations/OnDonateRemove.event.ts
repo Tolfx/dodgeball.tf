@@ -53,7 +53,7 @@ export default class OnDonateRemove
     // We also want to remove from cccm.cccm_users
     const steamid = new SteamID(donator.steamId).steam2();
 
-    const query = `DELETE FROM cccm.cccm_users WHERE auth = ${steamid}`;
+    const query = `DELETE FROM cccm.cccm_users WHERE auth = '${steamid}'`;
 
     mysql.query(query, (err, results) => {
       if (err) LOG.error(`Error deleting donator from cccm.cccm_users: ${err}`);
@@ -74,7 +74,7 @@ export default class OnDonateRemove
       .setDescription(
         `Donator ${donator.steamName} has been removed from the database.`
       )
-      .setColor(Colors.DARK_RED)
+      .setColor(Colors.DARK_ORANGE)
       .addFields(
         {
           name: "Donator",
