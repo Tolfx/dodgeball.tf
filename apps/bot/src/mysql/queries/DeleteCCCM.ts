@@ -4,9 +4,8 @@ import SteamID from "steamid";
 
 export default function DeleteCCCM(donator: DonatorUser) {
   // Delete auth from cccm table
-  const queryDeleteCCCM = `DELETE FROM cccm.cccm_users WHERE auth = '${new SteamID(
-    donator.steamId
-  ).steam2()}';`;
+  const steamid = new SteamID(donator.steamId).steam2();
+  const queryDeleteCCCM = `DELETE FROM cccm.cccm_users WHERE auth = '${steamid}'`;
 
   return (connection: mysql.Connection): Promise<Array<any>> =>
     new Promise((resolve, reject) => {
