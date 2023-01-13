@@ -13,6 +13,7 @@ import {
 import { webhookUrlToIdAndToken } from "../../util/discord";
 import { EventHandler, Event } from "../register.events";
 import DeleteCCCM from "../../mysql/queries/DeleteCCCM";
+import AsyncAwait from "../../util/AsyncAwait";
 
 const LOG = new Logger("dodgeball:bot:events:donations:OnDonateUpdate");
 
@@ -52,18 +53,28 @@ export default class OnDonateRemove
     );
 
     const mysql = this.services.getMysqlConnection();
-    await DeleteDonator(donator)(mysql);
-    await DeleteCCCM(donator)(mysql);
+    const [_, errorDeleteDonator] = await AsyncAwait(
+      DeleteDonator(donator)(mysql)
+    );
+    const [__, errorDeletingCCC] = await AsyncAwait(DeleteCCCM(donator)(mysql));
+
+    if (errorDeleteDonator) {
+      LOG.error(`Error deleting donator: `, errorDeleteDonator);
+    }
+
+    if (errorDeletingCCC) {
+      LOG.error(`Error deleting donator from cccm:`, errorDeletingCCC);
+    }
 
     // We also want to remove from cccm.cccm_users
     const steamid = new SteamID(donator.steamId).steam2();
 
-    const query = `DELETE FROM cccm.cccm_users WHERE auth = '${steamid}'`;
+    // const query = `DELETE FROM cccm.cccm_users WHERE auth = '${steamid}'`;
 
-    mysql.query(query, (err, results) => {
-      if (err) LOG.error(`Error deleting donator from cccm.cccm_users: ${err}`);
-      else LOG.warn(`Deleted donator from cccm.cccm_users: ${results}`);
-    });
+    // mysql.query(query, (err, results) => {
+    //   if (err) LOG.error(`Error deleting donator from cccm.cccm_users: ${err}`);
+    //   else LOG.warn(`Deleted donator from cccm.cccm_users: ${results}`);
+    // });
 
     const servers = this.services.getServerRegisterService()?.getAllServers();
 
